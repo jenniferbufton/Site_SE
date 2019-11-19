@@ -7,7 +7,7 @@ output:
       toc_collapsed: true
     toc_depth: 3
     number_sections: true
-    theme: spacelab
+    theme: flatly
     highlight: tango
 ---
 
@@ -34,7 +34,7 @@ library(wordcloud2)
 
 #### read in GMS data
 setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
-sg_df <- read.csv('SG_all.csv', header = TRUE, na.strings = "N/A")
+sg_df <- read.csv('SG_all.csv', header = TRUE, na.strings = c("","N/A"))
 
 topic_tbl <- read.csv('12Month_top.csv') %>%
   rename("Topic" = Topic.id, "Terms" = Concatenate.Term.)
@@ -92,7 +92,7 @@ table_df <- sg_df %>%
 summary(table_df)
 ```
 
-## Award distribution
+## Award amounts
 
 ```{r award, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 ggplot(sg_df)+
@@ -110,7 +110,7 @@ ggplot(sg_df)+
   scale_x_continuous(labels = scales::dollar_format(prefix = "£")) 
 ```
 
-## Awards by Outcome
+## Outcome
 ```{r go_col, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 ggplot(sg_df)+
   geom_bar(aes(x="", y = AWARD, fill = Govt_Outcome), stat = "identity" ) +
@@ -123,7 +123,7 @@ ggplot(sg_df)+
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "right") +
   labs( x= "", y = "", title = "Amount Awarded per Government Outcome")+
-    scale_fill_manual(values = se_colour)
+    scale_fill_manual(values = se_colour, name = "Outcome")
 ```
 
 ```{r go, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
@@ -138,6 +138,22 @@ ggplot(sg_df)+
         legend.position = "right") +
   labs( x= "Government Outcome", y = "Amount Awarded", title = "Amount Awarded per Government Outcome")+
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
+```
+
+## Focus
+```{r fo_pie, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+ggplot(sg_df)+
+  geom_bar(aes(x="", y = AWARD, fill = Focus), stat = "identity" ) +
+  coord_polar("y", start = 0)+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "right") +
+  labs( x= "", y = "", title = "Amount Awarded per Focus")+
+    scale_fill_manual(values = se_colour)
 ```
 
 ## Sport
@@ -182,7 +198,7 @@ sg_df %>%
   labs( x= "Organisation type", y = "Number of Applications", title = "Number of Applications by Organisation Type")
 ```
 
-## How many times funded?
+## Times funded
 This graph shows the distribution of funding more than once. As the histogram below shows, the maximum number of separate funded projects for a single organisation was `r max(sp_org$n)`
 
 ```{r fund, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
@@ -200,21 +216,7 @@ ggplot(sp_org)+
 
 ```
 
-## Awards by Focus
-```{r fo_pie, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-ggplot(sg_df)+
-  geom_bar(aes(x="", y = AWARD, fill = Focus), stat = "identity" ) +
-  coord_polar("y", start = 0)+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
-        axis.text.x = element_blank(),
-        panel.grid = element_blank(),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
-  labs( x= "", y = "", title = "Amount Awarded per Focus")+
-    scale_fill_manual(values = se_colour)
-```
+
 
 # Funding across the country {.tabset .tabset-fade .tabset-pills} 
 
@@ -326,14 +328,11 @@ ggplot(sg_df)+
 
 
 # Text Analysis 
-Using the "12 month progress" field, we can look at the unstructured data of the Measure and Evaluation element of an application. We can do this using word frequency, and also topic extraction using LDA (Latent Dirichlet Modelling). 
-
-* The wordcloud was produced through text processing ) which stripped out punctuation and non-relevant words, and the word frequency was weighted with the 'importance' given to each word.
-* The topic modelling was created using the LDA model, and the "Elbow" method applied to assign the number of topics (more information at this [site](https://www.knime.com/blog/topic-extraction-optimizing-the-number-of-topics-with-the-elbow-method)).
-* Sentiment score using a lexicon-based approach: The approach assigns a sentiment to each word of positive or negative. This can be translated int a score (number of positive words - number of negative words) / total number of words).
+Using the "12 month progress" field, we can look at the unstructured data of the Measure and Evaluation element of an application. We can do this using word frequency, topic extraction using LDA (Latent Dirichlet Modelling), and also assigning sentiment. 
 
 
 ## Term frequency score
+The wordcloud was produced through text processing ) which stripped out punctuation and non-relevant words, and the word frequency was weighted with the 'importance' given to each word.
 
 ```{r 12_prog, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 
@@ -343,13 +342,17 @@ wordcloud2(text_df[,c(2,4)], fontFamily = "Norwester", color = "random-light")
 
 ## Topics
 
+The topic modelling was created using the LDA model, and the "Elbow" method applied to assign the number of topics (more information at this [site](https://www.knime.com/blog/topic-extraction-optimizing-the-number-of-topics-with-the-elbow-method)).
+
 ```{r 12_prog_top, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 
 kable(topic_tbl)
 ```
 
 ## Sentiment
-Number of Small Grants projects with comment in the "12 month progress" field: `r nrow(sentiment_df)`
+Sentiment score using a lexicon-based approach: The approach assigns a sentiment to each word of positive or negative. This can be translated int a score (number of positive words - number of negative words) / total number of words).
+
+The number of Small Grants projects with a comment in the "12 month progress" field: `r nrow(sentiment_df)`
 
 ### Proportion of projects with positive / negative sentiment
 
@@ -371,3 +374,10 @@ ggplot(sentiment_df)+
     scale_fill_manual(values = se_colour)
 ```
 
+### Example of sentiment scoring
+
+```{r Sent, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
+
+kable(head(sentiment_df))
+
+```

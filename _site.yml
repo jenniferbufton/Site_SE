@@ -13,12 +13,6 @@ navbar:
         - text: "Grants"
         - text: "Small Grants"
           href: Small-Grants_Report.html
-        - text: "---------"
-        - text: "Test"
-        - text: "Page C"
-          href: index.html
-        - text: "Page D"
-          href: index.html
     
   right:
     - icon: fa-internet-explorer
@@ -29,5 +23,5 @@ navbar:
       href: https://www.linkedin.com/company/sport-england
 output:
   html_document:
-    theme: spacelab
+    theme: flatly
     highlight: tango
