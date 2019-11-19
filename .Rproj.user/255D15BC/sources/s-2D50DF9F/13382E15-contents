@@ -250,9 +250,8 @@ leaflet() %>% addTiles() %>%
 ```
 
 ## Awards by Local Authority
-* The top LA for number of applications is: `r sp_la[1,1]` with `r sp_la[1,2]` applications
-* The most deprived area '
 
+The top LA for number of applications is: `r sp_la[1,1]` with `r sp_la[1,2]` applications
 
 ```{r lamap, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE, fig.align="center"}
 ## For map
@@ -378,6 +377,6 @@ ggplot(sentiment_df)+
 
 ```{r Sent, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 
-kable(head(sentiment_df))
+kable(sentiment_df[1,])
 
 ```
