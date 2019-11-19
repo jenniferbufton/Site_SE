@@ -10,7 +10,6 @@ navbar:
     - icon: fa-pound-sign
       href: index.html
       menu:
-        - text: "Grants"
         - text: "Small Grants"
           href: Small-Grants_Report.html
     

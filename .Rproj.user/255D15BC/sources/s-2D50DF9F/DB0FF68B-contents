@@ -1,12 +1,11 @@
 ---
-title: Homepage
+title: <center>Data Analytics</center>
 output: html_document
 ---
 
-<br>
-</br>
+---
 
-<center><img src="images/tgc.jpg", width="1000px"></center>
+<center><img src="images/tgc.jpg""></center>
 
 
 
