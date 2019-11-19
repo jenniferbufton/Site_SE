@@ -1,0 +1,33 @@
+name: "Sport England"
+output_dir: "."
+navbar:
+  title: "Sport England"
+  left:
+    - icon: fa-home
+      href: index.html
+    - icon: fa-book
+      href: Cookbook.html
+    - icon: fa-pound-sign
+      href: index.html
+      menu:
+        - text: "Grants"
+        - text: "Small Grants"
+          href: Small-Grants_Report.html
+        - text: "---------"
+        - text: "Test"
+        - text: "Page C"
+          href: index.html
+        - text: "Page D"
+          href: index.html
+    
+  right:
+    - icon: fa-internet-explorer
+      href: https://www.sportengland.org/
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/sport_england
+    - icon: fa-linkedin fa-lg
+      href: https://www.linkedin.com/company/sport-england
+output:
+  html_document:
+    theme: spacelab
+    highlight: tango
