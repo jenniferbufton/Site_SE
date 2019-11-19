@@ -5,15 +5,16 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "889113648",
+    "hash" : "2218643806",
     "id" : "13382E15",
-    "lastKnownWriteTime" : 1574167595,
-    "last_content_update" : 1574167595546,
+    "lastKnownWriteTime" : 1574176580,
+    "last_content_update" : 1574176580035,
     "path" : "C:/Users/jenniferb/OneDrive - Sport England/GitHub/Site_SE/Small Grants_Report.Rmd",
     "project_path" : "Small Grants_Report.Rmd",
     "properties" : {
-        "cursorPosition" : "252,0",
-        "scrollLine" : "242"
+        "cursorPosition" : "113,0",
+        "last_setup_crc32" : "2D50DF9Fd0a39cd3",
+        "scrollLine" : "99"
     },
     "relative_order" : 2,
     "source_on_save" : false,

@@ -110,6 +110,29 @@ ggplot(sg_df)+
   scale_x_continuous(labels = scales::dollar_format(prefix = "£")) 
 ```
 
+## Times funded
+
+This graph shows the number of organisations who had been funded by the Small Grants by the number of projects they have been funded for. As per the below, the maximum number of separate funded projects for a single organisation was `r max(sp_org$n)`
+
+```{r fund, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+
+sp_org$n <- as.factor(sp_org$n)
+ggplot(sp_org)+
+  geom_bar(aes(x="", y = n, fill = n), stat = "identity" ) +
+  coord_polar("y", start = 0)+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "right") +
+  labs( x= "", y = "", title = "Number of times an Organisation was Funded", caption = "Funded by Small Grants during current strategy period")+
+  scale_fill_manual(values = se_colour, name = "Number of times")
+
+```
+
+
 ## Outcome
 ```{r go_col, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 ggplot(sg_df)+
@@ -198,25 +221,6 @@ sg_df %>%
   labs( x= "Organisation type", y = "Number of Applications", title = "Number of Applications by Organisation Type")
 ```
 
-## Times funded
-This graph shows the distribution of funding more than once. As the histogram below shows, the maximum number of separate funded projects for a single organisation was `r max(sp_org$n)`
-
-```{r fund, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
-
-ggplot(sp_org)+
-  geom_histogram(aes(n), fill = "#5D4086" , binwidth = 1)+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        panel.grid = element_blank(),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "left")  +
-  labs( x= "", y = "Frequency funded", title = "Number of Times an Organisation was Funded")
-
-```
-
-
 
 # Funding across the country {.tabset .tabset-fade .tabset-pills} 
 
@@ -297,13 +301,7 @@ ggplot() +
 # Environmental Indicators
 
 We can also look at a number of environmental indicators that impact on the communities that the funding is targeting. The Index of Multiple Deprivation is the aggregate of all the different indicators (Crime, Employment, etc.), and this Index gives a relative score of deprivation in a locale.
-
-\
-
 The project in the most deprived area (`r sp_la_imd$LOCAL_AUTHORITY[1]`) is titled "`r sp_la_imd$PROJECT_TITLE[1]`", and was awarded `r paste0("£", formatC(mean(sp_la_imd$AWARD[1]), format = "f", digits=2, big.mark=","))`
-
-\
-
 The below chart shows the distribution of projects by IMD decile.
 
 ```{r imd, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
