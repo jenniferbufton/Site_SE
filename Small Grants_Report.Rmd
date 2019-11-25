@@ -30,6 +30,7 @@ library(tidyverse)
 library(forcats)
 library(wordcloud2)
 library(DT)
+library(readxl)
 
 #### read in GMS data
 setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
@@ -45,6 +46,8 @@ gov <- read.csv('Gov.csv', header = TRUE, na.strings = c("","N/A"))
 sentiment_df <- read.csv('Sentiment.csv', header = TRUE)%>%
   select("Document", "Sentiment.Prediction", "all.Words") %>%
   rename("Sentiment" = Sentiment.Prediction, `Number of Words` = "all.Words")
+
+me_df <- read_xlsx('MandE.xlsx', na = "NA")
 
 # colours for charts
 se_colour<- c("#E79AB5", "#B8345C", "#8CCDD6", "#43A8B6", "#00818F", "#C1DC9A", "#7ABB40", "#5D4086")
@@ -79,6 +82,9 @@ sg_org <- sg_df %>%
   select(AWARD, Org_Class) %>%
   group_by(Org_Class) %>%
   summarise(AWARD = sum(AWARD))
+
+## for M&E
+tab_me <- table(me_df$prediction)
 
 
 
@@ -256,6 +262,27 @@ sg_sport %>%
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
 ```
 
+## Organisation Type
+<br>
+
+```{r org_amount, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+
+  ggplot(data = sg_org, aes(x= reorder(Org_Class, AWARD), y = AWARD))+
+  geom_bar(stat = "identity", fill = "#5D4086") +
+  coord_flip()+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+        axis.text.y = element_text(hjust = 1, size = 8),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "right") +
+  labs( x= "Organisation type", y = "Award amount", title = "Organisation Type by Award Amount")+
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
+  
+```
+
 ## Government Outcome
 The most invested in Government Outcome is `r gov_ord[1,1]` with `r gov_ord[1,2]` awards, and `r paste0("£", formatC(gov_ord[1,3], format="f", digits=2, big.mark=","))` total amount awarded.
 
@@ -275,27 +302,6 @@ ggplot(gov)+
   scale_fill_manual(values = se_colour, name = "Outcome")
 ```
  
-
-## Organisation Type
-<br>
-
-```{r org_amount, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-
-  ggplot(data = sg_org, aes(x= reorder(Org_Class, AWARD), y = AWARD))+
-  geom_bar(stat = "identity", fill = "#5D4086") +
-  coord_flip()+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
-        axis.text.y = element_text(hjust = 1, size = 8),
-        panel.grid = element_blank(),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
-  labs( x= "Organisation type", y = "Award amount", title = "Awards Amount by Organisation Type")+
-  scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
-  
-```
 
 ## Inactivity
 This graph shows how much we invest into areas (LSOAs) by the proportion of those who are inactive (do less than 30 minutes of activity a week) in that area. The national rate of inactivity is 24.8%. The Active Live Survey report can be found [here](https://www.sportengland.org/media/14239/active-lives-adult-may-18-19-report.pdf)
@@ -424,7 +430,89 @@ ggplot(sg_df)+
 
 ```
 
+
+# Measure and Evaluation {.tabset .tabset-fade .tabset-pills} 
+
+What can we understand about a project to help us identify which projects have been successful  so that we can invest in projects that are more likely to be successful in the future?
+
+
+## Success
+Success here is defined as projects that have met or exceeded their 12 month targets. `r tab_me[2]` are successful out of the `r nrow(me_df)` projects had M&E data.
+```{r success,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+me_df <- me_df %>%
+  select("GMS_URN", "Sport", "Org_Class", "AWARD", "PARTICIPANTS BASELINE", "PARTICIPANTS PROJECT OVERALL" , "YEAR 1 PARTICIPANTS TARGET", "12 MONTH PARTICIPANTS", "prediction") %>%
+  mutate(`Number of Participants (over / under target)` = `12 MONTH PARTICIPANTS` - `YEAR 1 PARTICIPANTS TARGET`)%>%
+  mutate(`Success (Yes / No)` = if_else(`Number of Participants (over / under target)` >0, "Yes", "No"))
+  
+ggplot(me_df)+
+  geom_bar(aes(x="", y =AWARD, fill = prediction), stat = "identity" ) +
+  coord_polar("y", start = 0)+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "right") +
+  labs( x= "", y = "", title = "Proportion of Amount Awarded to 'Successful' Projects", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
+  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
+
+```
+
 <br>
+The below boxplot shows the distribution of award amounts by whether the project was successful or not. The main difference is a greater range of award amount for those projects that "failed".
+```{r succes_box, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+ggplot(me_df)+
+  geom_boxplot(aes(x="" , y = AWARD, fill = prediction) )+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "left")  +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Amount Awarded by Success of Project") +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
+```
+
+## Sport
+This barchart shows the amount awarded by the 5 most awarded sports, and shows the proportion that were "successful" (of those with M&E data):
+```{r me_sport_bar, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+me_df %>%
+  filter(Sport == c("Sailing & Yachting", "Rowing", "Association Football", "Exercise & Fitness", "Boxing" ))%>%
+  ggplot()+
+  geom_col(aes(x=Sport , y = AWARD, fill = prediction) )+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "left")  +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Sport") +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
+```
+<br>
+
+The below boxplot shows the distribution of award amounts by project success (of those with M&E data), and the 5 most awarded sports:
+```{r me_sport, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+me_df %>%
+  filter(Sport == c("Sailing & Yachting", "Rowing", "Association Football", "Exercise & Fitness", "Boxing" ))%>%
+  ggplot()+
+  geom_boxplot(aes(x=Sport , y = AWARD, fill = prediction) )+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "left")  +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Sport") +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
+```
 
 
 # Text Analysis 
