@@ -3,63 +3,20 @@
 "0","library(gmodels)"
 "0","library(rlang)"
 "0","library(caret)"
-"2","Loading required package: lattice
-"
-"2","Loading required package: ggplot2
-"
 "0","library(extrafont)"
-"2","Registering fonts with R
-"
 "0","library(leaflet)"
 "0","library(ggplot2)"
 "0","library(dplyr)"
-"2","
-Attaching package: ‘dplyr’
-
-"
-"2","The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-"
-"2","The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-"
 "0","library(extrafont)"
 "0","library(leaflet)"
 "0","library(scales)"
 "0","library(knitr)"
 "0","library(tidyverse)"
-"2","[30m-- [1mAttaching packages[22m --------------------------------------- tidyverse 1.2.1 --[39m
-"
-"2","[30m[32mv[30m [34mtibble [30m 2.1.3     [32mv[30m [34mpurrr  [30m 0.3.2
-[32mv[30m [34mtidyr  [30m 1.0.0     [32mv[30m [34mstringr[30m 1.4.0
-[32mv[30m [34mreadr  [30m 1.3.1     [32mv[30m [34mforcats[30m 0.4.0[39m
-"
-"2","[30m-- [1mConflicts[22m ------------------------------------------ tidyverse_conflicts() --
-[31mx[30m [34mpurrr[30m::[32m%@%()[30m         masks [34mrlang[30m::%@%()
-[31mx[30m [34mpurrr[30m::[32mas_function()[30m masks [34mrlang[30m::as_function()
-[31mx[30m [34mreadr[30m::[32mcol_factor()[30m  masks [34mscales[30m::col_factor()
-[31mx[30m [34mpurrr[30m::[32mdiscard()[30m     masks [34mscales[30m::discard()
-[31mx[30m [34mdplyr[30m::[32mfilter()[30m      masks [34mstats[30m::filter()
-[31mx[30m [34mpurrr[30m::[32mflatten()[30m     masks [34mrlang[30m::flatten()
-[31mx[30m [34mpurrr[30m::[32mflatten_chr()[30m masks [34mrlang[30m::flatten_chr()
-[31mx[30m [34mpurrr[30m::[32mflatten_dbl()[30m masks [34mrlang[30m::flatten_dbl()
-[31mx[30m [34mpurrr[30m::[32mflatten_int()[30m masks [34mrlang[30m::flatten_int()
-[31mx[30m [34mpurrr[30m::[32mflatten_lgl()[30m masks [34mrlang[30m::flatten_lgl()
-[31mx[30m [34mpurrr[30m::[32mflatten_raw()[30m masks [34mrlang[30m::flatten_raw()
-[31mx[30m [34mpurrr[30m::[32minvoke()[30m      masks [34mrlang[30m::invoke()
-[31mx[30m [34mdplyr[30m::[32mlag()[30m         masks [34mstats[30m::lag()
-[31mx[30m [34mpurrr[30m::[32mlift()[30m        masks [34mcaret[30m::lift()
-[31mx[30m [34mpurrr[30m::[32mlist_along()[30m  masks [34mrlang[30m::list_along()
-[31mx[30m [34mpurrr[30m::[32mmodify()[30m      masks [34mrlang[30m::modify()
-[31mx[30m [34mpurrr[30m::[32mprepend()[30m     masks [34mrlang[30m::prepend()
-[31mx[30m [34mpurrr[30m::[32msplice()[30m      masks [34mrlang[30m::splice()[39m
-"
 "0","library(forcats)"
 "0","library(wordcloud2)"
+"0","library(plotly)"
+"0","Sys.setenv(""plotly_username""=""jenniferb-c"")"
+"0","Sys.setenv(""plotly_api_key""=""rHDyzJdezEPqEuJh4rv0"")"
 "0","#### read in GMS data"
 "0","setwd(""C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants"")"
 "2","The working directory was changed to C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants inside a notebook chunk. The working directory will be reset when the chunk is finished running. Use the knitr root.dir option in the setup chunk to change the working directory for notebook chunks."
@@ -72,8 +29,6 @@ Attaching package: ‘dplyr’
 "0","  rename(""Sentiment"" = Sentiment.Prediction, `Number of Words` = ""all.Words"")"
 "0","# colours for charts"
 "0","se_colour<- c(""#E79AB5"", ""#B8345C"", ""#8CCDD6"", ""#43A8B6"", ""#00818F"", ""#C1DC9A"", ""#7ABB40"", ""#5D4086"")"
-"2","
-"
 "0","# transformation for headline figs"
 "0","sp_vec <- sg_df %>% count(Sport, sort = TRUE)"
 "0","sp_per <- sp_vec[1,2] / sum(sp_vec$n) * 100"
@@ -85,3 +40,13 @@ Attaching package: ‘dplyr’
 "0","sp_fo <- sg_df%>% count(Focus, sort = TRUE)"
 "0","sp_la_imd <- sg_df[order(sg_df$IMD_RANK),]"
 "0","sent_tab <- table(sentiment_df$Sentiment)"
+"0","## for sport chart"
+"0","sg_sport <- sg_df %>%"
+"0","  select(AWARD, Sport) %>%"
+"0","  group_by(Sport) %>%"
+"0","  summarise(AWARD = sum(AWARD))"
+"0","### create count"
+"0","count_of_sp <- sg_sport %>%"
+"0","count_of_sp <- sum(count_of_sp$n /2)"
+"2","Error in count_of_sp$n : $ operator is invalid for atomic vectors
+"
