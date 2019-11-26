@@ -19,6 +19,7 @@ library(gmodels)
 library(rlang)
 library(caret)
 library(extrafont)
+library(reshape2)
 library(leaflet)
 library(ggplot2)
 library(dplyr)
@@ -31,6 +32,7 @@ library(forcats)
 library(wordcloud2)
 library(DT)
 library(readxl)
+library(kableExtra)
 
 #### read in GMS data
 setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
@@ -47,7 +49,19 @@ sentiment_df <- read.csv('Sentiment.csv', header = TRUE)%>%
   select("Document", "Sentiment.Prediction", "all.Words") %>%
   rename("Sentiment" = Sentiment.Prediction, `Number of Words` = "all.Words")
 
+#### M&E data
 me_df <- read_xlsx('MandE.xlsx', na = "NA")
+
+##mean data
+me_df_mean  <- me_df %>%
+  select( "YEAR 1 PARTICIPANTS TARGET", "12 MONTH PARTICIPANTS") %>%
+  mutate(`NUMBER OVER/UNDER` = `12 MONTH PARTICIPANTS` - `YEAR 1 PARTICIPANTS TARGET`)
+
+## for women
+me_df_women <- read_xlsx('MandE.xlsx', na = "NA")%>%
+  select("MALE TARGET NUMBER", "MALE TARGET PERCENTAGE", "FEMALE TARGET NUMBER", "FEMALE TARGET PERCENTAGE", "12 MONTH MALE NUMBER", "12 MONTH FEMALE NUMBER", "12 MONTH MALE PERCENTAGE", "12 MONTH FEMALE PERCENTAGE",  "prediction" ) 
+
+
 
 # colours for charts
 se_colour<- c("#E79AB5", "#B8345C", "#8CCDD6", "#43A8B6", "#00818F", "#C1DC9A", "#7ABB40", "#5D4086")
@@ -116,25 +130,11 @@ These figures are for projects (funded by the Small Grants fund) that have start
 ```{r summary, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 table_df <- sg_df %>%
   rename("URN" = GMS_URN, `Award Amount` =  AWARD, `Total Project Cost` = Total_Project_Cost,  `Partnership Funding` = Partnership_Funding, `Other Funding` = OTHER_FUNDING, `Government Outcome` = Govt_Outcome, "Region" = GOVERNMENT_OFFICE_REGION, `Organisation Type`= Org_Class, `IMD Decile` = "IMD_Decile_2019", `Active Lives Survey Inactive (%)` = ALS_Inactive_PC_2018, `Total Population` = Population..2018.Estimates....Total.population.) %>%
-  select(c(`Award Amount`, `Total Project Cost`, "Sport", "Region", `Organisation Type`, "Focus", `IMD Decile`, `Total Population`,`Active Lives Survey Inactive (%)`))
-summary(table_df)
+  select(c("Award Amount", "Total Project Cost", "Sport", "Region", "Organisation Type", "Focus", "IMD Decile", "Total Population","Active Lives Survey Inactive (%)"))
+kable(summary(table_df), row.names = 0, col.names = c("Award Amount", "Total Project Cost", "Sport", "Region", "Organisation Type", "Focus", "IMD Decile", "Total Population","Active Lives Survey Inactive (%)")) %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
 ```
-
-## Data table
-```{r dt, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
-table_df <- sg_df %>%
-  rename("URN" = GMS_URN, `Award Amount` =  AWARD, `Total Project Cost` = Total_Project_Cost,  `Partnership Funding` = Partnership_Funding, `Other Funding` = OTHER_FUNDING, `Government Outcome` = Govt_Outcome, "Region" = GOVERNMENT_OFFICE_REGION, `Organisation Type`= Org_Class, `IMD Decile` = "IMD_Decile_2019", `Active Lives Survey Inactive (%)` = ALS_Inactive_PC_2018, `Total Population (LSOA)` = Population..2018.Estimates....Total.population.) %>%
-  select(c("URN",`Award Amount`, `Total Project Cost`, "Sport", "Region", `Organisation Type`, "Focus", `IMD Decile`, `Total Population (LSOA)`,`Active Lives Survey Inactive (%)`))
-
-DT::datatable(table_df,  filter = 'top',
-              options = list(pageLength = 5,
-                                       lengthMenu = c(5, 10, 15, 20)))%>%
-  formatCurrency(c(2,3), '£') %>%
-  formatPercentage(10, 2) %>%
-  formatRound(9,0)
-
-```
-
 
 ## Award amounts
 ```{r award, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
@@ -189,7 +189,7 @@ ggplot(sp_org)+
         panel.grid = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
+        legend.position = "left") +
   labs( x= "", y = "", title = "Number of times an Organisation was Funded", caption = "Funded by Small Grants during current strategy period")+
   scale_fill_manual(values = se_colour, name = "Number of times")
 
@@ -206,7 +206,7 @@ ggplot(sg_df)+
         panel.grid = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
+        legend.position = "left") +
   labs( x= "", y = "", title = "Amount Awarded per Focus")+
     scale_fill_manual(values = se_colour)
 ```
@@ -233,7 +233,7 @@ sg_sport %>%
         panel.grid = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
+        legend.position = "left") +
   labs( x= "Organisation type", y = "Number of Awards", title = "Type of Sport by Award Amount") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
 ```
@@ -257,13 +257,12 @@ sg_sport %>%
         panel.grid = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
+        legend.position = "left") +
   labs( x= "Organisation type", y = "Number of Awards", title = "Type of Sport by Award Amount") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
 ```
 
 ## Organisation Type
-<br>
 
 ```{r org_amount, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 
@@ -277,8 +276,8 @@ sg_sport %>%
         panel.grid = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
-  labs( x= "Organisation type", y = "Award amount", title = "Organisation Type by Award Amount")+
+        legend.position = "left") +
+  labs( x= "Organisation type", y = "Award amount", title = "Organisation Type by Award Amount", caption = "Only one type has been selected per award. /nThis may not have been consistently applied by applicants")+
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
   
 ```
@@ -296,7 +295,7 @@ ggplot(gov)+
         panel.grid = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
+        legend.position = "left") +
   labs( x= "Government Outcome", y = "Award Amount", title = "Total Award by Government Outcome") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))+
   scale_fill_manual(values = se_colour, name = "Outcome")
@@ -326,8 +325,26 @@ mutate(ALS_Inactive = case_when(ALS_Inactive_PC_2018 >= 0.9 ~ "6. Between 90% an
         caption = ("Active Lives Survey 2018-2019")) +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) 
 ```
-<br>
 
+
+## Data table
+```{r dt, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+table_df <- sg_df %>%
+  rename("URN" = GMS_URN, `Award Amount` =  AWARD, `Total Project Cost` = Total_Project_Cost,  `Partnership Funding` = Partnership_Funding, `Other Funding` = OTHER_FUNDING, `Government Outcome` = Govt_Outcome, "Region" = GOVERNMENT_OFFICE_REGION, `Organisation Type`= Org_Class, `IMD Decile` = "IMD_Decile_2019", `Active Lives Survey Inactive (%)` = ALS_Inactive_PC_2018, `Total Population (LSOA)` = Population..2018.Estimates....Total.population.) %>%
+  select(c("URN",`Award Amount`, `Total Project Cost`, "Sport", "Region", `Organisation Type`, "Focus", `IMD Decile`, `Total Population (LSOA)`,`Active Lives Survey Inactive (%)`))
+
+DT::datatable(table_df,  filter = 'top',
+              options = list(pageLength = 5,
+                                       lengthMenu = c(5, 10, 15, 20)))%>%
+  formatCurrency(c(2,3), '£') %>%
+  formatPercentage(10, 2) %>%
+  formatRound(9,0) %>%
+formatStyle(columns = "URN", font = "Norwester", color = "#B8345C" , backgroundColor = "#E79AB5" )
+  
+
+```
+
+<br>
 
 # Funding across the country {.tabset .tabset-fade .tabset-pills} 
 
@@ -359,6 +376,8 @@ leaflet() %>% addTiles() %>%
   addLegend("bottomright", pal = pal, values = sg_map$group, title = "Small Grants Awards: Sport England 2019",
             opacity = 1)
 ```
+
+<br>
 
 ## Awards by Local Authority
 
@@ -430,17 +449,46 @@ ggplot(sg_df)+
 
 ```
 
+<br>
 
-# Measure and Evaluation {.tabset .tabset-fade .tabset-pills} 
+# Measure and Evaluation: Successful projects {.tabset .tabset-fade .tabset-pills} 
 
 What can we understand about a project to help us identify which projects have been successful  so that we can invest in projects that are more likely to be successful in the future?
 
-
-## Success
 Success here is defined as projects that have met or exceeded their 12 month targets. `r tab_me[2]` are successful out of the `r nrow(me_df)` projects had M&E data.
+
+## Overall
+
+The below table and graph shows the average target per project, and the average number of participants at 12 months.
+```{r success_mean,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+kable(as.data.frame(colMeans(me_df_mean)), col.names = "Figures Overall") %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
+```
+<br>
+
+
+```{r mean_df_1, success,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+melt(me_df_mean[,1:2]) %>%
+ggplot(aes(x=variable, y =value))+
+  geom_bar(aes( fill = variable),stat = "identity") +
+  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "left") +
+  labs( x= "Target / Actual Participants ", y = "Number of Participants", title = "Targets and actuals", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
+  scale_fill_manual(values = se_colour, name = "From a project that \nmet targets")+
+  scale_y_continuous(labels = scales::comma_format(big.mark = ",")) 
+```
+
+<br>
+This graph shows the proportion of awards that were "successful" or not at the 12 month point:
 ```{r success,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 me_df <- me_df %>%
-  select("GMS_URN", "Sport", "Org_Class", "AWARD", "PARTICIPANTS BASELINE", "PARTICIPANTS PROJECT OVERALL" , "YEAR 1 PARTICIPANTS TARGET", "12 MONTH PARTICIPANTS", "prediction") %>%
+  select("GMS_URN", "Sport", "Org_Class", "AWARD", "PROJECT_COST", "PARTICIPANTS BASELINE", "PARTICIPANTS PROJECT OVERALL" , "YEAR 1 PARTICIPANTS TARGET", "12 MONTH PARTICIPANTS", "prediction") %>%
   mutate(`Number of Participants (over / under target)` = `12 MONTH PARTICIPANTS` - `YEAR 1 PARTICIPANTS TARGET`)%>%
   mutate(`Success (Yes / No)` = if_else(`Number of Participants (over / under target)` >0, "Yes", "No"))
   
@@ -453,15 +501,15 @@ ggplot(me_df)+
         panel.grid = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
+        legend.position = "left") +
   labs( x= "", y = "", title = "Proportion of Amount Awarded to 'Successful' Projects", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 
 ```
 
 <br>
-The below boxplot shows the distribution of award amounts by whether the project was successful or not. The main difference is a greater range of award amount for those projects that "failed".
-```{r succes_box, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+The below boxplot shows the *distribution* of award amounts by whether the project was successful or not:
+```{r success_box, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 ggplot(me_df)+
   geom_boxplot(aes(x="" , y = AWARD, fill = prediction) )+
   theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
@@ -475,6 +523,54 @@ ggplot(me_df)+
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 ```
+
+## Gender
+
+The below table shows the average target numbers and proportions by gender:
+
+```{r women_target,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+
+me_df_women.num <- me_df_women[,1:4]
+kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall")%>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
+
+```
+
+<br>
+
+The below table shows the average 12 month actual numbers and proportions by gender:
+
+```{r women_actuals,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+
+me_df_women.num <- me_df_women[,5:8]
+
+kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall")%>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
+
+```
+
+<br>
+
+The below bar chart shows the number or participants after 12 months, and shows the proportion of these that came from either 'successful' projects or those that had 'failed' i.e. did not meet their 12 month target:
+```{r women_bar, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+melt_df_women <- melt(me_df_women[,c(5,6,9)])
+
+ggplot(melt_df_women, aes(x=variable, y =value))+
+  geom_bar(aes( fill = prediction),stat = "identity") +
+  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "left") +
+  labs( x= "Gender of Participants ", y = "Number of Participants", title = "Targets by Gender", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
+  scale_fill_manual(values = se_colour, name = "From a project that \nmet targets")+
+  scale_y_continuous(labels = scales::comma_format(big.mark = ",")) 
+```
+
 
 ## Sport
 This barchart shows the amount awarded by the 5 most awarded sports, and shows the proportion that were "successful" (of those with M&E data):
@@ -514,6 +610,63 @@ me_df %>%
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 ```
 
+## Organisation type
+```{r me_org_bar, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+me_df %>%
+  filter(Org_Class == c("Unregistered Club or Association", "Registered Charity", "Registered CASC", "Company Limited by Guarantee (without share capital)", "Charitable Incorporated Organisation" ))%>%
+  ggplot()+
+  geom_col(aes(x=Org_Class , y = AWARD, fill = prediction) )+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "bottom")  +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Organisation Type", caption = "Only one type has been selected per award. \nThis may not have been consistently applied by applicants") +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
+```
+
+<br>
+
+
+```{r me_org_box, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+
+me_df %>%
+    filter(Org_Class == c("Unregistered Club or Association", "Registered Charity", "Registered CASC", "Company Limited by Guarantee (without share capital)", "Charitable Incorporated Organisation" ))%>%
+  ggplot()+
+  geom_boxplot(aes(x=Org_Class , y = AWARD, fill = prediction) )+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "bottom")  +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Organisation Type", caption = "Only one type has been selected per award. \nThis may not have been consistently applied by applicants") +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
+
+```
+
+## Data table
+```{r me_dt, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+me_tab <- me_df %>%
+  select("GMS_URN", "Sport", "Org_Class", "AWARD", "PARTICIPANTS BASELINE", "YEAR 1 PARTICIPANTS TARGET", "12 MONTH PARTICIPANTS", "prediction") %>%
+  mutate(`Number of Participants (over / under target)` = `12 MONTH PARTICIPANTS` - `YEAR 1 PARTICIPANTS TARGET`)%>%
+  mutate("Percentage (over / under target" = `Number of Participants (over / under target)` / `YEAR 1 PARTICIPANTS TARGET`)
+
+DT::datatable(me_tab, colnames = c('Row', 'URN', 'Sport', 'Organisation Type', 'Award Amount', 'Baseline', 'Year 1 Target', 'Year 1 Participants', 'Outcome', 'Number: over/under target'),  filter = 'top',
+              options = list(pageLength = 5,
+                                       lengthMenu = c(5, 10, 15, 20)))%>%
+  formatCurrency(4, '£') %>%
+  formatRound(c(5:8, 10),0) %>%
+formatStyle(columns = "GMS_URN", font = "Norwester", color = "#B8345C" , backgroundColor = "#E79AB5" )
+
+```
+
+<br>
 
 # Text Analysis 
 Using the "12 month progress" field, we can look at the unstructured data of the Measure and Evaluation element of an award. We can do this using word frequency, topic extraction using LDA (Latent Dirichlet Modelling), and also assigning sentiment. 
@@ -537,7 +690,9 @@ The topic modelling was created using the LDA model, and the "Elbow" method appl
 
 ```{r 12_prog_top, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 
-kable(topic_tbl)
+kable(topic_tbl) %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
 ```
 
 <br>
@@ -564,7 +719,7 @@ ggplot(sentiment_df)+
         panel.grid = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "right") +
+        legend.position = "left") +
   labs( x= "", y = "", title = "Sentiment")+
     scale_fill_manual(values = se_colour)
 ```
@@ -575,6 +730,8 @@ ggplot(sentiment_df)+
 
 ```{r Sent, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 
-kable(sentiment_df[1,])
+kable(sentiment_df[1,]) %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
 
 ```
