@@ -467,19 +467,18 @@ kable(as.data.frame(colMeans(me_df_mean)), col.names = "Figures Overall") %>%
 ```
 <br>
 
-
-```{r mean_df_1, success,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+```{r mean_df_1,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 melt(me_df_mean[,1:2]) %>%
 ggplot(aes(x=variable, y =value))+
   geom_bar(aes( fill = variable),stat = "identity") +
   theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
         plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
         panel.grid = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.x = element_blank(),
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "Target / Actual Participants ", y = "Number of Participants", title = "Targets and actuals", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
+  labs( x= "Target / Actual Participants ", y = "Number of Participants", title = "Targets and Actuals", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
   scale_fill_manual(values = se_colour, name = "From a project that \nmet targets")+
   scale_y_continuous(labels = scales::comma_format(big.mark = ",")) 
 ```
