@@ -133,8 +133,8 @@ These figures are for projects (funded by the Small Grants fund) that have start
 ```{r summary, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 table_df <- sg_df %>%
   rename("URN" = GMS_URN, `Award Amount` =  AWARD, `Total Project Cost` = Total_Project_Cost,  `Partnership Funding` = Partnership_Funding, `Other Funding` = OTHER_FUNDING, `Government Outcome` = Govt_Outcome, "Region" = GOVERNMENT_OFFICE_REGION, `Organisation Type`= Org_Class, `IMD Decile` = "IMD_Decile_2019", `Active Lives Survey Inactive (%)` = ALS_Inactive_PC_2018, `Total Population` = Population..2018.Estimates....Total.population.) %>%
-  select(c("Award Amount", "Total Project Cost", "Sport", "Region", "Organisation Type", "Focus", "IMD Decile", "Total Population","Active Lives Survey Inactive (%)"))
-kable(summary(table_df), row.names = 0, col.names = c("Award Amount", "Total Project Cost", "Sport", "Region", "Organisation Type", "Focus", "IMD Decile", "Total Population","Active Lives Survey Inactive (%)")) %>%
+  select(c("Award Amount", "Total Project Cost", "Sport","Organisation Type", "Focus", "IMD Decile", "Total Population","Active Lives Survey Inactive (%)"))
+kable(summary(table_df), row.names = 0, col.names = c("Award Amount", "Total Project Cost", "Sport", "Organisation Type", "Focus", "IMD Decile", "Total Population","Active Lives Survey Inactive (%)")) %>%
   kable_styling(bootstrap_options = "bordered",
                 full_width = FALSE) 
 ```
@@ -285,25 +285,6 @@ sg_sport %>%
   
 ```
 
-## Government Outcome
-The most invested in Government Outcome is `r gov_ord[1,1]` with `r gov_ord[1,2]` awards, and `r paste0("£", formatC(gov_ord[1,3], format="f", digits=2, big.mark=","))` total amount awarded.
-
-```{r gov, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-ggplot(gov)+
-  geom_bar(aes(x=Govt_Outcome, y = AWARD, fill = Govt_Outcome), stat = "identity" ) +
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
-        axis.text.y = element_text(hjust = 1, size = 8),
-        panel.grid = element_blank(),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "left") +
-  labs( x= "Government Outcome", y = "Award Amount", title = "Total Award by Government Outcome") +
-  scale_y_continuous(labels = scales::dollar_format(prefix = "£"))+
-  scale_fill_manual(values = se_colour, name = "Outcome")
-```
- 
 
 ## Inactivity
 This graph shows how much we invest into areas (LSOAs) by the proportion of those who are inactive (do less than 30 minutes of activity a week) in that area. The national rate of inactivity is 24.8%. The Active Live Survey report can be found [here](https://www.sportengland.org/media/14239/active-lives-adult-may-18-19-report.pdf)
@@ -348,6 +329,39 @@ formatStyle(columns = "URN", font = "Norwester", color = "#B8345C" , backgroundC
 ```
 
 <br>
+
+# Government Outcomes
+The 2016-2021 strategy contriibutes to the Government's five outcomes set out in [*Sporting Futures*](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/486622/Sporting_Future_ACCESSIBLE.pdf). 
+
+The below table and chart show the amount the Small Grants fund invests per outcome. NB a minority of awards are duplicated - this is because a few contribute to more than one outcome. 
+
+```{r gov_tab, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center' }
+gov %>% 
+  group_by(Govt_Outcome)%>%
+  summarise(AWARD = sum(AWARD))%>%
+  mutate(AWARD = paste0(scales::dollar(AWARD, prefix = "£"))) %>%
+  rename("Award" = AWARD, "Government Outcome" = Govt_Outcome)%>%
+  kable()%>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
+```
+
+
+```{r gov, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+ggplot(gov)+
+  geom_bar(aes(x=Govt_Outcome, y = AWARD, fill = Govt_Outcome), stat = "identity" ) +
+  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+        axis.text.y = element_text(hjust = 1, size = 8),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "left") +
+  labs( x= "Government Outcome", y = "Award Amount", title = "Total Award by Government Outcome") +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£"))+
+  scale_fill_manual(values = se_colour, name = "Outcome")
+```
 
 # Funding across the country {.tabset .tabset-fade .tabset-pills} 
 
@@ -464,7 +478,7 @@ Success here is defined as projects that have met or exceeded their 12 month tar
 
 The below table and graph shows the average target per project, and the average number of participants at 12 months.
 ```{r success_mean,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
-kable(as.data.frame(colMeans(me_df_mean)), col.names = "Figures Overall") %>%
+kable(as.data.frame(colMeans(me_df_mean)), col.names = "Figures Overall", digits = 0) %>%
   kable_styling(bootstrap_options = "bordered",
                 full_width = FALSE) 
 ```
@@ -487,7 +501,7 @@ ggplot(aes(x=variable, y =value))+
 ```
 
 <br>
-This graph shows the proportion of awards that were "successful" or not at the 12 month point:
+This graph shows the *proportion* of awards that were "successful" or not at the 12 month point:
 ```{r success,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 me_df <- me_df %>%
   select("GMS_URN", "Sport", "Org_Class", "AWARD", "PROJECT_COST", "PARTICIPANTS BASELINE", "PARTICIPANTS PROJECT OVERALL" , "YEAR 1 PARTICIPANTS TARGET", "12 MONTH PARTICIPANTS", "prediction") %>%
@@ -570,7 +584,7 @@ ggplot(melt_df_women, aes(x=variable, y =value))+
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
   labs( x= "Gender of Participants ", y = "Number of Participants", title = "Targets by Gender", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
-  scale_fill_manual(values = se_colour, name = "From a project that \nmet targets")+
+  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")+
   scale_y_continuous(labels = scales::comma_format(big.mark = ",")) 
 ```
 
@@ -587,7 +601,7 @@ ggplot(me_box_g)+
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left")  +
-  labs( x= "Gender focus", y = "Amount awarded", title = "Amount Awarded by Gender: Success of Project") +
+  labs( x= "Gender focus", y = "Amount awarded", title = "Amount Awarded by Gender: Success of Project", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 
@@ -608,7 +622,7 @@ me_df %>%
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left")  +
-  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Sport") +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Sport", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 ```
@@ -627,7 +641,7 @@ me_df %>%
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left")  +
-  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Sport") +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Sport", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 ```
@@ -651,7 +665,6 @@ me_df %>%
 ```
 
 <br>
-
 
 ```{r me_org_box, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 
