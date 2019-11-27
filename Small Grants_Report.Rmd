@@ -61,6 +61,9 @@ me_df_mean  <- me_df %>%
 me_df_women <- read_xlsx('MandE.xlsx', na = "NA")%>%
   select("MALE TARGET NUMBER", "MALE TARGET PERCENTAGE", "FEMALE TARGET NUMBER", "FEMALE TARGET PERCENTAGE", "12 MONTH MALE NUMBER", "12 MONTH FEMALE NUMBER", "12 MONTH MALE PERCENTAGE", "12 MONTH FEMALE PERCENTAGE",  "prediction" ) 
 
+me_box_g <- me_df %>%
+  select("12 MONTH FEMALE NUMBER", "12 MONTH MALE NUMBER", "AWARD", "prediction") %>%
+  mutate("Gender_Focus" = ifelse(test = `12 MONTH MALE NUMBER` >= `12 MONTH FEMALE NUMBER`, yes = "Female", no = "Male"))
 
 
 # colours for charts
@@ -524,13 +527,14 @@ ggplot(me_df)+
 ```
 
 ## Gender
+In general, the Small Grants fund funds projects that have more male participants than women. 
 
-The below table shows the average target numbers and proportions by gender:
+The below table shows the average target numbers and percentage for women:
 
 ```{r women_target,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 
-me_df_women.num <- me_df_women[,1:4]
-kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall")%>%
+me_df_women.num <- me_df_women[,c(3,4,6,8)]
+kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall", digits = 0)%>%
   kable_styling(bootstrap_options = "bordered",
                 full_width = FALSE) 
 
@@ -538,13 +542,13 @@ kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall")%>
 
 <br>
 
-The below table shows the average 12 month actual numbers and proportions by gender:
+The below table shows the average target numbers and percentage for men:
 
 ```{r women_actuals,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 
-me_df_women.num <- me_df_women[,5:8]
+me_df_women.num <- me_df_women[,c(1,2,5,7)]
 
-kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall")%>%
+kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall", digits = 0)%>%
   kable_styling(bootstrap_options = "bordered",
                 full_width = FALSE) 
 
@@ -568,6 +572,25 @@ ggplot(melt_df_women, aes(x=variable, y =value))+
   labs( x= "Gender of Participants ", y = "Number of Participants", title = "Targets by Gender", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
   scale_fill_manual(values = se_colour, name = "From a project that \nmet targets")+
   scale_y_continuous(labels = scales::comma_format(big.mark = ",")) 
+```
+
+The below chart shows how much is invested in projects tht have a specific focus (focus defined as more participants at 12 months of a specific gender):
+
+```{r women_focus, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
+
+ggplot(me_box_g)+
+  geom_col(aes(x= Gender_Focus, y = AWARD, fill = prediction) )+
+  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "left")  +
+  labs( x= "Gender focus", y = "Amount awarded", title = "Amount Awarded by Gender: Success of Project") +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
+
 ```
 
 
