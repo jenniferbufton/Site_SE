@@ -10,8 +10,11 @@ navbar:
     - icon: fa-pound-sign
       href: index.html
       menu:
-        - text: "Small Grants"
-          href: Small-Grants_Report.html
+        - text: "Small Grants Report"
+        - text: "Main Report"
+          href: Small-Grants_Report.html 
+        - text: "Predictive Analytics"
+          href: Predictive.html
     
   right:
     - icon: fa-internet-explorer
