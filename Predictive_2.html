@@ -491,8 +491,8 @@ Incorrect
 </div>
 <div id="evaluating-the-classifications" class="section level2">
 <h2><span class="header-section-number">1.3</span> Evaluating the Classifications</h2>
-<p>We can see more detail around the classifications using the <code>CrossTable</code> function. As can be seen in the table below, the main issue with the predictions were that 45 of those that were <code>TRUE</code> (i.e. were over the 12 month target), were predicted <code>FALSE</code>.</p>
-<p>Only 11% (9 cases) of those that were <code>FALSE</code> were misclassified as <code>TRUE</code>.</p>
+<p>We can see more detail around the classifications using the <code>CrossTable</code> function. As can be seen in the table below, the main issue with the predictions were that 45 of those that were “True” (i.e. were over the 12 month target), were predicted “False”.</p>
+<p>Only 11% (9 cases) of those that were FALSE were misclassified as TRUE.</p>
 <pre><code>## 
 ##  
 ##    Cell Contents
@@ -527,6 +527,36 @@ Incorrect
 ## </code></pre>
 <p>The 60% accuracy is problematic for applying this to new applications as it currently stands.</p>
 <p>One potential way to improve the predictions would be to add other predictor variables (e.g. including target numbers around age, ethnicity, and disability).</p>
+</div>
+</div>
+<div id="decision-trees" class="section level1">
+<h1><span class="header-section-number">2</span> Decision Trees</h1>
+<p>The ‘tree’ is a sequence of decisions (branches) that aim to maximise the reduction in the variation in the outcome variable (in this case, the number of participants at 12 months).</p>
+<p><br></p>
+</div>
+<div id="outputs" class="section level1 tabset tabset-fade tabset-pills">
+<h1><span class="header-section-number">3</span> Outputs</h1>
+<p>The model below shows the first “branch”, i.e. the most important variable out of those included that explain variation. This is the “Total Project Cost” - if the total cost is greater than or equal to £23,707.93 (4% of the awards), the mean number of participants is 611 . Less than this amount, and the mean number is 176, and this accounts for 96% of the awards.</p>
+<p>The model was limited to the most important variable (branch 1). The more depth we go down, the better the model will ‘fit’ our data. This can be problematic if we tried to predict an outcome based on this model. The data may become ‘over-fitted’ (i.e. the model is only acccurate when applied to this specific dataset).</p>
+<div id="decision-tree-plot" class="section level2">
+<h2><span class="header-section-number">3.1</span> Decision Tree Plot</h2>
+<p><img src="Predictive_2_files/figure-html/tree.1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="decision-tree-summary" class="section level2">
+<h2><span class="header-section-number">3.2</span> Decision Tree Summary</h2>
+<pre><code>## n= 841 
+## 
+## node), split, n, deviance, yval
+##       * denotes terminal node
+## 
+## 1) root 841 299344300 191.6587  
+##   2) Total_Project_Cost&lt; 23707.93 810 201888500 175.6049 *
+##   3) Total_Project_Cost&gt;=23707.93 31  91792410 611.1290 *</code></pre>
+</div>
+<div id="variable-importance" class="section level2">
+<h2><span class="header-section-number">3.3</span> Variable Importance</h2>
+<pre><code>##  Total_Project_Cost Partnership_Funding 
+##             5663372             5297993</code></pre>
 </div>
 </div>
 

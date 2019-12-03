@@ -115,9 +115,9 @@ kable(prop.table(table(test_d$correct)), col.names = c("Correct?","Proportion"))
 
 ```
 ## Evaluating the Classifications
-We can see more detail around the classifications using the `CrossTable` function. As can be seen in the table below, the main issue with the predictions were that 45 of those that were `TRUE` (i.e. were over the 12 month target),  were  predicted `FALSE`.
+We can see more detail around the classifications using the `CrossTable` function. As can be seen in the table below, the main issue with the predictions were that 45 of those that were "True" (i.e. were over the 12 month target),  were  predicted "False".
 
-Only 11% (9 cases) of those that were `FALSE` were misclassified as `TRUE`.
+Only 11% (9 cases) of those that were FALSE were misclassified as TRUE.
 
 
 ```{r knn3, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE }
@@ -128,3 +128,49 @@ CrossTable(x = test_d$Over_Target, y = d_test_pred,
 The 60% accuracy is problematic for applying this to new applications as it currently stands.
 
 One potential way to improve the predictions would be to add other predictor variables (e.g. including target numbers around age, ethnicity, and disability). 
+
+
+# Decision Trees
+
+The ‘tree’ is a sequence of decisions (branches) that aim to maximise the reduction in the variation in the outcome variable (in this case, the number of participants at 12 months).
+
+<br>
+
+# Outputs  {.tabset .tabset-fade .tabset-pills} 
+The model below shows the first "branch", i.e. the most important variable out of those included that explain variation.  This is the "Total Project Cost" - if the total cost is greater than or equal to £23,707.93 (4% of the awards), the mean number of participants is 611 . Less than this amount, and the mean number is 176, and this accounts for 96% of the awards.
+
+The model was limited to the most important variable (branch 1). The more depth we go down, the better the model will 'fit' our data. This can be problematic if we tried to predict an outcome based on this model. The data may become 'over-fitted' (i.e. the model is only acccurate when applied to this specific dataset).
+
+## Decision Tree Plot
+```{r tree.1, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
+
+data <- me_df%>%
+  select(AWARD, Total_Project_Cost, Partnership_Funding, GOVERNMENT_OFFICE_REGION, Focus,
+         ALLOCATED_TO, IMD_RANK, `12 MONTH PARTICIPANTS`, Org_Class)
+
+data <- as.data.frame(data)
+data$IMD_RANK <- as.numeric(data$IMD_RANK)
+data$GOVERNMENT_OFFICE_REGION <- as.factor(data$GOVERNMENT_OFFICE_REGION)
+data$Focus <- as.factor(data$Focus)
+data$ALLOCATED_TO <- as.factor(data$ALLOCATED_TO)
+
+#set.seed(123)
+inTrain <- createDataPartition(y=data$`12 MONTH PARTICIPANTS`, p=1, list=FALSE) 
+Train <- data[inTrain,]
+#Test <- data[-inTrain,]
+
+tree <- rpart(`12 MONTH PARTICIPANTS` ~., data=Train, maxdepth = 1)
+rpart.plot(tree, tweak = 1.5, cex = 0.5, type = 1)
+```
+
+## Decision Tree Summary
+```{r tree.2, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
+tree
+```
+
+
+## Variable Importance
+```{r tree.3, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
+tree$variable.importance
+```
+
