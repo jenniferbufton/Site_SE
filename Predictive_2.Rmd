@@ -28,7 +28,7 @@ library(extrafont)
 setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
 me_df <- read_xlsx('MandE.xlsx', na = "NA")
 
-se_colour<- c( "#B8345C", "#8CCDD6", "#43A8B6", "#00818F", "#C1DC9A", "#7ABB40", "#5D4086", "#E79AB5")
+se_colour <- c( "#e41b4a", "#0072d6", "#a4569c", "#00a881", "#ff6105") # custom colours to use in the chart
 
 
 

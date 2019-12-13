@@ -27,19 +27,21 @@ use `se_colour` in plots to assign the Sport England house colours.
 
 ```{r brand, echo=TRUE, message=FALSE, warning=FALSE}
 # Set colour scheme
-se_colour <- c("#E79AB5", "#B8345C", "#8CCDD6", "#43A8B6", "#00818F", "#C1DC9A", "#7ABB40", "#5D4086") # colours for use in plot
+se_colour <- c( "#e41b4a", "#0072d6", "#a4569c", "#00a881", "#ff6105")
+se_colour__inverse <- c("#ff6105", "#00a881", "#a4569c", "#0072d6", "#e41b4a")
+se_colour_gradient <- c("#003F69", alpha("#003F69", 0.8), alpha("#003F69", 0.6), alpha("#003F69", 0.4), alpha("#003F69", 0.2)) # changes transparency
 ```
 
 ## Scatter Plot
 
-```{r Scatter, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Scatter, echo=FALSE, message=FALSE, warning=FALSE, fig.align= 'center'}
 
 # Scatter plot
 d <- diamonds
 plot.point <- ggplot(data = d)+ 
   geom_point(aes(x = carat, y = price, color = cut)) + 
-  theme(text = element_text(family = "Norwester", color = "#5F5F5F"), 
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5), 
+  theme(text = element_text(family = "Poppins", color = "#5F5F5F"), 
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5), 
         panel.background  =  element_blank() ) + 
   labs( x= "Carat", y = "Price", title = "Price by Carat", fill = "Cut") +
   scale_color_manual(values= se_colour) 
@@ -48,15 +50,15 @@ plot.point
 
 Depending on your data, additional changes may be required to "neaten" the plot. For example, we can reformat the y axis labels to display them as currency, and add `geom_smooth` to help show patterns:
 
-```{r Scatter2, echo=TRUE}
+```{r Scatter2, echo=TRUE, fig.align= 'center'}
 
 # Scatter plot
 d <- diamonds
 plot.point.v1 <- ggplot(data = d)+ 
   geom_point(aes(x = carat, y = price, color = cut)) +
   geom_smooth(aes(x = carat, y = price, color = cut)) +
-  theme(text = element_text(family = "Norwester", color = "#5F5F5F"), 
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5), 
+  theme(text = element_text(family = "Poppins", color = "#5F5F5F"), 
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5), 
         panel.background  =  element_blank() ) + 
   labs( x= "Carat", y = "Price", title = "Price by Carat", fill = "Cut") +
   scale_color_manual(values= se_colour) +
@@ -71,12 +73,12 @@ A boxplot shows the distribution of a variable. It gives you the median, the qua
 
 You can do lots more to a boxplot, rotating it horizontally, adding the notch argument to add confidence intervals around the median, adding the mean, etc. See `tidyverse` [documentation](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) for more details
 
-```{r Boxplot, echo=TRUE}
+```{r Boxplot, echo=TRUE, fig.align= 'center'}
 d <- diamonds
 plot.box <- ggplot(data = d)+ 
   geom_boxplot(aes(x = carat, y = price, fill = cut)) + 
-  theme(text = element_text(family = "Norwester", color = "#5F5F5F"), 
-  plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5),
+  theme(text = element_text(family = "Poppins", color = "#5F5F5F"), 
+  plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5),
   panel.background  =  element_blank()) +
   labs( x= "Carat", y = "Price", title = "Price by Carat", fill = "Cut") +
   scale_fill_manual(values=se_colour) +
@@ -90,14 +92,14 @@ plot.box
 
 Using `geom_hist`, we can plot the distribution of a variable. Altering the "binwidth" argument changes the size of the bins, and thus the level of detail.
 
-```{r hist}
+```{r hist, fig.align= 'center'}
 d <- iris 
 d <- subset(d, d$Species == "setosa") # only look at "Setosa" species from the Iris dataset
 
 plot.hist <- ggplot(data = d)+ 
-  geom_histogram(aes(x = Petal.Length), binwidth = 0.2, fill = "#5D4086") + 
-  theme(text = element_text(family = "Norwester", color = "#5F5F5F"), 
-  plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5),
+  geom_histogram(aes(x = Petal.Length), binwidth = 0.2, fill = "#ff6105") + 
+  theme(text = element_text(family = "Poppins", color = "#5F5F5F"), 
+  plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5),
         panel.background  =  element_blank()) + 
   labs( x= "Sepal Length",  y = "Number of Observations",  title = "Setosa Petal Length Distribution") 
 plot.hist
@@ -109,13 +111,13 @@ plot.hist
 We can use either `geom_bar` or `geom_col` for bar charts. For the former, the height of the bars relate to *the number of cases* per group and for the latter, the height represents the *values*. 
 
 
-```{r bar}
+```{r bar, fig.align= 'center'}
 d <- diamonds  
 
 plot.bar <- ggplot(data = d)+ 
   geom_col(aes(x = cut, y = price, fill = cut)) + 
-  theme(text = element_text(family = "Norwester", color = "#5F5F5F"), 
-  plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5),
+  theme(text = element_text(family = "Poppins", color = "#5F5F5F"), 
+  plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5),
         panel.background  =  element_blank(),
   legend.position = "none") + # remove legend
   labs( x= "Cut",  y = "Value of Diamonds",  title = "Value of Diamonds by Cut") +
@@ -129,7 +131,7 @@ plot.bar
 
 An infographic-type vsualisation can be created with the `waffle` package. In order to use the icons, the *Font Awesome* TrueType font file will need to be installed (use the 4.7 version from [here](https://github.com/FortAwesome/Font-Awesome/releases/tag/v4.7.0])) and then loaded into R using the `extrafont`package.
 
-```{r waffle, message=FALSE, warning=FALSE}
+```{r waffle, message=FALSE, warning=FALSE, fig.align= 'center'}
 library(extrafont)
 library(waffle)
 
@@ -143,8 +145,8 @@ d <- round(d)
 
 waffle(d, rows = 5, use_glyph = "diamond", glyph_size = 6, 
        title = "Diamonds") +
-  theme(text = element_text(family = "Norwester", size = 14, colour = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5), 
+  theme(text = element_text(family = "Poppins", size = 14, colour = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5), 
         panel.background  =  element_blank() )+
   scale_colour_manual(values = se_colour, name = "Cut", labels = c("Fair", "Good", "Very Good", "Premium", "Ideal")) +
   labs( caption =  "Diamonds by cut")

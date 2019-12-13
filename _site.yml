@@ -7,6 +7,15 @@ navbar:
       href: index.html
     - icon: fa-book
       href: Cookbook.html
+    - icon: fa-map-marked-alt
+      href: index.html
+      menu: 
+       - text: "Choropleth Map Tutorial"
+         href: map_tutorial.html
+       - text: "Leaflet Tutorial"
+         href: Leaflet.html
+       - text: "Cartogram Tutorial"
+         href: Cartogram.html
     - icon: fa-pound-sign
       href: index.html
       menu:

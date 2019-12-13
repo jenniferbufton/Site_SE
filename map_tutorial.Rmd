@@ -1,0 +1,99 @@
+---
+title: "Choropleth Tutorial"
+output:
+  html_document:  
+    toc: true  
+    toc_float: true 
+    theme: flatly
+    highlight: tango
+---
+
+This is a brief overview on how to create custom choropleth maps in R using Shapefiles. Some basic knowledge of R is assumed.
+</br>
+
+# Load the libraries
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+library(dplyr)
+
+setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/jenniferbufton.github.io/input")
+
+```
+
+```{r package, echo=TRUE, message=FALSE, warning=FALSE}
+library(ggplot2) # Our favourite grammar of graphics to create the map
+library(rgdal) # turning a shapefile into a dataframe
+library(plyr) # for "join" function
+library(extrafont)# for Sport England house font
+library(scales) # for percentage function
+```
+</br>
+
+# Get your data
+
+You will need: </p>
+a) The data you want to map </p>
+b) A Shapefile (which is an amalgamation of several files containing geospatial data). See [here](https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm) for more information about Shapefiles.</p>
+
+
+The aim of the game is to convert the Shapefile into a dataframe, and join with the data you wish to map. In order to do this, you will need to have a variable common to both the dataset and the Shapefile (e.g. a Local Authority code).
+
+In this example, we are going to use Active Lives Survey data from the Sport England Active Lives dataset (datasets available on the [UK Data Archive](https://beta.ukdataservice.ac.uk/datacatalogue/studies/#!?Search=active%20lives%20survey&Page=1&Rows=10&Sort=1&DateFrom=440&DateTo=2019)). This data goes down to a Local Authority level (England only). 
+</br>
+We will use the Shapefile from [data.gov.uk](https://data.gov.uk/dataset/45a1aaed-503a-4259-bd3e-27ce2ddc7b16/local-authority-districts-december-2016-super-generalised-clipped-boundaries-in-the-uk). This contains data beyond our interest (i.e. beyond England) so we will need to do a bit of data cleaning once we have created our joined dataframe.
+
+</br>
+
+# Read in your data
+We now read in our csv file of Active Lives data using `read.csv` and check the first line of the dataframe.
+```{r data, echo=FALSE, fig.align='center'}
+df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv')
+
+df <- df %>%
+  select('lad19cd', 'Male.Active')
+
+kable(df[1,]) %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE)  # peek at the first row and first few columns of data to check 
+
+```
+</br>
+Use the `rgdal` package to read in the Shapefile. The `readOGR` function retains projections used (more information on using projections with `ggplot` [here](https://ggplot2.tidyverse.org/reference/coord_map.html)). 
+After it has been read in, joined with the Active Lives data, and converted to a dataframe,  we can remove extraneous data (anything not in England) by using `grep` (regular expression) function on the Local Authority code column (aka "lad17cd").
+```{r map, echo=TRUE,  fig.align='left',message=FALSE, warning=FALSE, fig.height=5, fig.width=4}
+setwd("Shapefile")
+map1 <- readOGR(dsn = ".", layer = "Local_Authority_Districts_April_2019_Boundaries_UK_BUC", verbose = FALSE)
+
+## map without distortion
+map1@data$id <- rownames(map1@data)
+map1@data   <- join(map1@data, df, by="lad19cd")
+map.clean     <- fortify(map1)
+map.clean     <- join(map.clean,map1@data, by="id")
+
+map.clean <- map.clean[grep("E", map.clean$lad19cd),] # England only
+map.clean <- map.clean[, !duplicated(colnames(map.clean))] # remove dupe cols
+```
+
+We now have a dataframe that we can use with `ggplot2`. Here is an excellent `ggplot` [cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf). 
+</br>
+
+# Use ggplot
+We can use `geom_polygon` to create our map, and strip out axes, gridlines etc. using  `theme`.
+
+```{r poly, echo=TRUE, message=FALSE, fig.align='center', warning=FALSE}
+
+ggplot() +
+  geom_polygon(data = map.clean, aes(x = long, y = lat, group = group, fill = Male.Active))+
+  theme_minimal() + 
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(), 
+        text = element_text(family = "Poppins", color = "#5F5F5F"), 
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5),
+        panel.grid = element_blank(), 
+        axis.text = element_blank(),
+        axis.ticks.x = element_blank())+
+  scale_fill_gradient(high = '#f7fcfd', low = '#00441b',
+                      name='% of Active Males', breaks = 0.1*0:9, labels = percent(0.1*0:9))
+```
+

@@ -1,0 +1,91 @@
+---
+title: "Leaflet Tutorial"
+output:
+  html_document:  
+    toc: true  
+    toc_float: true 
+    theme: flatly
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(tidyr)
+library(extrafont)
+library(leaflet)
+library(kableExtra)
+
+#access url
+base2 <- "http://api.letsride.co.uk/public/v1/rides"
+openactive <- GET(base2) 
+
+#from unicode to text
+this.raw.content <- rawToChar(openactive$content)
+
+#parse to JSON
+this.content <- fromJSON(this.raw.content)
+
+#extract geo information 
+newdata <- this.content$items
+newdata1 <- newdata$data
+newdata2 <- newdata1$location
+newdata3 <- newdata2$geo
+
+#bind dataframes
+newdata4 <- cbind(newdata1, newdata3)
+
+
+#rename Gender categories
+newdata4$genderRestriction[newdata4$genderRestriction == "https://openactive.io/FemaleOnly"] <- "Women-only Session"
+newdata4$genderRestriction[is.na(newdata4$genderRestriction)] <- "Mixed-Session"
+
+mses <- subset(newdata4, genderRestriction == "Mixed-Session") 
+wses <- subset(newdata4, genderRestriction == "Women-only Session")
+
+```
+
+# About Leaflet
+The `Leaflet` package creates a map widget; you can add layers such as tiles, markers, and polygons to build up the map. There is already a fantastic guide for using [Leaflet](https://rstudio.github.io/leaflet/), but here is a quick overview on how to create a simple map, using data from British Cycling via the [Open Active API]("http://api.letsride.co.uk/public/v1/rides"). 
+
+# Load the Library
+
+All we need to create the map is a dataset with longitude and latitude (which we have from the Open Active API) and the `Leaflet` package.
+
+```{r library, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(leaflet)
+```
+
+# Get the data
+
+Here's a table of my British Cycling session information:
+
+```{r table, echo=FALSE, fig.align='center'}
+kable(newdata4[1,c(27,35,36)]) %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
+```
+
+
+# Create your map
+
+Below is a map widget with Open Street Map tiles (the default) and circle markers of different colours to differentiate between mixed sessions, and women-only sessions:
+
+```{r pressure, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center'}
+# use leaflet to map
+leaflet() %>% addTiles() %>%
+  addCircleMarkers(data= mses, ~longitude, ~latitude, popup = ~as.character(genderRestriction), label = ~as.character(genderRestriction), color = "#43A8B6")  %>%
+  addCircleMarkers(data= wses, ~longitude, ~latitude, popup = ~as.character(genderRestriction), label = ~as.character(genderRestriction),  color = "#5D4086")
+```
+
+It is also possible to cluster these markers by using the `clusterOptions` argument:
+
+```{r leaf, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center'}
+leaflet() %>% addTiles() %>%
+  addCircleMarkers(data= mses, ~longitude, ~latitude, popup = ~as.character(genderRestriction), label = ~as.character(genderRestriction), color = "#43A8B6", clusterOptions = markerClusterOptions())  %>%
+  addCircleMarkers(data= wses, ~longitude, ~latitude, popup = ~as.character(genderRestriction), label = ~as.character(genderRestriction),  color = "#5D4086", clusterOptions = markerClusterOptions())
+
+```
+

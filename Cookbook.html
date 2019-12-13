@@ -405,6 +405,25 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-map-marked-alt"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="map_tutorial.html">Choropleth Map Tutorial</a>
+    </li>
+    <li>
+      <a href="Leaflet.html">Leaflet Tutorial</a>
+    </li>
+    <li>
+      <a href="Cartogram.html">Cartogram Tutorial</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-pound-sign"></span>
      
      
@@ -463,26 +482,28 @@ div.tocify {
 <h2>Brand colours</h2>
 <p>use <code>se_colour</code> in plots to assign the Sport England house colours.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set colour scheme</span>
-se_colour &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#E79AB5&quot;</span>, <span class="st">&quot;#B8345C&quot;</span>, <span class="st">&quot;#8CCDD6&quot;</span>, <span class="st">&quot;#43A8B6&quot;</span>, <span class="st">&quot;#00818F&quot;</span>, <span class="st">&quot;#C1DC9A&quot;</span>, <span class="st">&quot;#7ABB40&quot;</span>, <span class="st">&quot;#5D4086&quot;</span>) <span class="co"># colours for use in plot</span></code></pre></div>
+se_colour &lt;-<span class="st"> </span><span class="kw">c</span>( <span class="st">&quot;#e41b4a&quot;</span>, <span class="st">&quot;#0072d6&quot;</span>, <span class="st">&quot;#a4569c&quot;</span>, <span class="st">&quot;#00a881&quot;</span>, <span class="st">&quot;#ff6105&quot;</span>)
+se_colour__inverse &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#ff6105&quot;</span>, <span class="st">&quot;#00a881&quot;</span>, <span class="st">&quot;#a4569c&quot;</span>, <span class="st">&quot;#0072d6&quot;</span>, <span class="st">&quot;#e41b4a&quot;</span>)
+se_colour_gradient &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.8</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.6</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.4</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.2</span>)) <span class="co"># changes transparency</span></code></pre></div>
 </div>
 <div id="scatter-plot" class="section level2">
 <h2>Scatter Plot</h2>
-<p><img src="Cookbook_files/figure-html/Scatter-1.png" width="672" /></p>
+<p><img src="Cookbook_files/figure-html/Scatter-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Depending on your data, additional changes may be required to “neaten” the plot. For example, we can reformat the y axis labels to display them as currency, and add <code>geom_smooth</code> to help show patterns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Scatter plot</span>
 d &lt;-<span class="st"> </span>diamonds
 plot.point.v1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
-        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), 
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
+        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), 
         <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() ) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Cut&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span> se_colour) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>)) <span class="co"># reformat scales to currency</span>
 plot.point.v1</code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="Cookbook_files/figure-html/Scatter2-1.png" width="672" /></p>
+<p><img src="Cookbook_files/figure-html/Scatter2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="boxplot" class="section level2">
 <h2>Boxplot</h2>
@@ -491,14 +512,14 @@ plot.point.v1</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span>diamonds
 plot.box &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">fill =</span> cut)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
-  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
+  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
   <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>()) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Cut&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>)) <span class="co"># reformat scales to currency</span>
 plot.box</code></pre></div>
-<p><img src="Cookbook_files/figure-html/Boxplot-1.png" width="672" /></p>
+<p><img src="Cookbook_files/figure-html/Boxplot-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="histogram" class="section level2">
 <h2>Histogram</h2>
@@ -507,13 +528,13 @@ plot.box</code></pre></div>
 d &lt;-<span class="st"> </span><span class="kw">subset</span>(d, d<span class="op">$</span>Species <span class="op">==</span><span class="st"> &quot;setosa&quot;</span>) <span class="co"># only look at &quot;Setosa&quot; species from the Iris dataset</span>
 
 plot.hist &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length), <span class="dt">binwidth =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;#5D4086&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
-  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length), <span class="dt">binwidth =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;#ff6105&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
+  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
         <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>()) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Sepal Length&quot;</span>,  <span class="dt">y =</span> <span class="st">&quot;Number of Observations&quot;</span>,  <span class="dt">title =</span> <span class="st">&quot;Setosa Petal Length Distribution&quot;</span>) 
 plot.hist</code></pre></div>
-<p><img src="Cookbook_files/figure-html/hist-1.png" width="672" /></p>
+<p><img src="Cookbook_files/figure-html/hist-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="bar-chart" class="section level2">
 <h2>Bar chart</h2>
@@ -522,15 +543,15 @@ plot.hist</code></pre></div>
 
 plot.bar &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">x =</span> cut, <span class="dt">y =</span> price, <span class="dt">fill =</span> cut)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
-  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
+  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
         <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>(),
   <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># remove legend</span>
 <span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Cut&quot;</span>,  <span class="dt">y =</span> <span class="st">&quot;Value of Diamonds&quot;</span>,  <span class="dt">title =</span> <span class="st">&quot;Value of Diamonds by Cut&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>))
 plot.bar</code></pre></div>
-<p><img src="Cookbook_files/figure-html/bar-1.png" width="672" /></p>
+<p><img src="Cookbook_files/figure-html/bar-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="waffle" class="section level2">
 <h2>Waffle</h2>
@@ -548,12 +569,12 @@ d &lt;-<span class="st"> </span><span class="kw">round</span>(d)
 
 <span class="kw">waffle</span>(d, <span class="dt">rows =</span> <span class="dv">5</span>, <span class="dt">use_glyph =</span> <span class="st">&quot;diamond&quot;</span>, <span class="dt">glyph_size =</span> <span class="dv">6</span>, 
        <span class="dt">title =</span> <span class="st">&quot;Diamonds&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">size =</span> <span class="dv">14</span>, <span class="dt">colour =</span> <span class="st">&quot;#5F5F5F&quot;</span>),
-        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Norwester&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), 
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">size =</span> <span class="dv">14</span>, <span class="dt">colour =</span> <span class="st">&quot;#5F5F5F&quot;</span>),
+        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), 
         <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> se_colour, <span class="dt">name =</span> <span class="st">&quot;Cut&quot;</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Fair&quot;</span>, <span class="st">&quot;Good&quot;</span>, <span class="st">&quot;Very Good&quot;</span>, <span class="st">&quot;Premium&quot;</span>, <span class="st">&quot;Ideal&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>( <span class="dt">caption =</span>  <span class="st">&quot;Diamonds by cut&quot;</span>)</code></pre></div>
-<p><img src="Cookbook_files/figure-html/waffle-1.png" width="672" /></p>
+<p><img src="Cookbook_files/figure-html/waffle-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 
 

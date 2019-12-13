@@ -67,7 +67,7 @@ me_box_g <- me_df %>%
 
 
 # colours for charts
-se_colour<- c("#E79AB5", "#B8345C", "#8CCDD6", "#43A8B6", "#00818F", "#C1DC9A", "#7ABB40", "#5D4086")
+se_colour <- c( "#e41b4a", "#0072d6", "#a4569c", "#00a881", "#ff6105") # custom colours to use in the chart
 
 
 # transformation for headline figs
@@ -143,8 +143,8 @@ kable(summary(table_df), row.names = 0, col.names = c("Award Amount", "Total Pro
 ```{r award, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 ggplot(sg_df)+
   geom_point(aes(AWARD, Total_Project_Cost), color = "#5D4086")+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -163,8 +163,8 @@ This graph shows the distribution of a the awards. It visualises five summary st
 ```{r award_box, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 ggplot(sg_df)+
   geom_boxplot(aes(x = "", y = AWARD) , color = "#5D4086", outlier.colour =  "#5D4086" )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -186,8 +186,8 @@ sp_org$n <- as.factor(sp_org$n)
 ggplot(sp_org)+
   geom_bar(aes(x="", y = n, fill = n), stat = "identity" ) +
   coord_polar("y", start = 0)+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_blank(),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -203,8 +203,8 @@ ggplot(sp_org)+
 ggplot(sg_df)+
   geom_bar(aes(x="", y = AWARD, fill = Focus), stat = "identity" ) +
   coord_polar("y", start = 0)+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_blank(),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -229,8 +229,8 @@ sg_sport %>%
   ggplot(aes(x= reorder(Sport, AWARD), y =AWARD))+
   geom_bar(stat = "identity", fill = "#5D4086") +
   coord_flip()+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
         axis.text.y = element_text(hjust = 1, size = 8),
         panel.grid = element_blank(),
@@ -253,8 +253,8 @@ sg_sport %>%
   ggplot(aes(x= reorder(Sport, AWARD), y =AWARD))+
   geom_bar(stat = "identity", fill = "#5D4086") +
   coord_flip()+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
         axis.text.y = element_text(hjust = 1, size = 8),
         panel.grid = element_blank(),
@@ -272,8 +272,8 @@ sg_sport %>%
   ggplot(data = sg_org, aes(x= reorder(Org_Class, AWARD), y = AWARD))+
   geom_bar(stat = "identity", fill = "#5D4086") +
   coord_flip()+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
         axis.text.y = element_text(hjust = 1, size = 8),
         panel.grid = element_blank(),
@@ -298,8 +298,8 @@ mutate(ALS_Inactive = case_when(ALS_Inactive_PC_2018 >= 0.9 ~ "6. Between 90% an
                               TRUE ~ '1. Under 30%'))%>%
   ggplot()+
   geom_bar(aes(x= ALS_Inactive, y = AWARD), fill = "#5D4086", stat = "identity" )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -323,7 +323,7 @@ DT::datatable(table_df,  filter = 'top',
   formatCurrency(c(2,3), '£') %>%
   formatPercentage(10, 2) %>%
   formatRound(9,0) %>%
-formatStyle(columns = "URN", font = "Norwester", color = "#B8345C" , backgroundColor = "#E79AB5" )
+formatStyle(columns = "URN", font = "Poppins", color = "#B8345C" , backgroundColor = "#E79AB5" )
   
 
 ```
@@ -350,8 +350,8 @@ gov %>%
 ```{r gov, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 ggplot(gov)+
   geom_bar(aes(x=Govt_Outcome, y = AWARD, fill = Govt_Outcome), stat = "identity" ) +
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
         axis.text.y = element_text(hjust = 1, size = 8),
         panel.grid = element_blank(),
@@ -428,8 +428,8 @@ p <- ggplot() +
   geom_polygon(data = map.clean, aes(x = long, y = lat, group = group, fill = AWARD))+
   theme_minimal() + 
   theme(axis.title.x = element_blank(),axis.title.y = element_blank(), 
-        text = element_text(family = "Norwester", color = "#5F5F5F"), 
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5),
+        text = element_text(family = "Poppins", color = "#5F5F5F"), 
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5),
         panel.grid = element_blank(), 
         axis.text = element_blank(),
         axis.ticks.x = element_blank())+
@@ -449,9 +449,9 @@ The below chart shows the distribution of projects by IMD decile (2019).
 
 ```{r imd, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 ggplot(sg_df)+
-  geom_histogram(aes(IMD_Decile_2019), fill = "#00818F", binwidth = 1 )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  geom_histogram(aes(IMD_Decile_2019), fill = "#ff6105", binwidth = 1 )+
+  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -488,8 +488,8 @@ kable(as.data.frame(colMeans(me_df_mean)), col.names = "Figures Overall", digits
 melt(me_df_mean[,1:2]) %>%
 ggplot(aes(x=variable, y =value))+
   geom_bar(aes( fill = variable),stat = "identity") +
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         panel.grid = element_blank(),
         axis.text.x = element_blank(),
         panel.background = element_blank(),
@@ -511,8 +511,8 @@ me_df <- me_df %>%
 ggplot(me_df)+
   geom_bar(aes(x="", y =AWARD, fill = prediction), stat = "identity" ) +
   coord_polar("y", start = 0)+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_blank(),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -528,8 +528,8 @@ The below boxplot shows the *distribution* of award amounts by whether the proje
 ```{r success_box, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 ggplot(me_df)+
   geom_boxplot(aes(x="" , y = AWARD, fill = prediction) )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -576,8 +576,8 @@ melt_df_women <- melt(me_df_women[,c(5,6,9)])
 
 ggplot(melt_df_women, aes(x=variable, y =value))+
   geom_bar(aes( fill = prediction),stat = "identity") +
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         panel.grid = element_blank(),
         axis.text.x = element_text(angle = 45, hjust = 1),
         panel.background = element_blank(),
@@ -594,8 +594,8 @@ The below chart shows how much is invested in projects tht have a specific focus
 
 ggplot(me_box_g)+
   geom_col(aes(x= Gender_Focus, y = AWARD, fill = prediction) )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -615,8 +615,8 @@ me_df %>%
   filter(Sport == c("Sailing & Yachting", "Rowing", "Association Football", "Exercise & Fitness", "Boxing" ))%>%
   ggplot()+
   geom_col(aes(x=Sport , y = AWARD, fill = prediction) )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -634,8 +634,8 @@ me_df %>%
   filter(Sport == c("Sailing & Yachting", "Rowing", "Association Football", "Exercise & Fitness", "Boxing" ))%>%
   ggplot()+
   geom_boxplot(aes(x=Sport , y = AWARD, fill = prediction) )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -652,8 +652,8 @@ me_df %>%
   filter(Org_Class == c("Unregistered Club or Association", "Registered Charity", "Registered CASC", "Company Limited by Guarantee (without share capital)", "Charitable Incorporated Organisation" ))%>%
   ggplot()+
   geom_col(aes(x=Org_Class , y = AWARD, fill = prediction) )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -672,8 +672,8 @@ me_df %>%
     filter(Org_Class == c("Unregistered Club or Association", "Registered Charity", "Registered CASC", "Company Limited by Guarantee (without share capital)", "Charitable Incorporated Organisation" ))%>%
   ggplot()+
   geom_boxplot(aes(x=Org_Class , y = AWARD, fill = prediction) )+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
         panel.grid = element_blank(),
         panel.background = element_blank(),
@@ -697,7 +697,7 @@ DT::datatable(me_tab, colnames = c('Row', 'URN', 'Sport', 'Organisation Type', '
                                        lengthMenu = c(5, 10, 15, 20)))%>%
   formatCurrency(4, '£') %>%
   formatRound(c(5:8, 10),0) %>%
-formatStyle(columns = "GMS_URN", font = "Norwester", color = "#B8345C" , backgroundColor = "#E79AB5" )
+formatStyle(columns = "GMS_URN", font = "Poppins", color = "#B8345C" , backgroundColor = "#E79AB5" )
 
 ```
 
@@ -713,7 +713,7 @@ The wordcloud was produced through text processing ) which stripped out punctuat
 
 ```{r 12_prog, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 
-wordcloud2(text_df[,c(2,4)], fontFamily = "Norwester", color = "random-light")
+wordcloud2(text_df[,c(2,4)], fontFamily = "Poppins", color = "random-light")
 
 ```
 
@@ -748,8 +748,8 @@ The number of Small Grants projects with a comment in the "12 month progress" fi
 ggplot(sentiment_df)+
   geom_bar(aes(x="", y = Sentiment, fill = Sentiment), stat = "identity" ) +
   coord_polar("y", start = 0)+
-  theme(text = element_text(family = "Norwester", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Norwester", face="bold", hjust = 0.5, color = "#525252"),
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_blank(),
         panel.grid = element_blank(),
         panel.background = element_blank(),
