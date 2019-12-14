@@ -72,6 +72,7 @@ library(cartogram)
 
 ## create cartogram
 test_cart <- cartogram_cont(map1, "Male.Active")
+test_cart.1 <- cartogram_ncont(map1, "Male.Active", k = 10)
 
 # check with basic plot
 plot(test_cart)
@@ -93,6 +94,33 @@ map1.df <- map1.df[, !duplicated(colnames(map1.df))]
 
 ggplot() +
   geom_polygon(data = map1.df, aes(x = long, y = lat, group = group, fill = Male.Active))+
+  theme_minimal() + 
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(), 
+        text = element_text(family = "Poppins", color = "#5F5F5F"), 
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5),
+        panel.grid = element_blank(), 
+        axis.text = element_blank(),
+        axis.ticks.x = element_blank())+
+  scale_fill_gradient(high = '#f7fcfd', low = '#00441b',
+                      name='% of Active Males', breaks = 0.1*0:9, labels = percent(0.1*0:9))
+```
+
+
+# Non-contiguous Cartogram using `GGPLOT`
+
+```{r map1, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+
+# make into dataframe
+map2.df     <- fortify(test_cart.1)
+map2.df     <- join(map2.df,test_cart.1@data, by="id")
+
+
+## remove dupe col
+map2.df <- map2.df[, !duplicated(colnames(map2.df))]
+
+
+ggplot() +
+  geom_polygon(data = map2.df, aes(x = long, y = lat, group = group, fill = Male.Active))+
   theme_minimal() + 
   theme(axis.title.x = element_blank(),axis.title.y = element_blank(), 
         text = element_text(family = "Poppins", color = "#5F5F5F"), 

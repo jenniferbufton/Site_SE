@@ -16,6 +16,8 @@ navbar:
          href: Leaflet.html
        - text: "Cartogram Tutorial"
          href: Cartogram.html
+       - text: "Hexmap Tutorial"
+         href: Hex.html
     - icon: fa-pound-sign
       href: index.html
       menu:

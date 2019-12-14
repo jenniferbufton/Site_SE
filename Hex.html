@@ -12,7 +12,7 @@
 
 
 
-<title>Predictive Modelling</title>
+<title>HexMap</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,11 +24,75 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -407,179 +471,24 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Predictive Modelling</h1>
+<h1 class="title toc-ignore">HexMap</h1>
 
 </div>
 
 
-<div id="k-nearest-neighbours" class="section level1">
-<h1><span class="header-section-number">1</span> K-Nearest Neighbours</h1>
-<div id="introduction" class="section level2">
-<h2><span class="header-section-number">1.1</span> Introduction</h2>
-<p>K-Nearest neighbours (or KNN), is a way of classifying a new observation based on already existing observations that have previously been classified. It is ‘black box’ - we don’t know the rules to understand the relationships between features and the classifications.</p>
-<p>We can use this algorithm to see if we can predict if a project will exceed its target. In this instance, we are using 8 predictor variables, and the target variable is “Over Target” (True or False).</p>
-<p>We can split the dataset into a Test dataset and a Training dataset to predict the outcome variable, and then evaluate those predictions.</p>
-<table class="table table-bordered" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Variables Used
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Award
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Total Cost
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Partnership Funding
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-IMD Rank
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Baseline
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-12 Month Target
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Female Target
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Male Target
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Over Target - Target Variable
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="classifiying-the-data" class="section level2">
-<h2><span class="header-section-number">1.2</span> Classifiying the Data</h2>
-<p>For the unclassified observations, the algorithm measures the K closest neighbours based on distance (the value of K in this instance in the square root of the number of rows in the dataframe). The algorithm selects which class is the most common in the training dataset, and predicts those new observations accordingly</p>
-<p>The below table shows the accuracy of the KNN algorithm when classifying a test dataset. It classified 60% correctly, and 40% incorrectly:</p>
-<table class="table table-bordered" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Correct?
-</th>
-<th style="text-align:right;">
-Proportion
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Correct
-</td>
-<td style="text-align:right;">
-0.6
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Incorrect
-</td>
-<td style="text-align:right;">
-0.4
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="evaluating-the-classifications" class="section level2">
-<h2><span class="header-section-number">1.3</span> Evaluating the Classifications</h2>
-<p>We can see more detail around the classifications using the <code>CrossTable</code> function. As can be seen in the table below, the main issue with the predictions were that 45 of those that were “True” (i.e. were over the 12 month target), were predicted “False”.</p>
-<p>Only 11% (9 cases) of those that were FALSE were misclassified as TRUE.</p>
-<pre><code>## 
-##  
-##    Cell Contents
-## |-------------------------|
-## |                       N |
-## |           N / Row Total |
-## |           N / Col Total |
-## |         N / Table Total |
-## |-------------------------|
-## 
-##  
-## Total Observations in Table:  135 
-## 
-##  
-##                    | d_test_pred 
-## test_d$Over_Target |     FALSE |      TRUE | Row Total | 
-## -------------------|-----------|-----------|-----------|
-##              FALSE |        71 |         9 |        80 | 
-##                    |     0.887 |     0.112 |     0.593 | 
-##                    |     0.612 |     0.474 |           | 
-##                    |     0.526 |     0.067 |           | 
-## -------------------|-----------|-----------|-----------|
-##               TRUE |        45 |        10 |        55 | 
-##                    |     0.818 |     0.182 |     0.407 | 
-##                    |     0.388 |     0.526 |           | 
-##                    |     0.333 |     0.074 |           | 
-## -------------------|-----------|-----------|-----------|
-##       Column Total |       116 |        19 |       135 | 
-##                    |     0.859 |     0.141 |           | 
-## -------------------|-----------|-----------|-----------|
-## 
-## </code></pre>
-<p>The 60% accuracy is problematic for applying this to new applications as it currently stands.</p>
-<p>One potential way to improve the predictions would be to add other predictor variables (e.g. including target numbers around age, ethnicity, and disability).</p>
-</div>
-</div>
-<div id="decision-trees" class="section level1">
-<h1><span class="header-section-number">2</span> Decision Trees</h1>
-<p>The ‘tree’ is a sequence of decisions (branches) that aim to maximise the reduction in the variation in the outcome variable (in this case, the number of participants at 12 months).</p>
-<p><br></p>
-</div>
-<div id="outputs" class="section level1 tabset tabset-fade tabset-pills">
-<h1><span class="header-section-number">3</span> Outputs</h1>
-<p>The model below shows the first “branch”, i.e. the most important variable out of those included that explain variation. This is the “Total Project Cost” - if the total cost is greater than or equal to £23,707.93 (4% of the awards), the mean number of participants is 611 . Less than this amount, and the mean number is 176, and this accounts for 96% of the awards.</p>
-<p>The model was limited to the most important variable (branch 1). The more depth we go down, the better the model will ‘fit’ our data. This can be problematic if we tried to predict an outcome based on this model. The data may become ‘over-fitted’ (i.e. the model is only acccurate when applied to this specific dataset).</p>
-<div id="decision-tree-plot" class="section level2">
-<h2><span class="header-section-number">3.1</span> Decision Tree Plot</h2>
-<p><img src="Predictive_2_files/figure-html/tree.1-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="decision-tree-summary" class="section level2">
-<h2><span class="header-section-number">3.2</span> Decision Tree Summary</h2>
-<pre><code>## n= 841 
-## 
-## node), split, n, deviance, yval
-##       * denotes terminal node
-## 
-## 1) root 841 299344300 191.6587  
-##   2) Total_Project_Cost&lt; 23707.93 810 201888500 175.6049 *
-##   3) Total_Project_Cost&gt;=23707.93 31  91792410 611.1290 *</code></pre>
-</div>
-<div id="variable-importance" class="section level2">
-<h2><span class="header-section-number">3.3</span> Variable Importance</h2>
-<pre><code>##  Total_Project_Cost Partnership_Funding 
-##             5663372             5297993</code></pre>
-</div>
+<div id="example-using-active-lives-data" class="section level1">
+<h1>Example using Active Lives data</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load packages</span>
+
+<span class="kw">ggplot</span>(resulthex, <span class="kw">aes</span>(long.x,
+                                lat.x,
+                                <span class="dt">fill=</span>Male.Active,
+                                <span class="dt">group=</span>group)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">col=</span><span class="st">&quot;white&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>, <span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_void</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>))</code></pre></div>
+<p><img src="Hex_files/figure-html/hex_map-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 
 
