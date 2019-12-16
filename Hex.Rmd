@@ -87,14 +87,16 @@ LAD_shp_data_tidy <- LAD_shp_data_tidy[grep("E", LAD_shp_data_tidy$lad19cd),]
 This will let us check the spatial data is correct and everything has worked.
 ```{r c_map, echo=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
 # plot the map
-(plot_1 <- ggplot(LAD_shp_data_tidy, aes(long.x,
+plot_1 <- ggplot(LAD_shp_data_tidy, aes(long.x,
                                          lat.x,
                                          fill=Male.Active,
                                          group=group)) +
     geom_polygon(col="white") +
     scale_fill_viridis(option="magma", name = "Male Active",breaks = 0.1*0:9, labels = percent(0.1*0:9)) +
-    coord_equal() + theme_void())+
+    coord_equal() + theme_void()+
   theme(text = element_text(family = "Poppins"))
+plot_1
+
 ```
 
 #Generate new grid

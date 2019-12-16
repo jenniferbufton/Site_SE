@@ -519,7 +519,7 @@ plot.box &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span clas
   <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
   <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>()) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Cut&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour_inverse) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>)) <span class="co"># reformat scales to currency</span>
 plot.box</code></pre></div>
 <p><img src="Cookbook_files/figure-html/Boxplot-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -551,7 +551,7 @@ plot.bar &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span clas
         <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>(),
   <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># remove legend</span>
 <span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Cut&quot;</span>,  <span class="dt">y =</span> <span class="st">&quot;Value of Diamonds&quot;</span>,  <span class="dt">title =</span> <span class="st">&quot;Value of Diamonds by Cut&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour_inverse) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>))
 plot.bar</code></pre></div>
 <p><img src="Cookbook_files/figure-html/bar-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -575,7 +575,7 @@ d &lt;-<span class="st"> </span><span class="kw">round</span>(d)
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">size =</span> <span class="dv">14</span>, <span class="dt">colour =</span> <span class="st">&quot;#5F5F5F&quot;</span>),
         <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), 
         <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() )<span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> se_colour, <span class="dt">name =</span> <span class="st">&quot;Cut&quot;</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Fair&quot;</span>, <span class="st">&quot;Good&quot;</span>, <span class="st">&quot;Very Good&quot;</span>, <span class="st">&quot;Premium&quot;</span>, <span class="st">&quot;Ideal&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> se_colour_inverse, <span class="dt">name =</span> <span class="st">&quot;Cut&quot;</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Fair&quot;</span>, <span class="st">&quot;Good&quot;</span>, <span class="st">&quot;Very Good&quot;</span>, <span class="st">&quot;Premium&quot;</span>, <span class="st">&quot;Ideal&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>( <span class="dt">caption =</span>  <span class="st">&quot;Diamonds by cut&quot;</span>)</code></pre></div>
 <p><img src="Cookbook_files/figure-html/waffle-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>

@@ -541,14 +541,15 @@ LAD_shp_data_tidy &lt;-<span class="st"> </span>LAD_shp_data_tidy[<span class="k
 <h1>Plot a choropleth map</h1>
 <p>This will let us check the spatial data is correct and everything has worked.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot the map</span>
-(plot_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>(LAD_shp_data_tidy, <span class="kw">aes</span>(long.x,
+plot_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>(LAD_shp_data_tidy, <span class="kw">aes</span>(long.x,
                                          lat.x,
                                          <span class="dt">fill=</span>Male.Active,
                                          <span class="dt">group=</span>group)) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">col=</span><span class="st">&quot;white&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>)) <span class="op">+</span>
-<span class="st">    </span><span class="kw">coord_equal</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_void</span>())<span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>))</code></pre></div>
+<span class="st">    </span><span class="kw">coord_equal</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_void</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>))
+plot_<span class="dv">1</span></code></pre></div>
 <p><img src="Hex_files/figure-html/c_map-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="generate-new-grid" class="section level1">
