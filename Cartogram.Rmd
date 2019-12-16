@@ -20,7 +20,6 @@ library(extrafont)
 library(rgdal)
 library(viridis)
 
-
 ### read in data to append
 df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv')
 
@@ -47,9 +46,25 @@ map.clean <- map.clean[, !duplicated(colnames(map.clean))] # remove dupe cols
 ```
 
 
-```{r test_map, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
-ggplot() +
-  geom_polygon(data = map.clean, aes(x = long, y = lat, group = group, fill = Male.Active))+
+#Introduction
+This tutorial will summarise an approach to creating a cartogram by using the `cartogram` package. This is very similar to creating a choropleth map - see the choropleth map tutorial for a 'how to' import a shapefile and join it with your data.
+
+#What is a cartogram?
+A [cartogram](https://en.wikipedia.org/wiki/Cartogram) is a map that is distorted spatially in order to convey information in a given variable.
+
+There are some interesting examples available at the Worldmapper [site](https://worldmapper.org/)
+
+#Plotting a choropleth map
+Here, we are going to read in some already-existing spatial data and a variable from the Active Lives survey to map.
+```{r test_map, echo=FALSE, message=FALSE, warning=FALSE}
+# load packages for visuals
+library(ggplot2)
+library(scales)
+library(extrafont)
+library(viridis)
+
+plot_1 <- ggplot() +
+  geom_polygon(data = map.clean, aes(x = long, y = lat, group = group, fill = Male.Active))+ #map.clean is a fortified dataframe created as per the choropleth tutorial
   theme_minimal() + 
   theme(axis.title.x = element_blank(),axis.title.y = element_blank(), 
         text = element_text(family = "Poppins", color = "#5F5F5F"), 
@@ -57,31 +72,31 @@ ggplot() +
         panel.grid = element_blank(), 
         axis.text = element_blank(),
         axis.ticks.x = element_blank())+
-  scale_fill_gradient(high = '#f7fcfd', low = '#00441b',
-                      name='% of Active Males', breaks = 0.1*0:9, labels = percent(0.1*0:9))
+  scale_fill_viridis(option="magma", name = "Male Active",breaks = 0.1*0:9, labels = percent(0.1*0:9))
 
-
+plot_1
 ```
 
-# Basic Cartogram
+#Basic Cartogram
+Using the `cartogram` package, we can plot a map using the spatial dataframe we have imported and joined with Active Lives data.
 
-
-```{r test_cart, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+```{r test_cart, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.align='center'}
 # load package
 library(cartogram)
 
 ## create cartogram
-test_cart <- cartogram_cont(map1, "Male.Active")
-test_cart.1 <- cartogram_ncont(map1, "Male.Active", k = 10)
+test_cart <- cartogram_cont(map1, "Male.Active") #map1 is a spatial dataframe with joined with Active Lives data
 
 # check with basic plot
 plot(test_cart)
 
 ```
 
-# Cartogram using `GGPLOT`
+#Cartogram using `GGPLOT`
+To 'prettify' it, we can convert it to a standard dataframe using `fortify` from the `rgdal` package, and then plot with `ggplot`.
 
-```{r map, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+```{r map, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE}
+library(rgdal)
 
 # make into dataframe
 map1.df     <- fortify(test_cart)
@@ -89,10 +104,10 @@ map1.df     <- join(map1.df,test_cart@data, by="id")
 
 
 ## remove dupe col
-map1.df <- map1.df[, !duplicated(colnames(map1.df))]
+map1.df <- map1.df[, !duplicated(colnames(map1.df))] # clean any duplicated columns
 
 
-ggplot() +
+plot_2 <- ggplot() +
   geom_polygon(data = map1.df, aes(x = long, y = lat, group = group, fill = Male.Active))+
   theme_minimal() + 
   theme(axis.title.x = element_blank(),axis.title.y = element_blank(), 
@@ -101,25 +116,26 @@ ggplot() +
         panel.grid = element_blank(), 
         axis.text = element_blank(),
         axis.ticks.x = element_blank())+
-  scale_fill_gradient(high = '#f7fcfd', low = '#00441b',
-                      name='% of Active Males', breaks = 0.1*0:9, labels = percent(0.1*0:9))
+scale_fill_viridis(option="magma", name = "Male Active",breaks = 0.1*0:9, labels = percent(0.1*0:9))
+plot_2
 ```
 
 
-# Non-contiguous Cartogram using `GGPLOT`
-
-```{r map1, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+#Non-contiguous Cartogram using `GGPLOT`
+We can also make a non-contiguous cartogram (a version of a cartogram where the polygon features are separated from their neighbours).
+```{r map2, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE}
+test_cart.ncont <- cartogram_ncont(map1, "Male.Active", k = 10) #k = factor expansion for the unit with the greater value
 
 # make into dataframe
-map2.df     <- fortify(test_cart.1)
-map2.df     <- join(map2.df,test_cart.1@data, by="id")
+map2.df     <- fortify(test_cart.ncont)
+map2.df     <- join(map2.df,test_cart.ncont@data, by="id")
 
 
 ## remove dupe col
 map2.df <- map2.df[, !duplicated(colnames(map2.df))]
 
 
-ggplot() +
+plot_3 <- ggplot() +
   geom_polygon(data = map2.df, aes(x = long, y = lat, group = group, fill = Male.Active))+
   theme_minimal() + 
   theme(axis.title.x = element_blank(),axis.title.y = element_blank(), 
@@ -128,7 +144,14 @@ ggplot() +
         panel.grid = element_blank(), 
         axis.text = element_blank(),
         axis.ticks.x = element_blank())+
-  scale_fill_gradient(high = '#f7fcfd', low = '#00441b',
-                      name='% of Active Males', breaks = 0.1*0:9, labels = percent(0.1*0:9))
+scale_fill_viridis(option="magma", name = "Male Active",breaks = 0.1*0:9, labels = percent(0.1*0:9))
+plot_3
+```
+
+#Compare the three plots
+
+```{r map3, echo=FALSE,  message=FALSE, warning=FALSE, fig.align='center'}
+library(gridExtra)
+grid.arrange(plot_1, plot_2, plot_3, nrow=2, ncol=2)
 ```
 

@@ -1,37 +1,133 @@
 ---
-title: "HexMap"
+title: "Hex Map Tutorial"
 output:
-  html_document:  
-    toc: true  
-    toc_float: true 
-    theme: flatly
+  html_document: 
     highlight: tango
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-# load packages
-library(ggplot2)
-library(scales)
-library(dplyr)
-library(tidyr)
-library(extrafont)
-library(viridis)
-
+knitr::opts_chunk$set(include = TRUE)
+library(kableExtra)
 
 ### read in data to append
 resulthex <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/GitHub/Geographical Data/HexMap_England_Active.Males.csv')
 
+file.shp <- "C:/Users/jenniferb/OneDrive - Sport England/GitHub/Geographical Data/LAD/Local_Authority_Districts_April_2019_Boundaries_UK_BUC/Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp"
 
+df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv')
 
 ```
 
-# Example using Active Lives data
+#Introduction
 
-```{r hex_map, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE}
-# load packages
+This tutorial will summarise an approach to creating a hexagon map. A hex map is a good way to show geographic units (in this case Local Authorities) with equal visual weight. One of the benefits of hex maps are that they avoid distortion by [size](https://odileeds.org/blog/2017-05-08-mapping-election-with-hexes), which is why they are a popular means to visualse election results.
 
-ggplot(resulthex, aes(long.x,
+There are comprehensive instructions outlined [here](http://rpubs.com/Hailstone/326118) to create a hex map using R. I have replicated that approach (with a few tweaks and updates) below.
+
+#Load packages
+```{r pack, echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)# for ggplot
+library(broom) # to put shapefile into a dataframe format
+library(devtools) # to enable installing from github
+library(fingertipsR) # to access PHE fingertips data
+library(hexbin) # useful package for plotting
+library(viridis) # fancy colour palettes
+library(gridExtra) # to arrange multiple plots
+library(geogrid) #reading and cleaning
+library(extrafont) # for bespoke font
+library(scales) # for ggplot
+
+```
+
+#Read in the ShapeFile
+Read in a shapefile with the `read_polygons` function from `geogrid` and plot it.
+
+```{r shp, echo=TRUE, message=FALSE, warning=FALSE}
+LAD_shp <- read_polygons(file.shp) #file.shp is an LA boundary shapefile from ONS
+plot(LAD_shp)
+```
+
+#Read in data
+Read in the data you want to plot, and merge it with the spatial data, using the common column (Local Authority code).
+```{r df, echo=TRUE, message=FALSE, warning=FALSE}
+
+df <- df %>% # Active Lives data
+  select('lad19cd', 'Male.Active') # choose LA code for join and also colmn with data to plot
+
+
+LAD_shp_data <- sp::merge(LAD_shp, #merge shape and data
+                          df,
+                          by.x="lad19cd",
+                          by.y="lad19cd",
+                          duplicateGeoms=T,
+                          all.x=F)
+```
+
+#Clean the data
+Create a 'clean' function to create a usable dataframe for plotting - by using `tidy` - and apply this custom function to our shapefile. 
+```{r clean, echo=TRUE, message=FALSE, warning=FALSE}
+clean <- function(shape){
+  shape@data$id = rownames(shape@data)
+  shape.points = tidy(shape, region="id")
+  shape.df = inner_join(shape.points, shape@data, by="id")
+}
+
+# Apply function to shapefile
+LAD_shp_data_tidy <- clean(LAD_shp_data)
+
+# here we can include only England by specifying only LAs with an "E" in the code are retained.
+LAD_shp_data_tidy <- LAD_shp_data_tidy[grep("E", LAD_shp_data_tidy$lad19cd),]
+```
+
+#Plot a choropleth map
+This will let us check the spatial data is correct and everything has worked.
+```{r c_map, echo=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
+# plot the map
+(plot_1 <- ggplot(LAD_shp_data_tidy, aes(long.x,
+                                         lat.x,
+                                         fill=Male.Active,
+                                         group=group)) +
+    geom_polygon(col="white") +
+    scale_fill_viridis(option="magma", name = "Male Active",breaks = 0.1*0:9, labels = percent(0.1*0:9)) +
+    coord_equal() + theme_void())+
+  theme(text = element_text(family = "Poppins"))
+```
+
+#Generate new grid
+by testing different seed numbers we can generate a range of hexagon layouts - we can then select a version for use inthe final map.
+```{r shp.new,  echo=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
+
+LAD_shp_details <- calculate_grid(LAD_shp_data) # create the grid. This may take a while
+
+par(mfrow=c(3,3), mar = c(0,0,2,0))
+
+# loop to create 9 versions
+for (i in 1:9){
+  new_cells <-  calculate_grid(shape = LAD_shp_data, learning_rate = 0.03, grid_type = c('hexagonal', "regular"), seed = i)
+  plot(new_cells[[2]], main = paste("Seed",i, sep=" "))
+}
+
+```
+
+#Select and clean
+Choose your favourite version and generate the grid.
+```{r shp.gr,  echo=TRUE, message=FALSE, warning=FALSE}
+new_cells_hex <-  calculate_grid(shape = LAD_shp_data, learning_rate = 0.03, grid_type = c('hexagonal', "regular"), seed = 1)
+
+resulthex <- assign_polygons(LAD_shp_data,new_cells_hex) # create shapefile with hex shapes
+                                 
+resulthex <- clean(resulthex) # use clean function to fortify 
+```
+
+#Final Output
+We can look at our original choropleth and our new hexagon map side by side.
+```{r comp,  echo=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
+# generate plot
+plot_2 <- ggplot(resulthex, aes(long.x,
                                 lat.x,
                                 fill=Male.Active,
                                 group=group)) +
@@ -39,5 +135,8 @@ ggplot(resulthex, aes(long.x,
   scale_fill_viridis(option="magma", name = "Male Active", breaks = 0.1*0:9, labels = percent(0.1*0:9)) +
   coord_equal() + theme_void() +
   theme(text = element_text(family = "Poppins"))
+
+# arrange plot with comparison to the original
+grid.arrange(plot_1, plot_2, nrow=1, ncol=2)
 ```
 
