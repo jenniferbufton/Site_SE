@@ -98,7 +98,7 @@ This will let us check the spatial data is correct and everything has worked.
 ```
 
 #Generate new grid
-by testing different seed numbers we can generate a range of hexagon layouts - we can then select a version for use inthe final map.
+By testing different seed numbers we can generate a range of hexagon layouts - we can then select a version for use in the final map.
 ```{r shp.new,  echo=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
 
 LAD_shp_details <- calculate_grid(LAD_shp_data) # create the grid. This may take a while
