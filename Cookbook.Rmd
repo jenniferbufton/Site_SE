@@ -9,13 +9,17 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(include = TRUE)
 library(ggplot2)
 library(extrafont)
 ```
 
 
 These examples all use datasets within R: `diamonds` from `ggplot2` and `iris` from base R.
+```{r pack, echo=TRUE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(extrafont)
+```
 
 ## Installing Fonts
 
@@ -33,8 +37,7 @@ se_colour_gradient <- c("#003F69", alpha("#003F69", 0.8), alpha("#003F69", 0.6),
 ```
 
 ## Scatter Plot
-
-```{r Scatter, echo=FALSE, message=FALSE, warning=FALSE, fig.align= 'center'}
+```{r scatter, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE}
 
 # Scatter plot
 d <- diamonds
@@ -48,9 +51,10 @@ plot.point <- ggplot(data = d)+
 plot.point
 ```
 
+
 Depending on your data, additional changes may be required to "neaten" the plot. For example, we can reformat the y axis labels to display them as currency, and add `geom_smooth` to help show patterns:
 
-```{r Scatter2, echo=TRUE, fig.align= 'center'}
+```{r Scatter2, echo=TRUE, fig.align= 'center', message=FALSE, warning=FALSE}
 
 # Scatter plot
 d <- diamonds

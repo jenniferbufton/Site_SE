@@ -477,6 +477,8 @@ div.tocify {
 
 
 <p>These examples all use datasets within R: <code>diamonds</code> from <code>ggplot2</code> and <code>iris</code> from base R.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(extrafont)</code></pre></div>
 <div id="installing-fonts" class="section level2">
 <h2>Installing Fonts</h2>
 <p>The <code>extrafont</code> package enables the use of custom fonts in the plots. To install a new font in Windows 10, download the TrueType font file, and follow the instructions <a href="https://www.cnet.com/how-to/how-to-add-remove-and-modify-fonts-in-windows-10/">here</a>.</p>
@@ -491,7 +493,17 @@ se_colour_gradient &lt;-<span class="st"> </span><span class="kw">c</span>(<span
 </div>
 <div id="scatter-plot" class="section level2">
 <h2>Scatter Plot</h2>
-<p><img src="Cookbook_files/figure-html/Scatter-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Scatter plot</span>
+d &lt;-<span class="st"> </span>diamonds
+plot.point &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
+        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), 
+        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() ) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span> se_colour_inverse, <span class="dt">name =</span> <span class="st">&#39;Cut&#39;</span>) 
+plot.point</code></pre></div>
+<p><img src="Cookbook_files/figure-html/scatter-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Depending on your data, additional changes may be required to “neaten” the plot. For example, we can reformat the y axis labels to display them as currency, and add <code>geom_smooth</code> to help show patterns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Scatter plot</span>
 d &lt;-<span class="st"> </span>diamonds
@@ -505,7 +517,6 @@ plot.point.v1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span
 <span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span> se_colour_inverse, <span class="dt">name =</span> <span class="st">&#39;Cut&#39;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>)) <span class="co"># reformat scales to currency</span>
 plot.point.v1</code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="Cookbook_files/figure-html/Scatter2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="boxplot" class="section level2">
