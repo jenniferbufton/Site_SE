@@ -12,52 +12,18 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(include = TRUE)
 library(kableExtra)
-
-### read in data to append
-resulthex <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/GitHub/Geographical Data/HexMap_England_Active.Males.csv')
+library(broom)
+library(geogrid)
+library(tidyverse) # Our favourite grammar of graphics to create the map
+library(extrafont)# for Sport England house font
+library(scales) # for percentage function
+library(viridis) # for colours
 
 file.shp <- "C:/Users/jenniferb/OneDrive - Sport England/GitHub/Geographical Data/LAD/Local_Authority_Districts_April_2019_Boundaries_UK_BUC/Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp"
-
-df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv')
-
-```
-
-#Introduction
-
-This tutorial will summarise an approach to creating a hexagon map. A hex map is a good way to show geographic units (in this case Local Authorities) with equal visual weight. One of the benefits of hex maps are that they avoid distortion by [size](https://odileeds.org/blog/2017-05-08-mapping-election-with-hexes), which is why they are a popular means to visualse election results.
-
-There are comprehensive instructions outlined [here](http://rpubs.com/Hailstone/326118) to create a hex map using R. I have replicated that approach (with a few tweaks and updates) below.
-
-#Load packages
-```{r pack, echo=TRUE, message=FALSE, warning=FALSE}
-library(tidyverse)# for ggplot
-library(broom) # to put shapefile into a dataframe format
-library(devtools) # to enable installing from github
-library(fingertipsR) # to access PHE fingertips data
-library(hexbin) # useful package for plotting
-library(viridis) # fancy colour palettes
-library(gridExtra) # to arrange multiple plots
-library(geogrid) #reading and cleaning
-library(extrafont) # for bespoke font
-library(scales) # for ggplot
-
-```
-
-#Read in the ShapeFile
-Read in a shapefile with the `read_polygons` function from `geogrid` and plot it.
-
-```{r shp, echo=TRUE, message=FALSE, warning=FALSE}
 LAD_shp <- read_polygons(file.shp) #file.shp is an LA boundary shapefile from ONS
-plot(LAD_shp)
-```
 
-#Read in data
-Read in the data you want to plot, and merge it with the spatial data, using the common column (Local Authority code).
-```{r df, echo=TRUE, message=FALSE, warning=FALSE}
-
-df <- df %>% # Active Lives data
-  select('lad19cd', 'Male.Active') # choose LA code for join and also colmn with data to plot
-
+df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv') %>%
+  select('lad19cd', 'Male.Active')
 
 LAD_shp_data <- sp::merge(LAD_shp, #merge shape and data
                           df,
@@ -65,12 +31,8 @@ LAD_shp_data <- sp::merge(LAD_shp, #merge shape and data
                           by.y="lad19cd",
                           duplicateGeoms=T,
                           all.x=F)
-```
 
-#Clean the data
-Create a 'clean' function to create a usable dataframe for plotting - by using `tidy` - and apply this custom function to our shapefile. 
-```{r clean, echo=TRUE, message=FALSE, warning=FALSE}
-clean <- function(shape){
+clean <- function(shape){ # function
   shape@data$id = rownames(shape@data)
   shape.points = tidy(shape, region="id")
   shape.df = inner_join(shape.points, shape@data, by="id")
@@ -81,7 +43,38 @@ LAD_shp_data_tidy <- clean(LAD_shp_data)
 
 # here we can include only England by specifying only LAs with an "E" in the code are retained.
 LAD_shp_data_tidy <- LAD_shp_data_tidy[grep("E", LAD_shp_data_tidy$lad19cd),]
+
 ```
+
+
+This tutorial will summarise an approach to creating a hexagon map. A hex map is a good way to show geographic units (in this case Local Authorities) with equal visual weight. One of the benefits of hex maps are that they avoid distortion by [size](https://odileeds.org/blog/2017-05-08-mapping-election-with-hexes), which is why they are a popular means to visualse election results.
+
+There are comprehensive instructions outlined [here](http://rpubs.com/Hailstone/326118) to create a hex map using R. I have replicated that approach (with a few tweaks and updates) below.
+
+</br>
+
+#Load packages
+```{r pack, echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse) # multiple packages including ggplot
+library(extrafont)# for Sport England house font
+library(scales) # for percentage function
+library(viridis) # for colours
+library(gridExtra) # to arrange multiple plots
+library(geogrid) #reading and cleaning
+library(broom) # to put shapefile into a dataframe format
+library(hexbin) # useful package for plotting
+
+
+```
+</br>
+
+#Get your data
+See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data.
+
+```{r shp, echo=TRUE, message=FALSE, warning=FALSE}
+plot(LAD_shp)
+```
+</br>
 
 #Plot a choropleth map
 This will let us check the spatial data is correct and everything has worked.
@@ -98,6 +91,7 @@ plot_1 <- ggplot(LAD_shp_data_tidy, aes(long.x,
 plot_1
 
 ```
+</br>
 
 #Generate new grid
 By testing different seed numbers we can generate a range of hexagon layouts - we can then select a version for use in the final map.
@@ -114,6 +108,7 @@ for (i in 1:9){
 }
 
 ```
+</br>
 
 #Select and clean
 Choose your favourite version and generate the grid.
@@ -124,6 +119,7 @@ resulthex <- assign_polygons(LAD_shp_data,new_cells_hex) # create shapefile with
                                  
 resulthex <- clean(resulthex) # use clean function to fortify 
 ```
+</br>
 
 #Final Output
 We can look at our original choropleth and our new hexagon map side by side.

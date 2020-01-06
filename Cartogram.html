@@ -412,16 +412,19 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="map_tutorial.html">Choropleth Map Tutorial</a>
+      <a href="shapefile_add.html">Reading in Spatial Data</a>
     </li>
     <li>
-      <a href="Leaflet.html">Leaflet Tutorial</a>
+      <a href="map_tutorial.html">Choropleth Map Tutorial</a>
     </li>
     <li>
       <a href="Cartogram.html">Cartogram Tutorial</a>
     </li>
     <li>
       <a href="Hex.html">Hex Map Tutorial</a>
+    </li>
+    <li>
+      <a href="Leaflet.html">Leaflet Tutorial</a>
     </li>
   </ul>
 </li>
@@ -479,15 +482,49 @@ div.tocify {
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>This tutorial will summarise an approach to creating a cartogram by using the <code>cartogram</code> package. This is very similar to creating a choropleth map - see the choropleth map tutorial for a ‘how to’ import a shapefile and join it with your data.</p>
+<p></br></p>
 </div>
 <div id="what-is-a-cartogram" class="section level1">
 <h1>What is a cartogram?</h1>
 <p>A <a href="https://en.wikipedia.org/wiki/Cartogram">cartogram</a> is a map that is distorted spatially in order to convey information in a given variable.</p>
 <p>There are some interesting examples available at the Worldmapper <a href="https://worldmapper.org/">site</a></p>
+<p></br></p>
 </div>
 <div id="plotting-a-choropleth-map" class="section level1">
 <h1>Plotting a choropleth map</h1>
-<p>Here, we are going to read in some already-existing spatial data and a variable from the Active Lives survey to map. <img src="Cartogram_files/figure-html/test_map-1.png" width="672" /></p>
+<p>Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives survey to map.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load packages for visuals</span>
+<span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span>
+<span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span>
+<span class="kw">library</span>(scales) <span class="co"># for percentage function</span>
+<span class="kw">library</span>(viridis) <span class="co"># for colours</span>
+<span class="kw">library</span>(rgdal) <span class="co">#for reading in the shapefile</span>
+
+<span class="co">#map1 &lt;- readOGR(dsn = &quot;.&quot;, layer = &quot;Local_Authority_Districts_April_2019_Boundaries_UK_BUC&quot;)</span>
+
+<span class="co"># map without distortion</span>
+map1<span class="op">@</span>data<span class="op">$</span>id &lt;-<span class="st"> </span><span class="kw">rownames</span>(map1<span class="op">@</span>data) 
+map1<span class="op">@</span>data   &lt;-<span class="st"> </span><span class="kw">join</span>(map1<span class="op">@</span>data, df, <span class="dt">by=</span><span class="st">&quot;lad19cd&quot;</span>)
+map.clean     &lt;-<span class="st"> </span><span class="kw">fortify</span>(map1)
+map.clean     &lt;-<span class="st"> </span><span class="kw">join</span>(map.clean,map1<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
+
+map.clean &lt;-<span class="st"> </span>map.clean[<span class="kw">grep</span>(<span class="st">&quot;E&quot;</span>, map.clean<span class="op">$</span>lad19cd),] <span class="co"># England only</span>
+map.clean &lt;-<span class="st"> </span>map.clean[, <span class="op">!</span><span class="kw">duplicated</span>(<span class="kw">colnames</span>(map.clean))] <span class="co"># remove dupe cols</span>
+
+plot_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map.clean, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span><span class="st"> </span><span class="co">#map.clean is a fortified dataframe created as per the choropleth tutorial</span>
+<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), 
+        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
+        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))
+
+plot_<span class="dv">1</span></code></pre></div>
+<p><img src="Cartogram_files/figure-html/test_map-1.png" width="672" /></p>
+<p></br></p>
 </div>
 <div id="basic-cartogram" class="section level1">
 <h1>Basic Cartogram</h1>
@@ -501,13 +538,12 @@ test_cart &lt;-<span class="st"> </span><span class="kw">cartogram_cont</span>(m
 <span class="co"># check with basic plot</span>
 <span class="kw">plot</span>(test_cart)</code></pre></div>
 <p><img src="Cartogram_files/figure-html/test_cart-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p></br></p>
 </div>
 <div id="cartogram-using-ggplot" class="section level1">
 <h1>Cartogram using <code>GGPLOT</code></h1>
 <p>To ‘prettify’ it, we can convert it to a standard dataframe using <code>fortify</code> from the <code>rgdal</code> package, and then plot with <code>ggplot</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rgdal)
-
-<span class="co"># make into dataframe</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make into dataframe</span>
 map1.df     &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart)
 map1.df     &lt;-<span class="st"> </span><span class="kw">join</span>(map1.df,test_cart<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
 
@@ -528,6 +564,7 @@ plot_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">gg
 <span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))
 plot_<span class="dv">2</span></code></pre></div>
 <p><img src="Cartogram_files/figure-html/map-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p></br></p>
 </div>
 <div id="non-contiguous-cartogram-using-ggplot" class="section level1">
 <h1>Non-contiguous Cartogram using <code>GGPLOT</code></h1>
@@ -554,7 +591,7 @@ plot_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">gg
         <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span>
 <span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))
 plot_<span class="dv">3</span></code></pre></div>
-<p><img src="Cartogram_files/figure-html/map2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Cartogram_files/figure-html/map2-1.png" width="672" style="display: block; margin: auto;" /> </br></p>
 </div>
 <div id="compare-the-three-plots" class="section level1">
 <h1>Compare the three plots</h1>

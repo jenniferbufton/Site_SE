@@ -412,16 +412,19 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="map_tutorial.html">Choropleth Map Tutorial</a>
+      <a href="shapefile_add.html">Reading in Spatial Data</a>
     </li>
     <li>
-      <a href="Leaflet.html">Leaflet Tutorial</a>
+      <a href="map_tutorial.html">Choropleth Map Tutorial</a>
     </li>
     <li>
       <a href="Cartogram.html">Cartogram Tutorial</a>
     </li>
     <li>
       <a href="Hex.html">Hex Map Tutorial</a>
+    </li>
+    <li>
+      <a href="Leaflet.html">Leaflet Tutorial</a>
     </li>
   </ul>
 </li>
@@ -476,66 +479,26 @@ div.tocify {
 </div>
 
 
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
 <p>This tutorial will summarise an approach to creating a hexagon map. A hex map is a good way to show geographic units (in this case Local Authorities) with equal visual weight. One of the benefits of hex maps are that they avoid distortion by <a href="https://odileeds.org/blog/2017-05-08-mapping-election-with-hexes">size</a>, which is why they are a popular means to visualse election results.</p>
 <p>There are comprehensive instructions outlined <a href="http://rpubs.com/Hailstone/326118">here</a> to create a hex map using R. I have replicated that approach (with a few tweaks and updates) below.</p>
-</div>
+<p></br></p>
 <div id="load-packages" class="section level1">
 <h1>Load packages</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)<span class="co"># for ggplot</span>
-<span class="kw">library</span>(broom) <span class="co"># to put shapefile into a dataframe format</span>
-<span class="kw">library</span>(devtools) <span class="co"># to enable installing from github</span>
-<span class="kw">library</span>(fingertipsR) <span class="co"># to access PHE fingertips data</span>
-<span class="kw">library</span>(hexbin) <span class="co"># useful package for plotting</span>
-<span class="kw">library</span>(viridis) <span class="co"># fancy colour palettes</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span>
+<span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span>
+<span class="kw">library</span>(scales) <span class="co"># for percentage function</span>
+<span class="kw">library</span>(viridis) <span class="co"># for colours</span>
 <span class="kw">library</span>(gridExtra) <span class="co"># to arrange multiple plots</span>
 <span class="kw">library</span>(geogrid) <span class="co">#reading and cleaning</span>
-<span class="kw">library</span>(extrafont) <span class="co"># for bespoke font</span>
-<span class="kw">library</span>(scales) <span class="co"># for ggplot</span></code></pre></div>
+<span class="kw">library</span>(broom) <span class="co"># to put shapefile into a dataframe format</span>
+<span class="kw">library</span>(hexbin) <span class="co"># useful package for plotting</span></code></pre></div>
+<p></br></p>
 </div>
-<div id="read-in-the-shapefile" class="section level1">
-<h1>Read in the ShapeFile</h1>
-<p>Read in a shapefile with the <code>read_polygons</code> function from <code>geogrid</code> and plot it.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LAD_shp &lt;-<span class="st"> </span><span class="kw">read_polygons</span>(file.shp) <span class="co">#file.shp is an LA boundary shapefile from ONS</span></code></pre></div>
-<pre><code>## Reading layer `Local_Authority_Districts_April_2019_Boundaries_UK_BUC&#39; from data source `C:\Users\jenniferb\OneDrive - Sport England\GitHub\Geographical Data\LAD\Local_Authority_Districts_April_2019_Boundaries_UK_BUC\Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp&#39; using driver `ESRI Shapefile&#39;
-## Simple feature collection with 382 features and 10 fields
-## geometry type:  MULTIPOLYGON
-## dimension:      XY
-## bbox:           xmin: -116.1928 ymin: 7054.1 xmax: 655644.8 ymax: 1218625
-## epsg (SRID):    NA
-## proj4string:    +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs</code></pre>
+<div id="get-your-data" class="section level1">
+<h1>Get your data</h1>
+<p>See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(LAD_shp)</code></pre></div>
-<p><img src="Hex_files/figure-html/shp-1.png" width="672" /></p>
-</div>
-<div id="read-in-data" class="section level1">
-<h1>Read in data</h1>
-<p>Read in the data you want to plot, and merge it with the spatial data, using the common column (Local Authority code).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Active Lives data</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="st">&#39;lad19cd&#39;</span>, <span class="st">&#39;Male.Active&#39;</span>) <span class="co"># choose LA code for join and also colmn with data to plot</span>
-
-
-LAD_shp_data &lt;-<span class="st"> </span>sp<span class="op">::</span><span class="kw">merge</span>(LAD_shp, <span class="co">#merge shape and data</span>
-                          df,
-                          <span class="dt">by.x=</span><span class="st">&quot;lad19cd&quot;</span>,
-                          <span class="dt">by.y=</span><span class="st">&quot;lad19cd&quot;</span>,
-                          <span class="dt">duplicateGeoms=</span>T,
-                          <span class="dt">all.x=</span>F)</code></pre></div>
-</div>
-<div id="clean-the-data" class="section level1">
-<h1>Clean the data</h1>
-<p>Create a ‘clean’ function to create a usable dataframe for plotting - by using <code>tidy</code> - and apply this custom function to our shapefile.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">clean &lt;-<span class="st"> </span><span class="cf">function</span>(shape){
-  shape<span class="op">@</span>data<span class="op">$</span>id =<span class="st"> </span><span class="kw">rownames</span>(shape<span class="op">@</span>data)
-  shape.points =<span class="st"> </span><span class="kw">tidy</span>(shape, <span class="dt">region=</span><span class="st">&quot;id&quot;</span>)
-  shape.df =<span class="st"> </span><span class="kw">inner_join</span>(shape.points, shape<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
-}
-
-<span class="co"># Apply function to shapefile</span>
-LAD_shp_data_tidy &lt;-<span class="st"> </span><span class="kw">clean</span>(LAD_shp_data)
-
-<span class="co"># here we can include only England by specifying only LAs with an &quot;E&quot; in the code are retained.</span>
-LAD_shp_data_tidy &lt;-<span class="st"> </span>LAD_shp_data_tidy[<span class="kw">grep</span>(<span class="st">&quot;E&quot;</span>, LAD_shp_data_tidy<span class="op">$</span>lad19cd),]</code></pre></div>
+<p><img src="Hex_files/figure-html/shp-1.png" width="672" /> </br></p>
 </div>
 <div id="plot-a-choropleth-map" class="section level1">
 <h1>Plot a choropleth map</h1>
@@ -550,7 +513,7 @@ plot_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">gg
 <span class="st">    </span><span class="kw">coord_equal</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_void</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>))
 plot_<span class="dv">1</span></code></pre></div>
-<p><img src="Hex_files/figure-html/c_map-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Hex_files/figure-html/c_map-1.png" width="672" style="display: block; margin: auto;" /> </br></p>
 </div>
 <div id="generate-new-grid" class="section level1">
 <h1>Generate new grid</h1>
@@ -564,7 +527,7 @@ plot_<span class="dv">1</span></code></pre></div>
   new_cells &lt;-<span class="st">  </span><span class="kw">calculate_grid</span>(<span class="dt">shape =</span> LAD_shp_data, <span class="dt">learning_rate =</span> <span class="fl">0.03</span>, <span class="dt">grid_type =</span> <span class="kw">c</span>(<span class="st">&#39;hexagonal&#39;</span>, <span class="st">&quot;regular&quot;</span>), <span class="dt">seed =</span> i)
   <span class="kw">plot</span>(new_cells[[<span class="dv">2</span>]], <span class="dt">main =</span> <span class="kw">paste</span>(<span class="st">&quot;Seed&quot;</span>,i, <span class="dt">sep=</span><span class="st">&quot; &quot;</span>))
 }</code></pre></div>
-<p><img src="Hex_files/figure-html/shp.new-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Hex_files/figure-html/shp.new-1.png" width="672" style="display: block; margin: auto;" /> </br></p>
 </div>
 <div id="select-and-clean" class="section level1">
 <h1>Select and clean</h1>
@@ -574,6 +537,7 @@ plot_<span class="dv">1</span></code></pre></div>
 resulthex &lt;-<span class="st"> </span><span class="kw">assign_polygons</span>(LAD_shp_data,new_cells_hex) <span class="co"># create shapefile with hex shapes</span>
                                  
 resulthex &lt;-<span class="st"> </span><span class="kw">clean</span>(resulthex) <span class="co"># use clean function to fortify </span></code></pre></div>
+<p></br></p>
 </div>
 <div id="final-output" class="section level1">
 <h1>Final Output</h1>

@@ -1,0 +1,101 @@
+---
+title: "Importing a Shapefile"
+output:
+  html_document: 
+    highlight: tango
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+
+#data
+file.shp <- "C:/Users/jenniferb/OneDrive - Sport England/GitHub/Geographical Data/LAD/Local_Authority_Districts_April_2019_Boundaries_UK_BUC/Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp"
+
+df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv')
+```
+
+This tutorial provides a step-by-step guide to reading in a shapefile and joining it with a dataset to create a dataframe which we can then visualise. 
+
+
+#Introduction
+You will need: </p>
+a) The data you want to map </p>
+b) A Shapefile (which is an amalgamation of several files containing geospatial data). See [here](https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm) for more information about Shapefiles.</p>
+
+
+The aim of the game is to convert the Shapefile into a dataframe, and join with the data you wish to map. In order to do this, you will need to have a variable common to both the dataset and the Shapefile (e.g. a Local Authority code).
+
+In this example, we are going to use Active Lives Survey data from the Sport England Active Lives dataset (datasets available on the [UK Data Archive](https://beta.ukdataservice.ac.uk/datacatalogue/studies/#!?Search=active%20lives%20survey&Page=1&Rows=10&Sort=1&DateFrom=440&DateTo=2019)). This data goes down to a Local Authority level (England only). 
+</br>
+We will use the Shapefile from [data.gov.uk](https://data.gov.uk/dataset/45a1aaed-503a-4259-bd3e-27ce2ddc7b16/local-authority-districts-december-2016-super-generalised-clipped-boundaries-in-the-uk). This contains data beyond our interest (i.e. beyond England) so we will need to do a bit of data cleaning once we have created our joined dataframe.
+
+</br>
+
+#Load packages
+```{r package, message=FALSE, warning=FALSE}
+library(tidyverse)# for ggplot
+library(broom) # to put shapefile into a dataframe format
+library(geogrid) #reading and cleaning
+```
+
+</br>
+
+#Read in the ShapeFile
+Read in a shapefile with the `read_polygons` function from `geogrid` and plot it.
+
+```{r shp, echo=TRUE, message=FALSE, warning=FALSE}
+LAD_shp <- read_polygons(file.shp) #file.shp is an LA boundary shapefile from ONS
+
+kable(LAD_shp[1,]) %>% # show first line of data
+  kable_styling(bootstrap_options = "bordered",
+                position = "left", font_size = 12)  
+
+```
+
+</br>
+
+#Read in the data
+Read in the data you want to plot, and merge it with the spatial data, using the common column (Local Authority code).
+```{r df, echo=TRUE, message=FALSE, warning=FALSE}
+
+df <- df %>% # Active Lives data
+  select('lad19cd', 'Male.Active') # choose LA code for join and also colmn with data to plot
+
+
+LAD_shp_data <- sp::merge(LAD_shp, #merge shape and data
+                          df,
+                          by.x="lad19cd",
+                          by.y="lad19cd",
+                          duplicateGeoms=T,
+                          all.x=F)
+```
+
+</br>
+
+#Clean the data
+Create a 'clean' function to create a usable dataframe for plotting - by using `tidy` - and apply this custom function to our shapefile. 
+```{r clean, echo=TRUE, message=FALSE, warning=FALSE}
+clean <- function(shape){
+  shape@data$id = rownames(shape@data)
+  shape.points = tidy(shape, region="id")
+  shape.df = inner_join(shape.points, shape@data, by="id")
+}
+
+# Apply function to shapefile
+LAD_shp_data_tidy <- clean(LAD_shp_data)
+
+# here we can include only England by specifying only LAs with an "E" in the code are retained.
+LAD_shp_data_tidy <- LAD_shp_data_tidy[grep("E", LAD_shp_data_tidy$lad19cd),]
+
+kable(LAD_shp_data_tidy[1,]) %>% # show first line of joined data
+  kable_styling(bootstrap_options = "bordered",
+              position = "left", font_size = 12) 
+```
+
+We now have a dataframe that we can use to make beautiful maps! See the other tutorials for guides on how to visualise this geospatial data in `R`.
+

@@ -12,7 +12,7 @@
 
 
 
-<title>Choropleth Tutorial</title>
+<title>Importing a Shapefile</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,6 +24,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -474,39 +475,271 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Choropleth Tutorial</h1>
+<h1 class="title toc-ignore">Importing a Shapefile</h1>
 
 </div>
 
 
-<p>This is a brief overview on how to create custom choropleth maps in R using shapefiles. </br></p>
-<div id="load-the-libraries" class="section level1">
-<h1>Load the libraries</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span>
-<span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span>
-<span class="kw">library</span>(scales) <span class="co"># for percentage function</span>
-<span class="kw">library</span>(viridis) <span class="co"># for colours</span></code></pre></div>
+<p>This tutorial provides a step-by-step guide to reading in a shapefile and joining it with a dataset to create a dataframe which we can then visualise.</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+You will need:
+</p>
+<ol style="list-style-type: lower-alpha">
+<li>The data you want to map
+</p></li>
+<li>A Shapefile (which is an amalgamation of several files containing geospatial data). See <a href="https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm">here</a> for more information about Shapefiles.
+</p></li>
+</ol>
+<p>The aim of the game is to convert the Shapefile into a dataframe, and join with the data you wish to map. In order to do this, you will need to have a variable common to both the dataset and the Shapefile (e.g. a Local Authority code).</p>
+<p>In this example, we are going to use Active Lives Survey data from the Sport England Active Lives dataset (datasets available on the <a href="https://beta.ukdataservice.ac.uk/datacatalogue/studies/#!?Search=active%20lives%20survey&amp;Page=1&amp;Rows=10&amp;Sort=1&amp;DateFrom=440&amp;DateTo=2019">UK Data Archive</a>). This data goes down to a Local Authority level (England only). </br> We will use the Shapefile from <a href="https://data.gov.uk/dataset/45a1aaed-503a-4259-bd3e-27ce2ddc7b16/local-authority-districts-december-2016-super-generalised-clipped-boundaries-in-the-uk">data.gov.uk</a>. This contains data beyond our interest (i.e. beyond England) so we will need to do a bit of data cleaning once we have created our joined dataframe.</p>
 <p></br></p>
 </div>
-<div id="get-your-data" class="section level1">
-<h1>Get your data</h1>
-<p>See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data.</p>
+<div id="load-packages" class="section level1">
+<h1>Load packages</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)<span class="co"># for ggplot</span>
+<span class="kw">library</span>(broom) <span class="co"># to put shapefile into a dataframe format</span>
+<span class="kw">library</span>(geogrid) <span class="co">#reading and cleaning</span></code></pre></div>
 <p></br></p>
 </div>
-<div id="ggplot" class="section level1">
-<h1><code>GGPLOT</code></h1>
-<p>We can use <code>geom_polygon</code> to create our map, and strip out axes, gridlines etc. using <code>theme</code>. Here is an excellent <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet</a> for more information around the package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> LAD_shp_data_tidy, <span class="kw">aes</span>(<span class="dt">x =</span> long.x, <span class="dt">y =</span> lat.x, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), <span class="co">#blank theme to remove axes, text etc.</span>
-        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
-        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
-        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
-        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),
-        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span>
-<span class="st"> </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>)) <span class="co">#colour theme can be modified</span></code></pre></div>
-<p><img src="map_tutorial_files/figure-html/poly-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="read-in-the-shapefile" class="section level1">
+<h1>Read in the ShapeFile</h1>
+<p>Read in a shapefile with the <code>read_polygons</code> function from <code>geogrid</code> and plot it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LAD_shp &lt;-<span class="st"> </span><span class="kw">read_polygons</span>(file.shp) <span class="co">#file.shp is an LA boundary shapefile from ONS</span></code></pre></div>
+<pre><code>## Reading layer `Local_Authority_Districts_April_2019_Boundaries_UK_BUC&#39; from data source `C:\Users\jenniferb\OneDrive - Sport England\GitHub\Geographical Data\LAD\Local_Authority_Districts_April_2019_Boundaries_UK_BUC\Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 382 features and 10 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -116.1928 ymin: 7054.1 xmax: 655644.8 ymax: 1218625
+## epsg (SRID):    NA
+## proj4string:    +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(LAD_shp[<span class="dv">1</span>,]) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># show first line of data</span>
+<span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;bordered&quot;</span>,
+                <span class="dt">position =</span> <span class="st">&quot;left&quot;</span>, <span class="dt">font_size =</span> <span class="dv">12</span>)  </code></pre></div>
+<table class="table table-bordered" style="font-size: 12px; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+objectid
+</th>
+<th style="text-align:left;">
+lad19cd
+</th>
+<th style="text-align:left;">
+lad19nm
+</th>
+<th style="text-align:left;">
+lad19nmw
+</th>
+<th style="text-align:right;">
+bng_e
+</th>
+<th style="text-align:right;">
+bng_n
+</th>
+<th style="text-align:right;">
+long
+</th>
+<th style="text-align:right;">
+lat
+</th>
+<th style="text-align:right;">
+st_areasha
+</th>
+<th style="text-align:right;">
+st_lengths
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+E06000001
+</td>
+<td style="text-align:left;">
+Hartlepool
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+447157
+</td>
+<td style="text-align:right;">
+531476
+</td>
+<td style="text-align:right;">
+-1.27023
+</td>
+<td style="text-align:right;">
+54.6762
+</td>
+<td style="text-align:right;">
+96512311
+</td>
+<td style="text-align:right;">
+50488.39
+</td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+</div>
+<div id="read-in-the-data" class="section level1">
+<h1>Read in the data</h1>
+<p>Read in the data you want to plot, and merge it with the spatial data, using the common column (Local Authority code).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Active Lives data</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="st">&#39;lad19cd&#39;</span>, <span class="st">&#39;Male.Active&#39;</span>) <span class="co"># choose LA code for join and also colmn with data to plot</span>
+
+
+LAD_shp_data &lt;-<span class="st"> </span>sp<span class="op">::</span><span class="kw">merge</span>(LAD_shp, <span class="co">#merge shape and data</span>
+                          df,
+                          <span class="dt">by.x=</span><span class="st">&quot;lad19cd&quot;</span>,
+                          <span class="dt">by.y=</span><span class="st">&quot;lad19cd&quot;</span>,
+                          <span class="dt">duplicateGeoms=</span>T,
+                          <span class="dt">all.x=</span>F)</code></pre></div>
+<p></br></p>
+</div>
+<div id="clean-the-data" class="section level1">
+<h1>Clean the data</h1>
+<p>Create a ‘clean’ function to create a usable dataframe for plotting - by using <code>tidy</code> - and apply this custom function to our shapefile.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">clean &lt;-<span class="st"> </span><span class="cf">function</span>(shape){
+  shape<span class="op">@</span>data<span class="op">$</span>id =<span class="st"> </span><span class="kw">rownames</span>(shape<span class="op">@</span>data)
+  shape.points =<span class="st"> </span><span class="kw">tidy</span>(shape, <span class="dt">region=</span><span class="st">&quot;id&quot;</span>)
+  shape.df =<span class="st"> </span><span class="kw">inner_join</span>(shape.points, shape<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
+}
+
+<span class="co"># Apply function to shapefile</span>
+LAD_shp_data_tidy &lt;-<span class="st"> </span><span class="kw">clean</span>(LAD_shp_data)
+
+<span class="co"># here we can include only England by specifying only LAs with an &quot;E&quot; in the code are retained.</span>
+LAD_shp_data_tidy &lt;-<span class="st"> </span>LAD_shp_data_tidy[<span class="kw">grep</span>(<span class="st">&quot;E&quot;</span>, LAD_shp_data_tidy<span class="op">$</span>lad19cd),]
+
+<span class="kw">kable</span>(LAD_shp_data_tidy[<span class="dv">1</span>,]) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># show first line of joined data</span>
+<span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;bordered&quot;</span>,
+              <span class="dt">position =</span> <span class="st">&quot;left&quot;</span>, <span class="dt">font_size =</span> <span class="dv">12</span>) </code></pre></div>
+<table class="table table-bordered" style="font-size: 12px; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+long.x
+</th>
+<th style="text-align:right;">
+lat.x
+</th>
+<th style="text-align:right;">
+order
+</th>
+<th style="text-align:left;">
+hole
+</th>
+<th style="text-align:left;">
+piece
+</th>
+<th style="text-align:left;">
+group
+</th>
+<th style="text-align:left;">
+id
+</th>
+<th style="text-align:left;">
+lad19cd
+</th>
+<th style="text-align:right;">
+objectid
+</th>
+<th style="text-align:left;">
+lad19nm
+</th>
+<th style="text-align:left;">
+lad19nmw
+</th>
+<th style="text-align:right;">
+bng_e
+</th>
+<th style="text-align:right;">
+bng_n
+</th>
+<th style="text-align:right;">
+long.y
+</th>
+<th style="text-align:right;">
+lat.y
+</th>
+<th style="text-align:right;">
+st_areasha
+</th>
+<th style="text-align:right;">
+st_lengths
+</th>
+<th style="text-align:right;">
+Male.Active
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+453098.3
+</td>
+<td style="text-align:right;">
+534104.2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+1.1
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+E06000001
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Hartlepool
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+447157
+</td>
+<td style="text-align:right;">
+531476
+</td>
+<td style="text-align:right;">
+-1.27023
+</td>
+<td style="text-align:right;">
+54.6762
+</td>
+<td style="text-align:right;">
+96512311
+</td>
+<td style="text-align:right;">
+50488.39
+</td>
+<td style="text-align:right;">
+0.55
+</td>
+</tr>
+</tbody>
+</table>
+<p>We now have a dataframe that we can use to make beautiful maps! See the other tutorials for guides on how to visualise this geospatial data in <code>R</code>.</p>
 </div>
 
 
@@ -555,7 +788,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2,h3",
+      selectors: "h1,h2,h3,h4",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {

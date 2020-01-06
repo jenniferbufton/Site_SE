@@ -21,26 +21,14 @@ library(rgdal)
 library(viridis)
 
 ### read in data to append
-df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv')
-
-df <- df %>%
+df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv') %>%
   select('lad19cd', 'Male.Active')
 range(df$Male.Active)
 
 #import shapefile
 setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Geographical Data/LAD/Local_Authority_Districts_April_2019_Boundaries_UK_BUC")
+
 map1 <- readOGR(dsn = ".", layer = "Local_Authority_Districts_April_2019_Boundaries_UK_BUC", verbose = FALSE)
-summary(map1) # see if projections used 
-
-## map without distortion
-map1@data$id <- rownames(map1@data)
-map1@data   <- join(map1@data, df, by="lad19cd")
-map.clean     <- fortify(map1)
-map.clean     <- join(map.clean,map1@data, by="id")
-
-map.clean <- map.clean[grep("E", map.clean$lad19cd),] # England only
-map.clean <- map.clean[, !duplicated(colnames(map.clean))] # remove dupe cols
-
 
 
 ```
@@ -49,19 +37,35 @@ map.clean <- map.clean[, !duplicated(colnames(map.clean))] # remove dupe cols
 #Introduction
 This tutorial will summarise an approach to creating a cartogram by using the `cartogram` package. This is very similar to creating a choropleth map - see the choropleth map tutorial for a 'how to' import a shapefile and join it with your data.
 
+</br>
+
 #What is a cartogram?
 A [cartogram](https://en.wikipedia.org/wiki/Cartogram) is a map that is distorted spatially in order to convey information in a given variable.
 
 There are some interesting examples available at the Worldmapper [site](https://worldmapper.org/)
 
+</br>
+
 #Plotting a choropleth map
-Here, we are going to read in some already-existing spatial data and a variable from the Active Lives survey to map.
-```{r test_map, echo=FALSE, message=FALSE, warning=FALSE}
+Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way. This approach uses the `readOGR` function from the `rgdal` package, and a variable from the Active Lives survey to map.
+```{r test_map, echo=TRUE, message=FALSE, warning=FALSE}
 # load packages for visuals
-library(ggplot2)
-library(scales)
-library(extrafont)
-library(viridis)
+library(tidyverse) # multiple packages including ggplot
+library(extrafont)# for Sport England house font
+library(scales) # for percentage function
+library(viridis) # for colours
+library(rgdal) #for reading in the shapefile
+
+#map1 <- readOGR(dsn = ".", layer = "Local_Authority_Districts_April_2019_Boundaries_UK_BUC")
+
+# map without distortion
+map1@data$id <- rownames(map1@data) 
+map1@data   <- join(map1@data, df, by="lad19cd")
+map.clean     <- fortify(map1)
+map.clean     <- join(map.clean,map1@data, by="id")
+
+map.clean <- map.clean[grep("E", map.clean$lad19cd),] # England only
+map.clean <- map.clean[, !duplicated(colnames(map.clean))] # remove dupe cols
 
 plot_1 <- ggplot() +
   geom_polygon(data = map.clean, aes(x = long, y = lat, group = group, fill = Male.Active))+ #map.clean is a fortified dataframe created as per the choropleth tutorial
@@ -76,6 +80,8 @@ plot_1 <- ggplot() +
 
 plot_1
 ```
+
+</br>
 
 #Basic Cartogram
 Using the `cartogram` package, we can plot a map using the spatial dataframe we have imported and joined with Active Lives data.
@@ -92,11 +98,12 @@ plot(test_cart)
 
 ```
 
+</br>
+
 #Cartogram using `GGPLOT`
 To 'prettify' it, we can convert it to a standard dataframe using `fortify` from the `rgdal` package, and then plot with `ggplot`.
 
 ```{r map, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE}
-library(rgdal)
 
 # make into dataframe
 map1.df     <- fortify(test_cart)
@@ -120,6 +127,7 @@ scale_fill_viridis(option="magma", name = "Male Active",breaks = 0.1*0:9, labels
 plot_2
 ```
 
+</br>
 
 #Non-contiguous Cartogram using `GGPLOT`
 We can also make a non-contiguous cartogram (a version of a cartogram where the polygon features are separated from their neighbours).
@@ -147,6 +155,7 @@ plot_3 <- ggplot() +
 scale_fill_viridis(option="magma", name = "Male Active",breaks = 0.1*0:9, labels = percent(0.1*0:9))
 plot_3
 ```
+</br>
 
 #Compare the three plots
 

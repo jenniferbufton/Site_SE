@@ -10,14 +10,16 @@ navbar:
     - icon: fa-map-marked-alt
       href: index.html
       menu: 
+       - text: "Reading in Spatial Data"
+         href: shapefile_add.html
        - text: "Choropleth Map Tutorial"
          href: map_tutorial.html
-       - text: "Leaflet Tutorial"
-         href: Leaflet.html
        - text: "Cartogram Tutorial"
          href: Cartogram.html
        - text: "Hex Map Tutorial"
          href: Hex.html
+       - text: "Leaflet Tutorial"
+         href: Leaflet.html
     - icon: fa-pound-sign
       href: index.html
       menu:
