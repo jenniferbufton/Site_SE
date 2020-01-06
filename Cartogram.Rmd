@@ -47,7 +47,7 @@ There are some interesting examples available at the Worldmapper [site](https://
 </br>
 
 #Plotting a choropleth map
-Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way. This approach uses the `readOGR` function from the `rgdal` package, and a variable from the Active Lives survey to map.
+Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick plot. This approach uses the `readOGR` function from the `rgdal` package, and a variable from the Active Lives survey to map.
 ```{r test_map, echo=TRUE, message=FALSE, warning=FALSE}
 # load packages for visuals
 library(tidyverse) # multiple packages including ggplot
@@ -84,7 +84,7 @@ plot_1
 </br>
 
 #Basic Cartogram
-Using the `cartogram` package, we can plot a map using the spatial dataframe we have imported and joined with Active Lives data.
+Using the `cartogram` package, we can plot a map using the spatial dataframe we have created.
 
 ```{r test_cart, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.align='center'}
 # load package

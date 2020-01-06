@@ -488,11 +488,12 @@ You will need:
 <ol style="list-style-type: lower-alpha">
 <li>The data you want to map
 </p></li>
-<li>A Shapefile (which is an amalgamation of several files containing geospatial data). See <a href="https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm">here</a> for more information about Shapefiles.
+<li>A shapefile (which is an amalgamation of several files containing geospatial data). See <a href="https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm">here</a> for more information about Shapefiles.
 </p></li>
 </ol>
-<p>The aim of the game is to convert the Shapefile into a dataframe, and join with the data you wish to map. In order to do this, you will need to have a variable common to both the dataset and the Shapefile (e.g. a Local Authority code).</p>
-<p>In this example, we are going to use Active Lives Survey data from the Sport England Active Lives dataset (datasets available on the <a href="https://beta.ukdataservice.ac.uk/datacatalogue/studies/#!?Search=active%20lives%20survey&amp;Page=1&amp;Rows=10&amp;Sort=1&amp;DateFrom=440&amp;DateTo=2019">UK Data Archive</a>). This data goes down to a Local Authority level (England only). </br> We will use the Shapefile from <a href="https://data.gov.uk/dataset/45a1aaed-503a-4259-bd3e-27ce2ddc7b16/local-authority-districts-december-2016-super-generalised-clipped-boundaries-in-the-uk">data.gov.uk</a>. This contains data beyond our interest (i.e. beyond England) so we will need to do a bit of data cleaning once we have created our joined dataframe.</p>
+<p>The aim is to join the shapefile with the data you wish to map, and then convert it from spatial data into a dataframe. In order to join the data, you will need to have a variable common to both the dataset and the shapefile (e.g. a Local Authority code).</p>
+<p>In this example, we are going to use Active Lives Survey data from the Sport England Active Lives dataset (datasets available on the <a href="https://beta.ukdataservice.ac.uk/datacatalogue/studies/#!?Search=active%20lives%20survey&amp;Page=1&amp;Rows=10&amp;Sort=1&amp;DateFrom=440&amp;DateTo=2019">UK Data Archive</a>). This data goes down to a Local Authority level (England only). </br></p>
+<p>We will use the Shapefile from <a href="https://data.gov.uk/dataset/45a1aaed-503a-4259-bd3e-27ce2ddc7b16/local-authority-districts-december-2016-super-generalised-clipped-boundaries-in-the-uk">data.gov.uk</a>. This contains data beyond our interest (i.e. beyond England) so we will need to do a bit of data cleaning once we have created our joined dataframe.</p>
 <p></br></p>
 </div>
 <div id="load-packages" class="section level1">
@@ -504,7 +505,7 @@ You will need:
 </div>
 <div id="read-in-the-shapefile" class="section level1">
 <h1>Read in the ShapeFile</h1>
-<p>Read in a shapefile with the <code>read_polygons</code> function from <code>geogrid</code> and plot it.</p>
+<p>Read in a shapefile with the <code>read_polygons</code> function from <code>geogrid</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LAD_shp &lt;-<span class="st"> </span><span class="kw">read_polygons</span>(file.shp) <span class="co">#file.shp is an LA boundary shapefile from ONS</span></code></pre></div>
 <pre><code>## Reading layer `Local_Authority_Districts_April_2019_Boundaries_UK_BUC&#39; from data source `C:\Users\jenniferb\OneDrive - Sport England\GitHub\Geographical Data\LAD\Local_Authority_Districts_April_2019_Boundaries_UK_BUC\Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 382 features and 10 fields
@@ -595,7 +596,7 @@ NA
 <span class="st">  </span><span class="kw">select</span>(<span class="st">&#39;lad19cd&#39;</span>, <span class="st">&#39;Male.Active&#39;</span>) <span class="co"># choose LA code for join and also colmn with data to plot</span>
 
 
-LAD_shp_data &lt;-<span class="st"> </span>sp<span class="op">::</span><span class="kw">merge</span>(LAD_shp, <span class="co">#merge shape and data</span>
+LAD_shp_data &lt;-<span class="st"> </span>sp<span class="op">::</span><span class="kw">merge</span>(LAD_shp, <span class="co">#join shape and data</span>
                           df,
                           <span class="dt">by.x=</span><span class="st">&quot;lad19cd&quot;</span>,
                           <span class="dt">by.y=</span><span class="st">&quot;lad19cd&quot;</span>,
@@ -608,7 +609,7 @@ LAD_shp_data &lt;-<span class="st"> </span>sp<span class="op">::</span><span cla
 <p>Create a ‘clean’ function to create a usable dataframe for plotting - by using <code>tidy</code> - and apply this custom function to our shapefile.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">clean &lt;-<span class="st"> </span><span class="cf">function</span>(shape){
   shape<span class="op">@</span>data<span class="op">$</span>id =<span class="st"> </span><span class="kw">rownames</span>(shape<span class="op">@</span>data)
-  shape.points =<span class="st"> </span><span class="kw">tidy</span>(shape, <span class="dt">region=</span><span class="st">&quot;id&quot;</span>)
+  shape.points =<span class="st"> </span><span class="kw">tidy</span>(shape, <span class="dt">region=</span><span class="st">&quot;id&quot;</span>) <span class="co">#converts to dataframe</span>
   shape.df =<span class="st"> </span><span class="kw">inner_join</span>(shape.points, shape<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
 }
 

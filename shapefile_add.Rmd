@@ -25,13 +25,14 @@ This tutorial provides a step-by-step guide to reading in a shapefile and joinin
 #Introduction
 You will need: </p>
 a) The data you want to map </p>
-b) A Shapefile (which is an amalgamation of several files containing geospatial data). See [here](https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm) for more information about Shapefiles.</p>
+b) A shapefile (which is an amalgamation of several files containing geospatial data). See [here](https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm) for more information about Shapefiles.</p>
 
 
-The aim of the game is to convert the Shapefile into a dataframe, and join with the data you wish to map. In order to do this, you will need to have a variable common to both the dataset and the Shapefile (e.g. a Local Authority code).
+The aim is to join the shapefile with the data you wish to map, and then convert it from spatial data into a dataframe. In order to join the data, you will need to have a variable common to both the dataset and the shapefile (e.g. a Local Authority code).
 
 In this example, we are going to use Active Lives Survey data from the Sport England Active Lives dataset (datasets available on the [UK Data Archive](https://beta.ukdataservice.ac.uk/datacatalogue/studies/#!?Search=active%20lives%20survey&Page=1&Rows=10&Sort=1&DateFrom=440&DateTo=2019)). This data goes down to a Local Authority level (England only). 
 </br>
+
 We will use the Shapefile from [data.gov.uk](https://data.gov.uk/dataset/45a1aaed-503a-4259-bd3e-27ce2ddc7b16/local-authority-districts-december-2016-super-generalised-clipped-boundaries-in-the-uk). This contains data beyond our interest (i.e. beyond England) so we will need to do a bit of data cleaning once we have created our joined dataframe.
 
 </br>
@@ -46,7 +47,7 @@ library(geogrid) #reading and cleaning
 </br>
 
 #Read in the ShapeFile
-Read in a shapefile with the `read_polygons` function from `geogrid` and plot it.
+Read in a shapefile with the `read_polygons` function from `geogrid`.
 
 ```{r shp, echo=TRUE, message=FALSE, warning=FALSE}
 LAD_shp <- read_polygons(file.shp) #file.shp is an LA boundary shapefile from ONS
@@ -67,7 +68,7 @@ df <- df %>% # Active Lives data
   select('lad19cd', 'Male.Active') # choose LA code for join and also colmn with data to plot
 
 
-LAD_shp_data <- sp::merge(LAD_shp, #merge shape and data
+LAD_shp_data <- sp::merge(LAD_shp, #join shape and data
                           df,
                           by.x="lad19cd",
                           by.y="lad19cd",
@@ -82,7 +83,7 @@ Create a 'clean' function to create a usable dataframe for plotting - by using `
 ```{r clean, echo=TRUE, message=FALSE, warning=FALSE}
 clean <- function(shape){
   shape@data$id = rownames(shape@data)
-  shape.points = tidy(shape, region="id")
+  shape.points = tidy(shape, region="id") #converts to dataframe
   shape.df = inner_join(shape.points, shape@data, by="id")
 }
 

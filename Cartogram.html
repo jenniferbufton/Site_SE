@@ -492,7 +492,7 @@ div.tocify {
 </div>
 <div id="plotting-a-choropleth-map" class="section level1">
 <h1>Plotting a choropleth map</h1>
-<p>Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives survey to map.</p>
+<p>Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick plot. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives survey to map.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load packages for visuals</span>
 <span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span>
 <span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span>
@@ -528,7 +528,7 @@ plot_<span class="dv">1</span></code></pre></div>
 </div>
 <div id="basic-cartogram" class="section level1">
 <h1>Basic Cartogram</h1>
-<p>Using the <code>cartogram</code> package, we can plot a map using the spatial dataframe we have imported and joined with Active Lives data.</p>
+<p>Using the <code>cartogram</code> package, we can plot a map using the spatial dataframe we have created.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load package</span>
 <span class="kw">library</span>(cartogram)
 
