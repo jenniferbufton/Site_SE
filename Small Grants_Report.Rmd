@@ -14,13 +14,9 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(class)
-library(gmodels)
-library(rlang)
-library(caret)
+
 library(extrafont)
 library(reshape2)
-library(leaflet)
 library(ggplot2)
 library(dplyr)
 library(extrafont)
@@ -28,8 +24,6 @@ library(leaflet)
 library(scales)
 library(knitr)
 library(tidyverse)
-library(forcats)
-library(wordcloud2)
 library(DT)
 library(readxl)
 library(kableExtra)
@@ -142,7 +136,7 @@ kable(summary(table_df), row.names = 0, col.names = c("Award Amount", "Total Pro
 ## Award amounts
 ```{r award, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 ggplot(sg_df)+
-  geom_point(aes(AWARD, Total_Project_Cost), color = "#5D4086")+
+  geom_point(aes(AWARD, Total_Project_Cost), color = "#e41b4a")+
   theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
         plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1),
@@ -151,7 +145,7 @@ ggplot(sg_df)+
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left")  +
   scale_color_manual(values = se_colour, name = "Focus")+
-  labs( x= "Amount Awarded", y = "Total Project Cost", title = "Funding Amount by Total Project Cost")+
+  labs( x= "Amount Awarded", y = "Total Project Cost", title = "Funding Amount by \nTotal Project Cost")+
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_x_continuous(labels = scales::dollar_format(prefix = "£")) 
 ```
@@ -162,7 +156,7 @@ This graph shows the distribution of a the awards. It visualises five summary st
 
 ```{r award_box, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
 ggplot(sg_df)+
-  geom_boxplot(aes(x = "", y = AWARD) , color = "#5D4086", outlier.colour =  "#5D4086" )+
+  geom_boxplot(aes(x = "", y = AWARD) , color = "#e41b4a", outlier.colour =  "#e41b4a" )+
   theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
         plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1),
@@ -193,7 +187,7 @@ ggplot(sp_org)+
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "", y = "", title = "Number of times an Organisation was Funded", caption = "Funded by Small Grants during current strategy period")+
+  labs( x= "", y = "", title = "Number of times an \nOrganisation was Funded", caption = "Funded by Small Grants during current strategy period")+
   scale_fill_manual(values = se_colour, name = "Number of times")
 
 ```
@@ -210,7 +204,7 @@ ggplot(sg_df)+
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "", y = "", title = "Amount Awarded per Focus")+
+  labs( x= "", y = "", title = "Amount Awarded \nper Focus")+
     scale_fill_manual(values = se_colour)
 ```
 
@@ -227,7 +221,7 @@ sg_sport <- sg_sport[order(sg_sport$AWARD),]
 sg_sport %>%
   top_n(count_of_sp)%>%
   ggplot(aes(x= reorder(Sport, AWARD), y =AWARD))+
-  geom_bar(stat = "identity", fill = "#5D4086") +
+  geom_bar(stat = "identity", fill = "#e41b4a") +
   coord_flip()+
   theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
         plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
@@ -237,7 +231,7 @@ sg_sport %>%
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "Organisation type", y = "Number of Awards", title = "Type of Sport by Award Amount") +
+  labs( x= "Organisation type", y = "Number of Awards", title = "Type of Sport \nby Award Amount") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
 ```
 
@@ -251,7 +245,7 @@ sg_sport <- sg_sport[order(sg_sport$AWARD, decreasing = TRUE),]
 sg_sport %>%
   top_n(-count_of_sp)%>%
   ggplot(aes(x= reorder(Sport, AWARD), y =AWARD))+
-  geom_bar(stat = "identity", fill = "#5D4086") +
+  geom_bar(stat = "identity", fill = "#e41b4a") +
   coord_flip()+
   theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
         plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
@@ -261,7 +255,7 @@ sg_sport %>%
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "Organisation type", y = "Number of Awards", title = "Type of Sport by Award Amount") +
+  labs( x= "Organisation type", y = "Number of Awards", title = "Type of Sport by \nAward Amount") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
 ```
 
@@ -270,7 +264,7 @@ sg_sport %>%
 ```{r org_amount, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 
   ggplot(data = sg_org, aes(x= reorder(Org_Class, AWARD), y = AWARD))+
-  geom_bar(stat = "identity", fill = "#5D4086") +
+  geom_bar(stat = "identity", fill = "#e41b4a") +
   coord_flip()+
   theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
         plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
@@ -280,7 +274,7 @@ sg_sport %>%
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "Organisation type", y = "Award amount", title = "Organisation Type by Award Amount", caption = "Only one type has been selected per award. /nThis may not have been consistently applied by applicants")+
+  labs( x= "Organisation type", y = "Award amount", title = "Organisation Type \nby Award Amount", caption = "Only one type has been selected per award. \nThis may not have been consistently applied \nby applicants")+
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
   
 ```
@@ -297,7 +291,7 @@ mutate(ALS_Inactive = case_when(ALS_Inactive_PC_2018 >= 0.9 ~ "6. Between 90% an
                                 ALS_Inactive_PC_2018 >= 0.3 ~ "2. Between 30% and 49%",
                               TRUE ~ '1. Under 30%'))%>%
   ggplot()+
-  geom_bar(aes(x= ALS_Inactive, y = AWARD), fill = "#5D4086", stat = "identity" )+
+  geom_bar(aes(x= ALS_Inactive, y = AWARD), fill = "#e41b4a", stat = "identity" )+
   theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
         plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1),
@@ -323,7 +317,7 @@ DT::datatable(table_df,  filter = 'top',
   formatCurrency(c(2,3), '£') %>%
   formatPercentage(10, 2) %>%
   formatRound(9,0) %>%
-formatStyle(columns = "URN", font = "Poppins", color = "#B8345C" , backgroundColor = "#E79AB5" )
+formatStyle(columns = "URN", font = "Poppins", color = "white" , backgroundColor = "#e41b4a" )
   
 
 ```
@@ -333,8 +327,21 @@ formatStyle(columns = "URN", font = "Poppins", color = "#B8345C" , backgroundCol
 # Government Outcomes
 The 2016-2021 strategy contriibutes to the Government's five outcomes set out in [*Sporting Futures*](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/486622/Sporting_Future_ACCESSIBLE.pdf). 
 
-The below table and chart show the amount the Small Grants fund invests per outcome. NB a minority of awards are duplicated - this is because a few contribute to more than one outcome. 
+The below table shows the proportion the Small Grants fund invests per outcome. NB a minority of awards are duplicated - this is because a few contribute to more than one outcome. 
+```{r gov_tab_1, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+gov.1 <- summary(gov$Govt_Outcome)
+gov.1 <- prop.table(gov.1)
+gov.1 <- as.data.frame(gov.1)
+gov.1$gov.1 <- paste0(scales::percent(gov.1$gov.1, suffix = "%")) 
+gov.1$Proportion <- gov.1$gov.1 
+gov.1 <- gov.1 %>%
+  select(Proportion)
+ kable(gov.1) %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
+```
 
+The below table and chart show the amount the Small Grants fund invests per outcome. 
 ```{r gov_tab, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center' }
 gov %>% 
   group_by(Govt_Outcome)%>%
@@ -358,7 +365,7 @@ ggplot(gov)+
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "Government Outcome", y = "Award Amount", title = "Total Award by Government Outcome") +
+  labs( x= "Government Outcome", y = "Award Amount", title = "Total Award by \nGovernment Outcome") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))+
   scale_fill_manual(values = se_colour, name = "Outcome")
 ```
@@ -370,8 +377,6 @@ Distribution of funding throughout England
 <style>
 .leaflet {
     margin: auto;
-}
-</style>
 
 ## Individual projects
 
@@ -393,7 +398,8 @@ leaflet() %>% addTiles() %>%
   addLegend("bottomright", pal = pal, values = sg_map$group, title = "Small Grants Awards: Sport England 2019",
             opacity = 1)
 ```
-
+}
+</style>
 <br>
 
 ## Awards by Local Authority
@@ -449,7 +455,7 @@ The below chart shows the distribution of projects by IMD decile (2019).
 
 ```{r imd, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 ggplot(sg_df)+
-  geom_histogram(aes(IMD_Decile_2019), fill = "#ff6105", binwidth = 1 )+
+  geom_histogram(aes(IMD_Decile_2019), fill = "#e41b4a", binwidth = 1 )+
   theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
         plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
         axis.text.x = element_text(angle = 45, hjust = 1),
@@ -518,7 +524,7 @@ ggplot(me_df)+
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "", y = "", title = "Proportion of Amount Awarded to 'Successful' Projects", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
+  labs( x= "", y = "", title = "Proportion of Amount Awarded to \n'Successful' Projects", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 
 ```
@@ -535,7 +541,7 @@ ggplot(me_df)+
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left")  +
-  labs( x= "Successful or Not?", y = "Amount awarded", title = "Amount Awarded by Success of Project") +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Amount Awarded by \nSuccess of Project") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 ```
@@ -601,7 +607,7 @@ ggplot(me_box_g)+
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left")  +
-  labs( x= "Gender focus", y = "Amount awarded", title = "Amount Awarded by Gender: Success of Project", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target") +
+  labs( x= "Gender focus", y = "Amount awarded", title = "Amount Awarded by Gender: \nSuccess of Project", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 
@@ -626,7 +632,7 @@ me_df %>%
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 ```
-<br>
+</br>
 
 The below boxplot shows the distribution of award amounts by project success (of those with M&E data), and the 5 most awarded sports:
 ```{r me_sport, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
@@ -664,7 +670,7 @@ me_df %>%
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 ```
 
-<br>
+</br>
 
 ```{r me_org_box, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 
@@ -679,7 +685,7 @@ me_df %>%
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "bottom")  +
-  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by Organisation Type", caption = "Only one type has been selected per award. \nThis may not have been consistently applied by applicants") +
+  labs( x= "Successful or Not?", y = "Amount awarded", title = "Award Amount by \nOrganisation Type", caption = "Only one type has been selected per award. \nThis may not have been consistently applied by applicants") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 
@@ -697,76 +703,9 @@ DT::datatable(me_tab, colnames = c('Row', 'URN', 'Sport', 'Organisation Type', '
                                        lengthMenu = c(5, 10, 15, 20)))%>%
   formatCurrency(4, '£') %>%
   formatRound(c(5:8, 10),0) %>%
-formatStyle(columns = "GMS_URN", font = "Poppins", color = "#B8345C" , backgroundColor = "#E79AB5" )
+formatStyle(columns = "GMS_URN", font = "Poppins", color = "white" , backgroundColor = "#e41b4a" )
 
 ```
 
-<br>
 
-# Text Analysis 
-Using the "12 month progress" field, we can look at the unstructured data of the Measure and Evaluation element of an award. We can do this using word frequency, topic extraction using LDA (Latent Dirichlet Modelling), and also assigning sentiment. 
 
-<br>
-
-## Term frequency score
-The wordcloud was produced through text processing ) which stripped out punctuation and non-relevant words, and the word frequency was weighted with the 'importance' given to each word.
-
-```{r 12_prog, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
-
-wordcloud2(text_df[,c(2,4)], fontFamily = "Poppins", color = "random-light")
-
-```
-
-<br>
-
-## Topics
-
-The topic modelling was created using the LDA model, and the "Elbow" method applied to assign the number of topics (more information at this [site](https://www.knime.com/blog/topic-extraction-optimizing-the-number-of-topics-with-the-elbow-method)).
-
-```{r 12_prog_top, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
-
-kable(topic_tbl) %>%
-  kable_styling(bootstrap_options = "bordered",
-                full_width = FALSE) 
-```
-
-<br>
-
-## Sentiment
-Sentiment score using a lexicon-based approach: The approach assigns a sentiment to each word of positive or negative. This can be translated int a score (number of positive words - number of negative words) / total number of words).
-
-The number of Small Grants projects with a comment in the "12 month progress" field: `r nrow(sentiment_df)`
-
-<br>
-
-### Proportion of projects with positive / negative sentiment
-
-* Positive comments: `r sent_tab[1]`
-* Negative comments: `r sent_tab[2]`
-
-```{r Sent_pie, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
-ggplot(sentiment_df)+
-  geom_bar(aes(x="", y = Sentiment, fill = Sentiment), stat = "identity" ) +
-  coord_polar("y", start = 0)+
-  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
-        axis.text.x = element_blank(),
-        panel.grid = element_blank(),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "left") +
-  labs( x= "", y = "", title = "Sentiment")+
-    scale_fill_manual(values = se_colour)
-```
-
-<br>
-
-### Example of sentiment scoring
-
-```{r Sent, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
-
-kable(sentiment_df[1,]) %>%
-  kable_styling(bootstrap_options = "bordered",
-                full_width = FALSE) 
-
-```

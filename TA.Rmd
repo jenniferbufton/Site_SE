@@ -1,0 +1,112 @@
+---
+title: "Text Analytics"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      toc_collapsed: true
+    toc_depth: 3
+    number_sections: true
+    theme: flatly
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(extrafont)
+library(reshape2)
+library(dplyr)
+library(extrafont)
+library(scales)
+library(knitr)
+library(tidyverse)
+library(forcats)
+library(wordcloud2)
+library(DT)
+library(kableExtra)
+
+setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
+
+se_colour <- c( "#e41b4a", "#0072d6", "#a4569c", "#00a881", "#ff6105") # custom colours to use in the chart
+
+topic_tbl <- read.csv('12Month_top.csv') %>%
+  rename("Topic" = Topic.id, "Terms" = Concatenate.Term.)
+
+text_df <- read.csv('12Month_Prog.csv', header = TRUE)
+
+
+sentiment_df <- read.csv('Sentiment.csv', header = TRUE)%>%
+  select("Document", "Sentiment.Prediction", "all.Words") %>%
+  rename("Sentiment" = Sentiment.Prediction, `Number of Words` = "all.Words")
+
+sent_tab <- table(sentiment_df$Sentiment)
+```
+
+
+Using the "12 month progress" field, we can look at the unstructured data of the Measure and Evaluation element of an award. We can do this using word frequency, topic extraction using LDA (Latent Dirichlet Modelling), and also assigning sentiment. 
+
+<br>
+
+#Term frequency score
+The wordcloud was produced through text processing ) which stripped out punctuation and non-relevant words, and the word frequency was weighted with the 'importance' given to each word.
+
+```{r 12_prog, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
+
+wordcloud2(text_df[,c(2,4)], fontFamily = "Poppins", color = "random-light")
+
+```
+
+<br>
+
+#Topics
+
+The topic modelling was created using the LDA model, and the "Elbow" method applied to assign the number of topics (more information at this [site](https://www.knime.com/blog/topic-extraction-optimizing-the-number-of-topics-with-the-elbow-method)).
+
+```{r 12_prog_top, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
+
+kable(topic_tbl) %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
+```
+
+<br>
+
+#Sentiment
+Sentiment score using a lexicon-based approach: The approach assigns a sentiment to each word of positive or negative. This can be translated int a score (number of positive words - number of negative words) / total number of words).
+
+The number of Small Grants projects with a comment in the "12 month progress" field: `r nrow(sentiment_df)`
+
+<br>
+
+## Proportion of projects with positive / negative sentiment
+
+* Positive comments: `r sent_tab[1]`
+* Negative comments: `r sent_tab[2]`
+
+```{r Sent_pie, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
+ggplot(sentiment_df)+
+  geom_bar(aes(x="", y = Sentiment, fill = Sentiment), stat = "identity" ) +
+  coord_polar("y", start = 0)+
+  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
+        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
+        axis.text.x = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
+        legend.position = "left") +
+  labs( x= "", y = "", title = "Sentiment")+
+    scale_fill_manual(values = se_colour)
+```
+
+<br>
+
+## Example of sentiment scoring
+
+```{r Sent, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
+
+kable(sentiment_df[1,]) %>%
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE) 
+
+```

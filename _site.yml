@@ -25,7 +25,9 @@ navbar:
       menu:
         - text: "Small Grants Report"
         - text: "Main Report"
-          href: Small-Grants_Report.html 
+          href: Small-Grants_Report.html
+        - text: "Text Analytics"
+          href: TA.html
         - text: "Predictive Analytics"
           href: Predictive.html
     

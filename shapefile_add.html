@@ -442,6 +442,9 @@ div.tocify {
       <a href="Small-Grants_Report.html">Main Report</a>
     </li>
     <li>
+      <a href="TA.html">Text Analytics</a>
+    </li>
+    <li>
       <a href="Predictive.html">Predictive Analytics</a>
     </li>
   </ul>
@@ -488,12 +491,12 @@ You will need:
 <ol style="list-style-type: lower-alpha">
 <li>The data you want to map
 </p></li>
-<li>A shapefile (which is an amalgamation of several files containing geospatial data). See <a href="https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm">here</a> for more information about Shapefiles.
+<li>A shapefile. See <a href="https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm">here</a> for more information about shapefiles.
 </p></li>
 </ol>
 <p>The aim is to join the shapefile with the data you wish to map, and then convert it from spatial data into a dataframe. In order to join the data, you will need to have a variable common to both the dataset and the shapefile (e.g. a Local Authority code).</p>
 <p>In this example, we are going to use Active Lives Survey data from the Sport England Active Lives dataset (datasets available on the <a href="https://beta.ukdataservice.ac.uk/datacatalogue/studies/#!?Search=active%20lives%20survey&amp;Page=1&amp;Rows=10&amp;Sort=1&amp;DateFrom=440&amp;DateTo=2019">UK Data Archive</a>). This data goes down to a Local Authority level (England only). </br></p>
-<p>We will use the Shapefile from <a href="https://data.gov.uk/dataset/45a1aaed-503a-4259-bd3e-27ce2ddc7b16/local-authority-districts-december-2016-super-generalised-clipped-boundaries-in-the-uk">data.gov.uk</a>. This contains data beyond our interest (i.e. beyond England) so we will need to do a bit of data cleaning once we have created our joined dataframe.</p>
+<p>We will use the shapefile from <a href="https://data.gov.uk/dataset/45a1aaed-503a-4259-bd3e-27ce2ddc7b16/local-authority-districts-december-2016-super-generalised-clipped-boundaries-in-the-uk">data.gov.uk</a>. This contains data beyond our interest (i.e. beyond England) so we will need to do a bit of data cleaning once we have created our joined dataframe.</p>
 <p></br></p>
 </div>
 <div id="load-packages" class="section level1">
@@ -506,7 +509,7 @@ You will need:
 <div id="read-in-the-shapefile" class="section level1">
 <h1>Read in the ShapeFile</h1>
 <p>Read in a shapefile with the <code>read_polygons</code> function from <code>geogrid</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LAD_shp &lt;-<span class="st"> </span><span class="kw">read_polygons</span>(file.shp) <span class="co">#file.shp is an LA boundary shapefile from ONS</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LAD_shp &lt;-<span class="st"> </span><span class="kw">read_polygons</span>(file.shp) <span class="co">#file.shp is an LA boundary shapefile from ONS: Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp</span></code></pre></div>
 <pre><code>## Reading layer `Local_Authority_Districts_April_2019_Boundaries_UK_BUC&#39; from data source `C:\Users\jenniferb\OneDrive - Sport England\GitHub\Geographical Data\LAD\Local_Authority_Districts_April_2019_Boundaries_UK_BUC\Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 382 features and 10 fields
 ## geometry type:  MULTIPOLYGON

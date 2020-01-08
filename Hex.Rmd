@@ -69,7 +69,7 @@ library(hexbin) # useful package for plotting
 </br>
 
 #Get your data
-See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data.
+See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data. You can check the boundaries with the `plot` function.
 
 ```{r shp, echo=TRUE, message=FALSE, warning=FALSE}
 plot(LAD_shp)

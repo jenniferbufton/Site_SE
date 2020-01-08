@@ -47,7 +47,7 @@ There are some interesting examples available at the Worldmapper [site](https://
 </br>
 
 #Plotting a choropleth map
-Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick plot. This approach uses the `readOGR` function from the `rgdal` package, and a variable from the Active Lives survey to map.
+Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick `plot` of a cartogram. This approach uses the `readOGR` function from the `rgdal` package, and a variable from the Active Lives Survey to map.
 ```{r test_map, echo=TRUE, message=FALSE, warning=FALSE}
 # load packages for visuals
 library(tidyverse) # multiple packages including ggplot
@@ -60,9 +60,9 @@ library(rgdal) #for reading in the shapefile
 
 # map without distortion
 map1@data$id <- rownames(map1@data) 
-map1@data   <- join(map1@data, df, by="lad19cd")
-map.clean     <- fortify(map1)
-map.clean     <- join(map.clean,map1@data, by="id")
+map1@data <- join(map1@data, df, by="lad19cd")
+map.clean <- fortify(map1)
+map.clean <- join(map.clean,map1@data, by="id")
 
 map.clean <- map.clean[grep("E", map.clean$lad19cd),] # England only
 map.clean <- map.clean[, !duplicated(colnames(map.clean))] # remove dupe cols
@@ -106,8 +106,8 @@ To 'prettify' it, we can convert it to a standard dataframe using `fortify` from
 ```{r map, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE}
 
 # make into dataframe
-map1.df     <- fortify(test_cart)
-map1.df     <- join(map1.df,test_cart@data, by="id")
+map1.df <- fortify(test_cart)
+map1.df <- join(map1.df,test_cart@data, by="id")
 
 
 ## remove dupe col
@@ -135,8 +135,8 @@ We can also make a non-contiguous cartogram (a version of a cartogram where the 
 test_cart.ncont <- cartogram_ncont(map1, "Male.Active", k = 10) #k = factor expansion for the unit with the greater value
 
 # make into dataframe
-map2.df     <- fortify(test_cart.ncont)
-map2.df     <- join(map2.df,test_cart.ncont@data, by="id")
+map2.df <- fortify(test_cart.ncont)
+map2.df <- join(map2.df,test_cart.ncont@data, by="id")
 
 
 ## remove dupe col

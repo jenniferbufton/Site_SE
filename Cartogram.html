@@ -441,6 +441,9 @@ div.tocify {
       <a href="Small-Grants_Report.html">Main Report</a>
     </li>
     <li>
+      <a href="TA.html">Text Analytics</a>
+    </li>
+    <li>
       <a href="Predictive.html">Predictive Analytics</a>
     </li>
   </ul>
@@ -492,7 +495,7 @@ div.tocify {
 </div>
 <div id="plotting-a-choropleth-map" class="section level1">
 <h1>Plotting a choropleth map</h1>
-<p>Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick plot. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives survey to map.</p>
+<p>Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick <code>plot</code> of a cartogram. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives Survey to map.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load packages for visuals</span>
 <span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span>
 <span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span>
@@ -504,9 +507,9 @@ div.tocify {
 
 <span class="co"># map without distortion</span>
 map1<span class="op">@</span>data<span class="op">$</span>id &lt;-<span class="st"> </span><span class="kw">rownames</span>(map1<span class="op">@</span>data) 
-map1<span class="op">@</span>data   &lt;-<span class="st"> </span><span class="kw">join</span>(map1<span class="op">@</span>data, df, <span class="dt">by=</span><span class="st">&quot;lad19cd&quot;</span>)
-map.clean     &lt;-<span class="st"> </span><span class="kw">fortify</span>(map1)
-map.clean     &lt;-<span class="st"> </span><span class="kw">join</span>(map.clean,map1<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
+map1<span class="op">@</span>data &lt;-<span class="st"> </span><span class="kw">join</span>(map1<span class="op">@</span>data, df, <span class="dt">by=</span><span class="st">&quot;lad19cd&quot;</span>)
+map.clean &lt;-<span class="st"> </span><span class="kw">fortify</span>(map1)
+map.clean &lt;-<span class="st"> </span><span class="kw">join</span>(map.clean,map1<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
 
 map.clean &lt;-<span class="st"> </span>map.clean[<span class="kw">grep</span>(<span class="st">&quot;E&quot;</span>, map.clean<span class="op">$</span>lad19cd),] <span class="co"># England only</span>
 map.clean &lt;-<span class="st"> </span>map.clean[, <span class="op">!</span><span class="kw">duplicated</span>(<span class="kw">colnames</span>(map.clean))] <span class="co"># remove dupe cols</span>
@@ -544,8 +547,8 @@ test_cart &lt;-<span class="st"> </span><span class="kw">cartogram_cont</span>(m
 <h1>Cartogram using <code>GGPLOT</code></h1>
 <p>To ‘prettify’ it, we can convert it to a standard dataframe using <code>fortify</code> from the <code>rgdal</code> package, and then plot with <code>ggplot</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make into dataframe</span>
-map1.df     &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart)
-map1.df     &lt;-<span class="st"> </span><span class="kw">join</span>(map1.df,test_cart<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
+map1.df &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart)
+map1.df &lt;-<span class="st"> </span><span class="kw">join</span>(map1.df,test_cart<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
 
 
 ## remove dupe col
@@ -572,8 +575,8 @@ plot_<span class="dv">2</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test_cart.ncont &lt;-<span class="st"> </span><span class="kw">cartogram_ncont</span>(map1, <span class="st">&quot;Male.Active&quot;</span>, <span class="dt">k =</span> <span class="dv">10</span>) <span class="co">#k = factor expansion for the unit with the greater value</span>
 
 <span class="co"># make into dataframe</span>
-map2.df     &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart.ncont)
-map2.df     &lt;-<span class="st"> </span><span class="kw">join</span>(map2.df,test_cart.ncont<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
+map2.df &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart.ncont)
+map2.df &lt;-<span class="st"> </span><span class="kw">join</span>(map2.df,test_cart.ncont<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
 
 
 ## remove dupe col
