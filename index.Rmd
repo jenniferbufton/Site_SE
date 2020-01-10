@@ -1,16 +1,14 @@
 ---
-title: <center>Data Analytics</center>
+title: " "
 output: html_document
 ---
 
 ---
+ 
 
-<center><img src="images/tgc.jpg", width = "800px"></center>
+![TGC](C:/Users/jenniferb/OneDrive - Sport England/GitHub/Site_SE/images/tgc.jpg)
+
 
 ---
-<img style="float: right;" src="images/logo.png", width = "200px">
-
-
-
 
 
