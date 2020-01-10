@@ -374,10 +374,6 @@ ggplot(gov)+
 
 Distribution of funding throughout England 
 
-<style>
-.leaflet {
-    margin: auto;
-
 ## Individual projects
 
 ```{r map, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
@@ -398,9 +394,7 @@ leaflet() %>% addTiles() %>%
   addLegend("bottomright", pal = pal, values = sg_map$group, title = "Small Grants Awards: Sport England 2019",
             opacity = 1)
 ```
-}
-</style>
-<br>
+
 
 ## Awards by Local Authority
 

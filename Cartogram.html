@@ -30,41 +30,66 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-pre, code { background-color: #f8f8f8; }
-code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
-code > span.dt { color: #204a87; } /* DataType */
-code > span.dv { color: #0000cf; } /* DecVal */
-code > span.bn { color: #0000cf; } /* BaseN */
-code > span.fl { color: #0000cf; } /* Float */
-code > span.ch { color: #4e9a06; } /* Char */
-code > span.st { color: #4e9a06; } /* String */
-code > span.co { color: #8f5902; font-style: italic; } /* Comment */
-code > span.ot { color: #8f5902; } /* Other */
-code > span.al { color: #ef2929; } /* Alert */
-code > span.fu { color: #000000; } /* Function */
-code > span.er { color: #a40000; font-weight: bold; } /* Error */
-code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #000000; } /* Constant */
-code > span.sc { color: #000000; } /* SpecialChar */
-code > span.vs { color: #4e9a06; } /* VerbatimString */
-code > span.ss { color: #4e9a06; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #000000; } /* Variable */
-code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
-code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
-code > span.ex { } /* Extension */
-code > span.at { color: #c4a000; } /* Attribute */
-code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
-code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { background-color: #f8f8f8; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 
 </style>
 <script>
@@ -482,124 +507,104 @@ div.tocify {
 </div>
 
 
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>This tutorial will summarise an approach to creating a cartogram by using the <code>cartogram</code> package. This is very similar to creating a choropleth map - see the choropleth map tutorial for a ‘how to’ import a shapefile and join it with your data.</p>
+<p>#Introduction This tutorial will summarise an approach to creating a cartogram by using the <code>cartogram</code> package. This is very similar to creating a choropleth map - see the choropleth map tutorial for a ‘how to’ import a shapefile and join it with your data.</p>
 <p></br></p>
-</div>
-<div id="what-is-a-cartogram" class="section level1">
-<h1>What is a cartogram?</h1>
-<p>A <a href="https://en.wikipedia.org/wiki/Cartogram">cartogram</a> is a map that is distorted spatially in order to convey information in a given variable.</p>
+<p>#What is a cartogram? A <a href="https://en.wikipedia.org/wiki/Cartogram">cartogram</a> is a map that is distorted spatially in order to convey information in a given variable.</p>
 <p>There are some interesting examples available at the Worldmapper <a href="https://worldmapper.org/">site</a></p>
 <p></br></p>
-</div>
-<div id="plotting-a-choropleth-map" class="section level1">
-<h1>Plotting a choropleth map</h1>
-<p>Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick <code>plot</code> of a cartogram. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives Survey to map.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load packages for visuals</span>
-<span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span>
-<span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span>
-<span class="kw">library</span>(scales) <span class="co"># for percentage function</span>
-<span class="kw">library</span>(viridis) <span class="co"># for colours</span>
-<span class="kw">library</span>(rgdal) <span class="co">#for reading in the shapefile</span>
-
-<span class="co">#map1 &lt;- readOGR(dsn = &quot;.&quot;, layer = &quot;Local_Authority_Districts_April_2019_Boundaries_UK_BUC&quot;)</span>
-
-<span class="co"># map without distortion</span>
-map1<span class="op">@</span>data<span class="op">$</span>id &lt;-<span class="st"> </span><span class="kw">rownames</span>(map1<span class="op">@</span>data) 
-map1<span class="op">@</span>data &lt;-<span class="st"> </span><span class="kw">join</span>(map1<span class="op">@</span>data, df, <span class="dt">by=</span><span class="st">&quot;lad19cd&quot;</span>)
-map.clean &lt;-<span class="st"> </span><span class="kw">fortify</span>(map1)
-map.clean &lt;-<span class="st"> </span><span class="kw">join</span>(map.clean,map1<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
-
-map.clean &lt;-<span class="st"> </span>map.clean[<span class="kw">grep</span>(<span class="st">&quot;E&quot;</span>, map.clean<span class="op">$</span>lad19cd),] <span class="co"># England only</span>
-map.clean &lt;-<span class="st"> </span>map.clean[, <span class="op">!</span><span class="kw">duplicated</span>(<span class="kw">colnames</span>(map.clean))] <span class="co"># remove dupe cols</span>
-
-plot_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map.clean, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span><span class="st"> </span><span class="co">#map.clean is a fortified dataframe created as per the choropleth tutorial</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), 
-        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
-        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
-        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
-        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),
-        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))
-
-plot_<span class="dv">1</span></code></pre></div>
+<p>#Plotting a choropleth map Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick <code>plot</code> of a cartogram. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives Survey to map.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># load packages for visuals</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(scales) <span class="co"># for percentage function</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(viridis) <span class="co"># for colours</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw">library</span>(rgdal) <span class="co">#for reading in the shapefile</span></a>
+<a class="sourceLine" id="cb1-7" title="7"></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co">#map1 &lt;- readOGR(dsn = &quot;.&quot;, layer = &quot;Local_Authority_Districts_April_2019_Boundaries_UK_BUC&quot;)</span></a>
+<a class="sourceLine" id="cb1-9" title="9"></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="co"># map without distortion</span></a>
+<a class="sourceLine" id="cb1-11" title="11">map1<span class="op">@</span>data<span class="op">$</span>id &lt;-<span class="st"> </span><span class="kw">rownames</span>(map1<span class="op">@</span>data) </a>
+<a class="sourceLine" id="cb1-12" title="12">map1<span class="op">@</span>data &lt;-<span class="st"> </span><span class="kw">join</span>(map1<span class="op">@</span>data, df, <span class="dt">by=</span><span class="st">&quot;lad19cd&quot;</span>)</a>
+<a class="sourceLine" id="cb1-13" title="13">map.clean &lt;-<span class="st"> </span><span class="kw">fortify</span>(map1)</a>
+<a class="sourceLine" id="cb1-14" title="14">map.clean &lt;-<span class="st"> </span><span class="kw">join</span>(map.clean,map1<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)</a>
+<a class="sourceLine" id="cb1-15" title="15"></a>
+<a class="sourceLine" id="cb1-16" title="16">map.clean &lt;-<span class="st"> </span>map.clean[<span class="kw">grep</span>(<span class="st">&quot;E&quot;</span>, map.clean<span class="op">$</span>lad19cd),] <span class="co"># England only</span></a>
+<a class="sourceLine" id="cb1-17" title="17">map.clean &lt;-<span class="st"> </span>map.clean[, <span class="op">!</span><span class="kw">duplicated</span>(<span class="kw">colnames</span>(map.clean))] <span class="co"># remove dupe cols</span></a>
+<a class="sourceLine" id="cb1-18" title="18"></a>
+<a class="sourceLine" id="cb1-19" title="19">plot_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-20" title="20"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map.clean, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span><span class="st"> </span><span class="co">#map.clean is a fortified dataframe created as per the choropleth tutorial</span></a>
+<a class="sourceLine" id="cb1-21" title="21"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-22" title="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb1-23" title="23">        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
+<a class="sourceLine" id="cb1-24" title="24">        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb1-25" title="25">        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb1-26" title="26">        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb1-27" title="27">        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
+<a class="sourceLine" id="cb1-28" title="28"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))</a>
+<a class="sourceLine" id="cb1-29" title="29"></a>
+<a class="sourceLine" id="cb1-30" title="30">plot_<span class="dv">1</span></a></code></pre></div>
 <p><img src="Cartogram_files/figure-html/test_map-1.png" width="672" /></p>
 <p></br></p>
-</div>
-<div id="basic-cartogram" class="section level1">
-<h1>Basic Cartogram</h1>
-<p>Using the <code>cartogram</code> package, we can plot a map using the spatial dataframe we have created.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load package</span>
-<span class="kw">library</span>(cartogram)
-
-## create cartogram
-test_cart &lt;-<span class="st"> </span><span class="kw">cartogram_cont</span>(map1, <span class="st">&quot;Male.Active&quot;</span>) <span class="co">#map1 is a spatial dataframe with joined with Active Lives data</span>
-
-<span class="co"># check with basic plot</span>
-<span class="kw">plot</span>(test_cart)</code></pre></div>
+<p>#Basic Cartogram Using the <code>cartogram</code> package, we can plot a map using the spatial dataframe we have created.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># load package</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">library</span>(cartogram)</a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">## create cartogram</span></a>
+<a class="sourceLine" id="cb2-5" title="5">test_cart &lt;-<span class="st"> </span><span class="kw">cartogram_cont</span>(map1, <span class="st">&quot;Male.Active&quot;</span>) <span class="co">#map1 is a spatial dataframe with joined with Active Lives data</span></a>
+<a class="sourceLine" id="cb2-6" title="6"></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co"># check with basic plot</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="kw">plot</span>(test_cart)</a></code></pre></div>
 <p><img src="Cartogram_files/figure-html/test_cart-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p></br></p>
-</div>
-<div id="cartogram-using-ggplot" class="section level1">
-<h1>Cartogram using <code>GGPLOT</code></h1>
-<p>To ‘prettify’ it, we can convert it to a standard dataframe using <code>fortify</code> from the <code>rgdal</code> package, and then plot with <code>ggplot</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make into dataframe</span>
-map1.df &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart)
-map1.df &lt;-<span class="st"> </span><span class="kw">join</span>(map1.df,test_cart<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
-
-
-## remove dupe col
-map1.df &lt;-<span class="st"> </span>map1.df[, <span class="op">!</span><span class="kw">duplicated</span>(<span class="kw">colnames</span>(map1.df))] <span class="co"># clean any duplicated columns</span>
-
-
-plot_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map1.df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), 
-        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
-        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
-        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
-        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),
-        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span>
-<span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))
-plot_<span class="dv">2</span></code></pre></div>
+<p>#Cartogram using <code>GGPLOT</code> To ‘prettify’ it, we can convert it to a standard dataframe using <code>fortify</code> from the <code>rgdal</code> package, and then plot with <code>ggplot</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># make into dataframe</span></a>
+<a class="sourceLine" id="cb3-2" title="2">map1.df &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart)</a>
+<a class="sourceLine" id="cb3-3" title="3">map1.df &lt;-<span class="st"> </span><span class="kw">join</span>(map1.df,test_cart<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)</a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">## remove dupe col</span></a>
+<a class="sourceLine" id="cb3-7" title="7">map1.df &lt;-<span class="st"> </span>map1.df[, <span class="op">!</span><span class="kw">duplicated</span>(<span class="kw">colnames</span>(map1.df))] <span class="co"># clean any duplicated columns</span></a>
+<a class="sourceLine" id="cb3-8" title="8"></a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10">plot_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map1.df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb3-14" title="14">        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
+<a class="sourceLine" id="cb3-15" title="15">        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb3-16" title="16">        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb3-17" title="17">        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb3-18" title="18">        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))</a>
+<a class="sourceLine" id="cb3-20" title="20">plot_<span class="dv">2</span></a></code></pre></div>
 <p><img src="Cartogram_files/figure-html/map-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p></br></p>
-</div>
-<div id="non-contiguous-cartogram-using-ggplot" class="section level1">
-<h1>Non-contiguous Cartogram using <code>GGPLOT</code></h1>
-<p>We can also make a non-contiguous cartogram (a version of a cartogram where the polygon features are separated from their neighbours).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test_cart.ncont &lt;-<span class="st"> </span><span class="kw">cartogram_ncont</span>(map1, <span class="st">&quot;Male.Active&quot;</span>, <span class="dt">k =</span> <span class="dv">10</span>) <span class="co">#k = factor expansion for the unit with the greater value</span>
-
-<span class="co"># make into dataframe</span>
-map2.df &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart.ncont)
-map2.df &lt;-<span class="st"> </span><span class="kw">join</span>(map2.df,test_cart.ncont<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
-
-
-## remove dupe col
-map2.df &lt;-<span class="st"> </span>map2.df[, <span class="op">!</span><span class="kw">duplicated</span>(<span class="kw">colnames</span>(map2.df))]
-
-
-plot_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map2.df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), 
-        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), 
-        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),
-        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
-        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),
-        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span>
-<span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))
-plot_<span class="dv">3</span></code></pre></div>
+<p>#Non-contiguous Cartogram using <code>GGPLOT</code> We can also make a non-contiguous cartogram (a version of a cartogram where the polygon features are separated from their neighbours).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">test_cart.ncont &lt;-<span class="st"> </span><span class="kw">cartogram_ncont</span>(map1, <span class="st">&quot;Male.Active&quot;</span>, <span class="dt">k =</span> <span class="dv">10</span>) <span class="co">#k = factor expansion for the unit with the greater value</span></a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co"># make into dataframe</span></a>
+<a class="sourceLine" id="cb4-4" title="4">map2.df &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart.ncont)</a>
+<a class="sourceLine" id="cb4-5" title="5">map2.df &lt;-<span class="st"> </span><span class="kw">join</span>(map2.df,test_cart.ncont<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)</a>
+<a class="sourceLine" id="cb4-6" title="6"></a>
+<a class="sourceLine" id="cb4-7" title="7"></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">## remove dupe col</span></a>
+<a class="sourceLine" id="cb4-9" title="9">map2.df &lt;-<span class="st"> </span>map2.df[, <span class="op">!</span><span class="kw">duplicated</span>(<span class="kw">colnames</span>(map2.df))]</a>
+<a class="sourceLine" id="cb4-10" title="10"></a>
+<a class="sourceLine" id="cb4-11" title="11"></a>
+<a class="sourceLine" id="cb4-12" title="12">plot_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map2.df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb4-16" title="16">        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
+<a class="sourceLine" id="cb4-17" title="17">        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb4-18" title="18">        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb4-19" title="19">        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb4-20" title="20">        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
+<a class="sourceLine" id="cb4-21" title="21"><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))</a>
+<a class="sourceLine" id="cb4-22" title="22">plot_<span class="dv">3</span></a></code></pre></div>
 <p><img src="Cartogram_files/figure-html/map2-1.png" width="672" style="display: block; margin: auto;" /> </br></p>
-</div>
-<div id="compare-the-three-plots" class="section level1">
-<h1>Compare the three plots</h1>
+<p>#Compare the three plots</p>
 <p><img src="Cartogram_files/figure-html/map3-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
 
 
 
