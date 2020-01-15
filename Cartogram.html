@@ -507,12 +507,20 @@ div.tocify {
 </div>
 
 
-<p>#Introduction This tutorial will summarise an approach to creating a cartogram by using the <code>cartogram</code> package. This is very similar to creating a choropleth map - see the choropleth map tutorial for a ‘how to’ import a shapefile and join it with your data.</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This tutorial will summarise an approach to creating a cartogram by using the <code>cartogram</code> package. This is very similar to creating a choropleth map - see the choropleth map tutorial for a ‘how to’ import a shapefile and join it with your data.</p>
 <p></br></p>
-<p>#What is a cartogram? A <a href="https://en.wikipedia.org/wiki/Cartogram">cartogram</a> is a map that is distorted spatially in order to convey information in a given variable.</p>
+</div>
+<div id="what-is-a-cartogram" class="section level1">
+<h1>What is a cartogram?</h1>
+<p>A <a href="https://en.wikipedia.org/wiki/Cartogram">cartogram</a> is a map that is distorted spatially in order to convey information in a given variable.</p>
 <p>There are some interesting examples available at the Worldmapper <a href="https://worldmapper.org/">site</a></p>
 <p></br></p>
-<p>#Plotting a choropleth map Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick <code>plot</code> of a cartogram. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives Survey to map.</p>
+</div>
+<div id="plotting-a-choropleth-map" class="section level1">
+<h1>Plotting a choropleth map</h1>
+<p>Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick <code>plot</code> of a cartogram. This approach uses the <code>readOGR</code> function from the <code>rgdal</code> package, and a variable from the Active Lives Survey to map.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># load packages for visuals</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span></a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span></a>
@@ -545,7 +553,10 @@ div.tocify {
 <a class="sourceLine" id="cb1-30" title="30">plot_<span class="dv">1</span></a></code></pre></div>
 <p><img src="Cartogram_files/figure-html/test_map-1.png" width="672" /></p>
 <p></br></p>
-<p>#Basic Cartogram Using the <code>cartogram</code> package, we can plot a map using the spatial dataframe we have created.</p>
+</div>
+<div id="basic-cartogram" class="section level1">
+<h1>Basic Cartogram</h1>
+<p>Using the <code>cartogram</code> package, we can plot a map using the spatial dataframe we have created.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># load package</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">library</span>(cartogram)</a>
 <a class="sourceLine" id="cb2-3" title="3"></a>
@@ -556,7 +567,10 @@ div.tocify {
 <a class="sourceLine" id="cb2-8" title="8"><span class="kw">plot</span>(test_cart)</a></code></pre></div>
 <p><img src="Cartogram_files/figure-html/test_cart-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p></br></p>
-<p>#Cartogram using <code>GGPLOT</code> To ‘prettify’ it, we can convert it to a standard dataframe using <code>fortify</code> from the <code>rgdal</code> package, and then plot with <code>ggplot</code>.</p>
+</div>
+<div id="cartogram-using-ggplot" class="section level1">
+<h1>Cartogram using <code>GGPLOT</code></h1>
+<p>To ‘prettify’ it, we can convert it to a standard dataframe using <code>fortify</code> from the <code>rgdal</code> package, and then plot with <code>ggplot</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># make into dataframe</span></a>
 <a class="sourceLine" id="cb3-2" title="2">map1.df &lt;-<span class="st"> </span><span class="kw">fortify</span>(test_cart)</a>
 <a class="sourceLine" id="cb3-3" title="3">map1.df &lt;-<span class="st"> </span><span class="kw">join</span>(map1.df,test_cart<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)</a>
@@ -579,7 +593,10 @@ div.tocify {
 <a class="sourceLine" id="cb3-20" title="20">plot_<span class="dv">2</span></a></code></pre></div>
 <p><img src="Cartogram_files/figure-html/map-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p></br></p>
-<p>#Non-contiguous Cartogram using <code>GGPLOT</code> We can also make a non-contiguous cartogram (a version of a cartogram where the polygon features are separated from their neighbours).</p>
+</div>
+<div id="non-contiguous-cartogram-using-ggplot" class="section level1">
+<h1>Non-contiguous Cartogram using <code>GGPLOT</code></h1>
+<p>We can also make a non-contiguous cartogram (a version of a cartogram where the polygon features are separated from their neighbours).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">test_cart.ncont &lt;-<span class="st"> </span><span class="kw">cartogram_ncont</span>(map1, <span class="st">&quot;Male.Active&quot;</span>, <span class="dt">k =</span> <span class="dv">10</span>) <span class="co">#k = factor expansion for the unit with the greater value</span></a>
 <a class="sourceLine" id="cb4-2" title="2"></a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="co"># make into dataframe</span></a>
@@ -603,8 +620,11 @@ div.tocify {
 <a class="sourceLine" id="cb4-21" title="21"><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>))</a>
 <a class="sourceLine" id="cb4-22" title="22">plot_<span class="dv">3</span></a></code></pre></div>
 <p><img src="Cartogram_files/figure-html/map2-1.png" width="672" style="display: block; margin: auto;" /> </br></p>
-<p>#Compare the three plots</p>
+</div>
+<div id="compare-the-three-plots" class="section level1">
+<h1>Compare the three plots</h1>
 <p><img src="Cartogram_files/figure-html/map3-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
 
 
 

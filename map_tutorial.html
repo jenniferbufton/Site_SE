@@ -515,9 +515,15 @@ div.tocify {
 <a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(scales) <span class="co"># for percentage function</span></a>
 <a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(viridis) <span class="co"># for colours</span></a></code></pre></div>
 <p></br></p>
-<p>#Get your data See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data.</p>
+</div>
+<div id="get-your-data" class="section level1">
+<h1>Get your data</h1>
+<p>See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data.</p>
 <p></br></p>
-<p>#<code>GGPLOT</code> We can use <code>geom_polygon</code> to create our map, and strip out axes, gridlines etc. using <code>theme</code>. Here is an excellent <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet</a> for more information around the package.</p>
+</div>
+<div id="ggplot" class="section level1">
+<h1><code>GGPLOT</code></h1>
+<p>We can use <code>geom_polygon</code> to create our map, and strip out axes, gridlines etc. using <code>theme</code>. Here is an excellent <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet</a> for more information around the package.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">ggplot</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> LAD_shp_data_tidy, <span class="kw">aes</span>(<span class="dt">x =</span> long.x, <span class="dt">y =</span> lat.x, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></a>

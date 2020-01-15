@@ -34,19 +34,19 @@ map1 <- readOGR(dsn = ".", layer = "Local_Authority_Districts_April_2019_Boundar
 ```
 
 
-#Introduction
+# Introduction
 This tutorial will summarise an approach to creating a cartogram by using the `cartogram` package. This is very similar to creating a choropleth map - see the choropleth map tutorial for a 'how to' import a shapefile and join it with your data.
 
 </br>
 
-#What is a cartogram?
+# What is a cartogram?
 A [cartogram](https://en.wikipedia.org/wiki/Cartogram) is a map that is distorted spatially in order to convey information in a given variable.
 
 There are some interesting examples available at the Worldmapper [site](https://worldmapper.org/)
 
 </br>
 
-#Plotting a choropleth map
+# Plotting a choropleth map
 Here, we are going to read in spatial data slightly differently to the shapefile tutorial to demonstrate an alternative way, which enables us to do a quick `plot` of a cartogram. This approach uses the `readOGR` function from the `rgdal` package, and a variable from the Active Lives Survey to map.
 ```{r test_map, echo=TRUE, message=FALSE, warning=FALSE}
 # load packages for visuals
@@ -83,7 +83,7 @@ plot_1
 
 </br>
 
-#Basic Cartogram
+# Basic Cartogram
 Using the `cartogram` package, we can plot a map using the spatial dataframe we have created.
 
 ```{r test_cart, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.align='center'}
@@ -100,7 +100,7 @@ plot(test_cart)
 
 </br>
 
-#Cartogram using `GGPLOT`
+# Cartogram using `GGPLOT`
 To 'prettify' it, we can convert it to a standard dataframe using `fortify` from the `rgdal` package, and then plot with `ggplot`.
 
 ```{r map, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE}
@@ -129,7 +129,7 @@ plot_2
 
 </br>
 
-#Non-contiguous Cartogram using `GGPLOT`
+# Non-contiguous Cartogram using `GGPLOT`
 We can also make a non-contiguous cartogram (a version of a cartogram where the polygon features are separated from their neighbours).
 ```{r map2, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE}
 test_cart.ncont <- cartogram_ncont(map1, "Male.Active", k = 10) #k = factor expansion for the unit with the greater value
@@ -157,7 +157,7 @@ plot_3
 ```
 </br>
 
-#Compare the three plots
+# Compare the three plots
 
 ```{r map3, echo=FALSE,  message=FALSE, warning=FALSE, fig.align='center'}
 library(gridExtra)

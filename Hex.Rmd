@@ -53,7 +53,7 @@ There are comprehensive instructions outlined [here](http://rpubs.com/Hailstone/
 
 </br>
 
-#Load packages
+# Load packages
 ```{r pack, echo=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse) # multiple packages including ggplot
 library(extrafont)# for Sport England house font
@@ -68,7 +68,7 @@ library(hexbin) # useful package for plotting
 ```
 </br>
 
-#Get your data
+# Get your data
 See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data. You can check the boundaries with the `plot` function.
 
 ```{r shp, echo=TRUE, message=FALSE, warning=FALSE}
@@ -76,7 +76,7 @@ plot(LAD_shp)
 ```
 </br>
 
-#Plot a choropleth map
+# Plot a choropleth map
 This will let us check the spatial data is correct and everything has worked.
 ```{r c_map, echo=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
 # plot the map
@@ -93,7 +93,7 @@ plot_1
 ```
 </br>
 
-#Generate new grid
+# Generate new grid
 By testing different seed numbers we can generate a range of hexagon layouts - we can then select a version for use in the final map.
 ```{r shp.new,  echo=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
 
@@ -110,7 +110,7 @@ for (i in 1:9){
 ```
 </br>
 
-#Select and clean
+# Select and clean
 Choose your favourite version and generate the grid.
 ```{r shp.gr,  echo=TRUE, message=FALSE, warning=FALSE}
 new_cells_hex <-  calculate_grid(shape = LAD_shp_data, learning_rate = 0.03, grid_type = c('hexagonal', "regular"), seed = 1)
@@ -121,7 +121,7 @@ resulthex <- clean(resulthex) # use clean function to fortify
 ```
 </br>
 
-#Final Output
+# Final Output
 We can look at our original choropleth and our new hexagon map side by side.
 ```{r comp,  echo=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
 # generate plot

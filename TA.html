@@ -425,11 +425,15 @@ div.tocify {
 
 <p>Using the “12 month progress” field, we can look at the unstructured data of the Measure and Evaluation element of an award. We can do this using word frequency, topic extraction using LDA (Latent Dirichlet Modelling), and also assigning sentiment.</p>
 <p><br></p>
-<p>#Term frequency score The wordcloud was produced through text processing ) which stripped out punctuation and non-relevant words, and the word frequency was weighted with the ‘importance’ given to each word.</p>
+<div id="term-frequency-score" class="section level1">
+<h1><span class="header-section-number">1</span> Term frequency score</h1>
+<p>The wordcloud was produced through text processing ) which stripped out punctuation and non-relevant words, and the word frequency was weighted with the ‘importance’ given to each word.</p>
 <div id="htmlwidget-473648e572c7e1691055" style="width:672px;height:480px;" class="wordcloud2 html-widget"></div>
 <script type="application/json" data-for="htmlwidget-473648e572c7e1691055">{"x":{"word":["delivery","date","game","equipment","day","venue","week","event","time","issue","team","player","club","woman","child","session","school","age","participant","girl","session","people","participant","activity","challenge","support","volunteer","issue","staff","time","school","coach","course","club","session","coaching","programme","term","level","sport","training","club","boat","people","time","weather","instructor","season","issue","delivery","pool","equipment","position","club","manager","gala","committee","plan","april","timing","sport","venue","centre","session","club","facility","time","student","staff","pitch"],"freq":[3579,3906,2199,4115,4502,3008,4010,1930,10198,6093,3648,1907,10472,904,1480,13630,5716,1370,5915,1323,13630,6711,5915,4757,4275,5673,4959,6093,2612,10198,5716,5978,4564,10472,13630,3257,2696,2877,3167,6666,4652,10472,1578,6711,10198,1600,1470,1815,6093,3579,2841,4115,1596,10472,2082,2139,1964,8181,1591,2647,6666,3008,3197,13630,10472,2669,10198,1536,2612,934],"fontFamily":"Poppins","fontWeight":"bold","color":"random-light","minSize":0,"weightFactor":0.0132061628760088,"backgroundColor":"white","gridSize":0,"minRotation":-0.785398163397448,"maxRotation":0.785398163397448,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":{"render":[{"code":"function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }","data":null}]}}</script>
 <p><br></p>
-<p>#Topics</p>
+</div>
+<div id="topics" class="section level1">
+<h1><span class="header-section-number">2</span> Topics</h1>
 <p>The topic modelling was created using the LDA model, and the “Elbow” method applied to assign the number of topics (more information at this <a href="https://www.knime.com/blog/topic-extraction-optimizing-the-number-of-topics-with-the-elbow-method">site</a>).</p>
 <table class="table table-bordered" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -502,11 +506,14 @@ sport, venue, centre, session, club, facility, time, student, staff, pitch
 </tbody>
 </table>
 <p><br></p>
-<p>#Sentiment Sentiment score using a lexicon-based approach: The approach assigns a sentiment to each word of positive or negative. This can be translated int a score (number of positive words - number of negative words) / total number of words).</p>
+</div>
+<div id="sentiment" class="section level1">
+<h1><span class="header-section-number">3</span> Sentiment</h1>
+<p>Sentiment score using a lexicon-based approach: The approach assigns a sentiment to each word of positive or negative. This can be translated int a score (number of positive words - number of negative words) / total number of words).</p>
 <p>The number of Small Grants projects with a comment in the “12 month progress” field: 949</p>
 <p><br></p>
 <div id="proportion-of-projects-with-positive-negative-sentiment" class="section level2">
-<h2><span class="header-section-number">0.1</span> Proportion of projects with positive / negative sentiment</h2>
+<h2><span class="header-section-number">3.1</span> Proportion of projects with positive / negative sentiment</h2>
 <ul>
 <li>Positive comments: 508</li>
 <li>Negative comments: 441</li>
@@ -515,7 +522,7 @@ sport, venue, centre, session, club, facility, time, student, staff, pitch
 <p><br></p>
 </div>
 <div id="example-of-sentiment-scoring" class="section level2">
-<h2><span class="header-section-number">0.2</span> Example of sentiment scoring</h2>
+<h2><span class="header-section-number">3.2</span> Example of sentiment scoring</h2>
 <table class="table table-bordered" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -544,6 +551,7 @@ POS
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 
 

@@ -22,7 +22,7 @@ df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Live
 This tutorial provides a step-by-step guide to reading in a shapefile and joining it with a dataset to create a dataframe which we can then visualise. 
 
 
-#Introduction
+# Introduction
 You will need: </p>
 a) The data you want to map </p>
 b) A shapefile. See [here](https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm) for more information about shapefiles.</p>
@@ -37,7 +37,7 @@ We will use the shapefile from [data.gov.uk](https://data.gov.uk/dataset/45a1aae
 
 </br>
 
-#Load packages
+# Load packages
 ```{r package, message=FALSE, warning=FALSE}
 library(tidyverse)# for ggplot
 library(broom) # to put shapefile into a dataframe format
@@ -46,7 +46,7 @@ library(geogrid) #reading and cleaning
 
 </br>
 
-#Read in the ShapeFile
+# Read in the ShapeFile
 Read in a shapefile with the `read_polygons` function from `geogrid`.
 
 ```{r shp, echo=TRUE, message=FALSE, warning=FALSE}
@@ -60,7 +60,7 @@ kable(LAD_shp[1,]) %>% # show first line of data
 
 </br>
 
-#Read in the data
+# Read in the data
 Read in the data you want to plot, and merge it with the spatial data, using the common column (Local Authority code).
 ```{r df, echo=TRUE, message=FALSE, warning=FALSE}
 
@@ -78,7 +78,7 @@ LAD_shp_data <- sp::merge(LAD_shp, #join shape and data
 
 </br>
 
-#Clean the data
+# Clean the data
 Create a 'clean' function to create a usable dataframe for plotting - by using `tidy` - and apply this custom function to our shapefile. 
 ```{r clean, echo=TRUE, message=FALSE, warning=FALSE}
 clean <- function(shape){

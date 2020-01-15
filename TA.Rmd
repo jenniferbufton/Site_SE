@@ -48,7 +48,7 @@ Using the "12 month progress" field, we can look at the unstructured data of the
 
 <br>
 
-#Term frequency score
+# Term frequency score
 The wordcloud was produced through text processing ) which stripped out punctuation and non-relevant words, and the word frequency was weighted with the 'importance' given to each word.
 
 ```{r 12_prog, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE}
@@ -59,7 +59,7 @@ wordcloud2(text_df[,c(2,4)], fontFamily = "Poppins", color = "random-light")
 
 <br>
 
-#Topics
+# Topics
 
 The topic modelling was created using the LDA model, and the "Elbow" method applied to assign the number of topics (more information at this [site](https://www.knime.com/blog/topic-extraction-optimizing-the-number-of-topics-with-the-elbow-method)).
 
@@ -72,7 +72,7 @@ kable(topic_tbl) %>%
 
 <br>
 
-#Sentiment
+# Sentiment
 Sentiment score using a lexicon-based approach: The approach assigns a sentiment to each word of positive or negative. This can be translated int a score (number of positive words - number of negative words) / total number of words).
 
 The number of Small Grants projects with a comment in the "12 month progress" field: `r nrow(sentiment_df)`

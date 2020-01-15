@@ -59,12 +59,12 @@ library(viridis) # for colours
 ```
 </br>
 
-#Get your data
+# Get your data
 See the tutorial on reading in shapefiles to merge the data you want to plot with boundary data.
 
 </br>
 
-#`GGPLOT`
+# `GGPLOT`
 We can use `geom_polygon` to create our map, and strip out axes, gridlines etc. using  `theme`. Here is an excellent `ggplot` [cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) for more information around the package. 
 
 ```{r poly, echo=TRUE, message=FALSE, fig.align='center', warning=FALSE}

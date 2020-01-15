@@ -1,14 +1,15 @@
 ---
-title: " "
+title: <center> Data Analytics </center>
 output: html_document
 ---
 
----
- 
-
-![TGC](C:/Users/jenniferb/OneDrive - Sport England/GitHub/Site_SE/images/tgc.jpg)
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 ---
 
+![](C:/Users/jenniferb/OneDrive - Sport England/GitHub/Site_SE/images/tgc.jpg)
+
+---
 
