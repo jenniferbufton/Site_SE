@@ -89,3 +89,46 @@ leaflet() %>% addTiles() %>%
 
 ```
 
+# Add layers and use custom markers 
+
+There is an add-on package to the `leaflet` package = `leaflet.esri` - which enables a user to add Esri services to a `leaflet` map. The below code provides an example of adding feature layers from the Esri service, and adding a control for both tiles and layers.
+
+It is also possible to create custom markers through the use of the [Font Awesome](https://fontawesome.com/) icon set.
+
+```{r esri, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center'}
+library(leaflet.esri) # install 
+
+woman <- makeAwesomeIcon(icon = "fa-female", library = "fa", markerColor = "blue") 
+both <- makeAwesomeIcon(icon = "fa-bicycle", library = "fa", markerColor = "purple") 
+#create marker
+
+m <- leaflet()%>%
+  addProviderTiles(providers$Esri.WorldGrayCanvas, group = "Esri Gray (default)") %>%
+  addTiles(group = "OSM") %>%
+  addProviderTiles(providers$OpenStreetMap.BlackAndWhite, group = "OSM Black and White") %>%
+  addAwesomeMarkers(data= wses, ~longitude, ~latitude, label = ~as.character(genderRestriction), icon = woman) %>%
+  addAwesomeMarkers(data= mses, ~longitude, ~latitude, label = ~as.character(genderRestriction), icon = both) %>%
+  addEsriFeatureLayer(url = "https://services3.arcgis.com/ivmBBrHfQfDnDf8Q/ArcGIS/rest/services/Indices_of_Multiple_Deprivation_(IMD)_2019/FeatureServer/0",
+                     useServiceSymbology = TRUE,
+                     labelProperty = paste("LSOA01NM"), 
+                     group = "IMD 2019",
+                     labelOptions = labelOptions(textsize = "12px"),
+                     popupProperty = JS("function(feature) { return L.Util.template(\"<h3>IMD Decile: {IMDDec0}</h3><hr /><p>This LSOA is {LSOA01NM} and the IMD Rank is {IMDRank0}. The total population is {TotPop} (excluding pensioners)\", feature.properties);}")) %>%
+addEsriFeatureLayer(url = "https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/ArcGIS/rest/services/UK_Health/FeatureServer/3",
+                    useServiceSymbology = TRUE,
+                    labelProperty = paste("AREA_NAME"), 
+                    group = "Health UK 2011 Census",
+                    labelOptions = labelOptions(textsize = "12px"),
+                    popupProperty = JS("function(feature) { return L.Util.template(\"<h3>All categories: Long-term health problem or disability: {KS301EW0001}</h3><hr /><p>Day to day activities limited alot: {KS301EW0002} </br> Day-to-day activities limited a little: {KS301EW0003} </br> Day-to-day activities not limited: {KS301EW0004} \", feature.properties);}"))
+  
+#create controls 
+
+m %>%
+  addLayersControl(
+    baseGroups = c("Esri Gray (default)", "OSM","OSM Black and White"),
+    overlayGroups = c("IMD 2019", "Health UK 2011 Census"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+```
+

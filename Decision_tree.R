@@ -9,8 +9,9 @@ setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
 me_df <- read_xlsx('MandE.xlsx', na = "NA")
 
 data <- me_df%>%
-  select(AWARD, Total_Project_Cost, Partnership_Funding, GOVERNMENT_OFFICE_REGION, Focus, Sport,
-         IMD_RANK, `12 MONTH PARTICIPANTS`, ALLOCATED_TO,`FEMALE TARGET PERCENTAGE`, `MALE TARGET PERCENTAGE`)
+  mutate(Over_Target = `12 MONTH PARTICIPANTS` > `YEAR 1 PARTICIPANTS TARGET`)%>%
+  select(AWARD, Total_Project_Cost, Partnership_Funding, GOVERNMENT_OFFICE_REGION, Focus, Sport, Over_Target,
+         IMD_RANK,  ALLOCATED_TO) #`12 MONTH PARTICIPANTS`,
 
 data <- as.data.frame(data)
 data$IMD_RANK <- as.numeric(data$IMD_RANK)
@@ -18,15 +19,22 @@ data$GOVERNMENT_OFFICE_REGION <- as.factor(data$GOVERNMENT_OFFICE_REGION)
 data$Focus <- as.factor(data$Focus)
 data$ALLOCATED_TO <- as.factor(data$ALLOCATED_TO)
 data$Sport <- as.factor(data$Sport)
+data$Over_Target <- as.factor(data$Over_Target)
 str(data)
 
-inTrain <- createDataPartition(y=data$`12 MONTH PARTICIPANTS`, p=1, list=FALSE) 
+##Partition
+set.seed(101)
+inTrain <- createDataPartition(y=data$Over_Target, p=1, list=FALSE) 
 Train <- data[inTrain,]
 Test <- data[-inTrain,]
 
-tree <- rpart(`12 MONTH PARTICIPANTS` ~., data=Train, maxdepth = 3)
+tree <- rpart(`Over_Target` ~., data=Train, maxdepth = 4)
 rpart.plot(tree)
 tree
+
+m <- C5.0(Train[,-7], Train[,7]) #training dataset with predictors (arg 1), and the predictor (arg 2)
+m
+plot(m) #shows how it decided.
 
 pred <- predict(tree, Test)
 str(pred)
