@@ -10,7 +10,7 @@ output:
     theme: flatly
     highlight: tango
 ---
-
+<link rel="stylesheet" href="styles.css" type="text/css">
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(caret)
@@ -25,7 +25,7 @@ library(rlang)
 library(ggplot2)
 library(extrafont)
 
-setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
+setwd("C:/Users/jenniferb/OneDrive - Sport England/R/Small Grants")
 me_df <- read_xlsx('MandE.xlsx', na = "NA")
 
 se_colour <- c( "#e41b4a", "#0072d6", "#a4569c", "#00a881", "#ff6105") # custom colours to use in the chart
@@ -38,11 +38,11 @@ se_colour <- c( "#e41b4a", "#0072d6", "#a4569c", "#00a881", "#ff6105") # custom 
 
 ## Introduction
 
-K-Nearest neighbours (or KNN), is a way of classifying a new observation based on already existing observations that have previously been classified. It is 'black box' - we don't know the rules to understand the relationships between features and the classifications.
+K-Nearest neighbours (or KNN), is a way of classifying a new observation based on already existing observations that have previously been classified. 
 
-We can use this algorithm to see if we can predict if a project will exceed its target. In this instance, we are using 8 predictor variables, and the target variable is "Over Target" (True or False).
+We can use this algorithm to see if we can predict if a project will exceed its target. In this instance, we are using 8 predictor variables, and the target variable is "Over Target"- whether a project exceeds its target (this is either True or False).
 
-We can split the dataset into a Test dataset and a Training dataset to predict the outcome variable, and then evaluate those predictions. 
+We will split the dataset into a Test dataset and a Training dataset to predict the outcome variable, and then evaluate those predictions. 
 
 ```{r knn, echo=FALSE,  fig.align="center",}
 data <- me_df%>%
@@ -70,9 +70,6 @@ kable(colnames(a), col.names = "Variables Used")%>%
 ```
 
 ## Classifiying the Data
-
-For the unclassified observations, the algorithm measures the K closest neighbours based on distance (the value of K in this instance in the square root of the number of rows in the dataframe). The algorithm selects which class is the most common in the training dataset, and predicts those new observations accordingly
-
 The below table shows the accuracy of the KNN algorithm when classifying a test dataset. It classified 60% correctly, and 40% incorrectly:
 
 ```{r knn2, fig.align="center", message=FALSE, warning=FALSE,  echo=FALSE,}
@@ -125,6 +122,4 @@ CrossTable(x = test_d$Over_Target, y = d_test_pred,
           prop.chisq=FALSE)
 ```
 
-The 60% accuracy is problematic for applying this to new applications as it currently stands.
 
-One potential way to improve the predictions would be to add other predictor variables (e.g. including target numbers around age, ethnicity, and disability). 

@@ -8,18 +8,18 @@ output:
     toc_depth: 4
     toc_float: yes
 ---
-
+<link rel="stylesheet" href="styles.css" type="text/css">
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(include = TRUE)
 library(kableExtra)
 library(broom)
 library(geogrid)
-library(tidyverse) # Our favourite grammar of graphics to create the map
+library(tidyverse) # for ggplot
 library(extrafont)# for Sport England house font
 library(scales) # for percentage function
 library(viridis) # for colours
 
-file.shp <- "C:/Users/jenniferb/OneDrive - Sport England/GitHub/Geographical Data/LAD/Local_Authority_Districts_April_2019_Boundaries_UK_BUC/Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp"
+file.shp <- "C:/Users/jenniferb/OneDrive - Sport England/R/Geographical Data/LAD/Local_Authority_Districts_April_2019_Boundaries_UK_BUC/Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp"
 LAD_shp <- read_polygons(file.shp) #file.shp is an LA boundary shapefile from ONS
 
 df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Lives Survey/Gender_May1819_LA_CC_Regv2.csv') %>%

@@ -10,7 +10,7 @@ output:
     theme: flatly
     highlight: tango
 ---
-
+<link rel="stylesheet" href="styles.css" type="text/css">
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -29,7 +29,7 @@ library(readxl)
 library(kableExtra)
 
 #### read in GMS data
-setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
+setwd("C:/Users/jenniferb/OneDrive - Sport England/R/Small Grants")
 sg_df <- read.csv('SG_all.csv', header = TRUE, na.strings = c("","N/A"))
 
 ### ADD CNI to dataframe
@@ -220,7 +220,7 @@ ggplot(sg_df)+
 
 ## Sport
 
-The below chart shows the amount awarded to each sport (top `r count_of_sp` awarded sports):
+The below chart shows the amount awarded to each sport (top 10 awarded sports):
 
 ```{r sport2, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 
@@ -229,7 +229,7 @@ sg_sport <- as.data.frame(sg_sport)
 
 sg_sport <- sg_sport[order(sg_sport$AWARD),] 
 sg_sport %>%
-  top_n(count_of_sp)%>%
+  top_n(10)%>%
   ggplot(aes(x= reorder(Sport, AWARD), y =AWARD))+
   geom_bar(stat = "identity", fill = "#e41b4a") +
   coord_flip()+
@@ -241,39 +241,21 @@ sg_sport %>%
         panel.background = element_blank(),
         plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
         legend.position = "left") +
-  labs( x= "Organisation type", y = "Number of Awards", title = "Type of Sport \nby Award Amount") +
+  labs( x= "Sport", y = "Award amount", title = "Type of Sport \nby Award Amount") +
   scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
 ```
 
-<br>
-
-The below chart shows the amount awarded to each sport (bottom `r count_of_sp` awarded sports):
-
-```{r sport3, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-
-sg_sport <- sg_sport[order(sg_sport$AWARD, decreasing = TRUE),]
-sg_sport %>%
-  top_n(-count_of_sp)%>%
-  ggplot(aes(x= reorder(Sport, AWARD), y =AWARD))+
-  geom_bar(stat = "identity", fill = "#e41b4a") +
-  coord_flip()+
-  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
-        axis.text.y = element_text(hjust = 1, size = 8),
-        panel.grid = element_blank(),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "left") +
-  labs( x= "Organisation type", y = "Number of Awards", title = "Type of Sport by \nAward Amount") +
-  scale_y_continuous(labels = scales::dollar_format(prefix = "£"))
-```
 
 ## Organisation Type
 
 ```{r org_amount, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 
-  ggplot(data = sg_org, aes(x= reorder(Org_Class, AWARD), y = AWARD))+
+sg_org <- as.data.frame(sg_org)
+
+sg_org <- sg_org[order(sg_org$AWARD),] 
+sg_org %>%
+  top_n(10)%>%
+  ggplot(aes(x= reorder(Org_Class, AWARD), y = AWARD))+
   geom_bar(stat = "identity", fill = "#e41b4a") +
   coord_flip()+
   theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
@@ -289,37 +271,11 @@ sg_sport %>%
   
 ```
 
-
-## Inactivity
-This graph shows how much we invest into areas (LSOAs) by the proportion of those who are inactive (do less than 30 minutes of activity a week) in that area. The national rate of inactivity is 24.8%. The Active Live Survey report can be found [here](https://www.sportengland.org/media/14239/active-lives-adult-may-18-19-report.pdf)
-```{r als, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
-sg_df%>%
-mutate(ALS_Inactive = case_when(ALS_Inactive_PC_2018 >= 0.9 ~ "6. Between 90% and 100%",
-                                ALS_Inactive_PC_2018 >= 0.8 ~ "5. Between 80% and 89%",
-                                ALS_Inactive_PC_2018 >= 0.7 ~ "4. Between 70% and 79%",
-                                ALS_Inactive_PC_2018 >= 0.5 ~ "3. Between 50% and 69%",
-                                ALS_Inactive_PC_2018 >= 0.3 ~ "2. Between 30% and 49%",
-                              TRUE ~ '1. Under 30%'))%>%
-  ggplot()+
-  geom_bar(aes(x= ALS_Inactive, y = AWARD), fill = "#e41b4a", stat = "identity" )+
-  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        panel.grid = element_blank(),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "left")  +
-  labs( x= "Percentage of Inactive (grouped)", y = "Amount awarded", title = "Active Lives Inactive",
-        caption = ("Active Lives Survey 2018-2019")) +
-  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) 
-```
-
-
 ## Data table
 ```{r dt, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 table_df <- sg_df %>%
-  rename("URN" = GMS_URN, `Award Amount` =  AWARD, `Total Project Cost` = Total_Project_Cost,  `Partnership Funding` = Partnership_Funding, `Other Funding` = OTHER_FUNDING, `Government Outcome` = Govt_Outcome, "Region" = GOVERNMENT_OFFICE_REGION, `Organisation Type`= Org_Class, `IMD Decile` = "IMD_Decile_2019", `Active Lives Survey Inactive (%)` = ALS_Inactive_PC_2018, `Total Population (LSOA)` = Population..2018.Estimates....Total.population.) %>%
-  select(c("URN",`Award Amount`, `Total Project Cost`, "Sport", "Region", `Organisation Type`, "Focus", `IMD Decile`, `Total Population (LSOA)`,`Active Lives Survey Inactive (%)`))
+  rename("URN" = GMS_URN, `Award Amount` =  AWARD, `Total Project Cost` = Total_Project_Cost,  `Partnership Funding` = Partnership_Funding, `Other Funding` = OTHER_FUNDING, `Government Outcome` = Govt_Outcome, "Region" = GOVERNMENT_OFFICE_REGION, `Organisation Type`= Org_Class, `IMD Decile` = "IMD_Decile_2019", `Active Lives Survey Inactive - LA (%)` = ALS_Inactive_PC_2018, `Total Population (LSOA)` = Population..2018.Estimates....Total.population.) %>%
+  select(c("URN",`Award Amount`, `Total Project Cost`, "Sport", "Region", `Organisation Type`, "Focus", `IMD Decile`, `Total Population (LSOA)`,`Active Lives Survey Inactive - LA (%)`))
 
 DT::datatable(table_df,  filter = 'top',
               options = list(pageLength = 5,
@@ -493,7 +449,7 @@ sg_join %>%
                  panel.background = element_blank(),
                  plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
                  legend.position = "left")  +
-           labs( x= "Percentage of Inactive (grouped)", y = "Amount awarded", title = "Community Needs Index Score",
+           labs( x= "CNI Group", y = "Amount awarded", title = "Community Needs Index Score",
                  caption = ("OCSI 2019")) +
            scale_y_continuous(labels = scales::dollar_format(prefix = "£")) 
 ```
@@ -570,74 +526,6 @@ ggplot(me_df)+
   scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
   scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
 ```
-
-## Gender
-In general, the Small Grants fund funds projects that have more male participants than women. 
-
-The below table shows the average target numbers and percentage for women:
-
-```{r women_target,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
-
-me_df_women.num <- me_df_women[,c(3,4,6,8)]
-kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall", digits = 0)%>%
-  kable_styling(bootstrap_options = "bordered",
-                full_width = FALSE) 
-
-```
-
-<br>
-
-The below table shows the average target numbers and percentage for men:
-
-```{r women_actuals,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
-
-me_df_women.num <- me_df_women[,c(1,2,5,7)]
-
-kable(as.data.frame(colMeans(me_df_women.num)), col.names = "Figures Overall", digits = 0)%>%
-  kable_styling(bootstrap_options = "bordered",
-                full_width = FALSE) 
-
-```
-
-<br>
-
-The below bar chart shows the number or participants after 12 months, and shows the proportion of these that came from either 'successful' projects or those that had 'failed' i.e. did not meet their 12 month target:
-```{r women_bar, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
-melt_df_women <- melt(me_df_women[,c(5,6,9)])
-
-ggplot(melt_df_women, aes(x=variable, y =value))+
-  geom_bar(aes( fill = prediction),stat = "identity") +
-  theme(text = element_text(family = "Poppins", size = 12, color = "#525252"),
-        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
-        panel.grid = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "left") +
-  labs( x= "Gender of Participants ", y = "Number of Participants", title = "Targets by Gender", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target" )+
-  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")+
-  scale_y_continuous(labels = scales::comma_format(big.mark = ",")) 
-```
-
-The below chart shows how much is invested in projects tht have a specific focus (focus defined as more participants at 12 months of a specific gender):
-
-```{r women_focus, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
-
-ggplot(me_box_g)+
-  geom_col(aes(x= Gender_Focus, y = AWARD, fill = prediction) )+
-  theme(text = element_text(family = "Poppins", size = 12, color = "#5F5F5F"),
-        plot.title=element_text(size=14,family = "Poppins", face="bold", hjust = 0.5, color = "#525252"),
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
-        panel.grid = element_blank(),
-        panel.background = element_blank(),
-        plot.caption=element_text(size=9, hjust=0, margin=margin(15,0,0,0)),
-        legend.position = "left")  +
-  labs( x= "Gender focus", y = "Amount awarded", title = "Amount Awarded by Gender: \nSuccess of Project", caption = "'Successful' is defined as projects that \nmeet or exceed the year 1 target") +
-  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
-  scale_fill_manual(values = se_colour, name = "Is the project \nsuccessful?")
-
-```
-
 
 ## Sport
 This barchart shows the amount awarded by the 5 most awarded sports, and shows the proportion that were "successful" (of those with M&E data):

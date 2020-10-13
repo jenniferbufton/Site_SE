@@ -7,7 +7,7 @@ output:
     theme: flatly
     highlight: tango
 ---
-
+<link rel="stylesheet" href="styles.css" type="text/css">
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # load packages
@@ -26,7 +26,7 @@ df <- read.csv('C:/Users/jenniferb/OneDrive - Sport England/Power BI/Active Live
 range(df$Male.Active)
 
 #import shapefile
-setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Geographical Data/LAD/Local_Authority_Districts_April_2019_Boundaries_UK_BUC")
+setwd("C:/Users/jenniferb/OneDrive - Sport England/R/Geographical Data/LAD/Local_Authority_Districts_April_2019_Boundaries_UK_BUC")
 
 map1 <- readOGR(dsn = ".", layer = "Local_Authority_Districts_April_2019_Boundaries_UK_BUC", verbose = FALSE)
 

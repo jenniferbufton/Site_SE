@@ -10,7 +10,7 @@ output:
     theme: flatly
     highlight: tango
 ---
-
+<link rel="stylesheet" href="styles.css" type="text/css">
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(caret)
@@ -25,7 +25,7 @@ library(rlang)
 library(ggplot2)
 library(extrafont)
 
-setwd("C:/Users/jenniferb/OneDrive - Sport England/GitHub/Small Grants")
+setwd("C:/Users/jenniferb/OneDrive - Sport England/R/Small Grants")
 me_df <- read_xlsx('MandE.xlsx', na = "NA")
 
 se_colour <- c( "#e41b4a", "#0072d6", "#a4569c", "#00a881", "#ff6105") # custom colours to use in the chart
