@@ -23,15 +23,16 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -41,14 +42,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -57,9 +60,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { background-color: #f8f8f8; }
+  {  background-color: #f8f8f8; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -459,26 +462,6 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-pound-sign"></span>
-     
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Small Grants Report</li>
-    <li>
-      <a href="Small-Grants_Report.html">Main Report</a>
-    </li>
-    <li>
-      <a href="TA.html">Text Analytics</a>
-    </li>
-    <li>
-      <a href="Predictive.html">Predictive Analytics</a>
-    </li>
-  </ul>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -515,8 +498,8 @@ div.tocify {
 
 <p><link rel="stylesheet" href="styles.css" type="text/css"></p>
 <p>These examples all use datasets within R: <code>diamonds</code> from <code>ggplot2</code> and <code>iris</code> from base R.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(extrafont)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(extrafont)</span></code></pre></div>
 <div id="installing-fonts" class="section level2">
 <h2>Installing Fonts</h2>
 <p>The <code>extrafont</code> package enables the use of custom fonts in the plots. To install a new font in Windows 10, download the TrueType font file, and follow the instructions <a href="https://www.cnet.com/how-to/how-to-add-remove-and-modify-fonts-in-windows-10/">here</a>.</p>
@@ -524,109 +507,86 @@ div.tocify {
 <div id="brand-colours" class="section level2">
 <h2>Brand colours</h2>
 <p>use <code>se_colour</code> in plots to assign the Sport England house colours.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Set colour scheme</span></a>
-<a class="sourceLine" id="cb2-2" title="2">se_colour &lt;-<span class="st"> </span><span class="kw">c</span>( <span class="st">&quot;#e41b4a&quot;</span>, <span class="st">&quot;#0072d6&quot;</span>, <span class="st">&quot;#a4569c&quot;</span>, <span class="st">&quot;#00a881&quot;</span>, <span class="st">&quot;#ff6105&quot;</span>)</a>
-<a class="sourceLine" id="cb2-3" title="3">se_colour_inverse &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#ff6105&quot;</span>, <span class="st">&quot;#00a881&quot;</span>, <span class="st">&quot;#a4569c&quot;</span>, <span class="st">&quot;#0072d6&quot;</span>, <span class="st">&quot;#e41b4a&quot;</span>)</a>
-<a class="sourceLine" id="cb2-4" title="4">se_colour_gradient &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.8</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.6</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.4</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.2</span>)) <span class="co"># changes transparency</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Set colour scheme</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>se_colour &lt;-<span class="st"> </span><span class="kw">c</span>( <span class="st">&quot;#e41b4a&quot;</span>, <span class="st">&quot;#0072d6&quot;</span>, <span class="st">&quot;#a4569c&quot;</span>, <span class="st">&quot;#00a881&quot;</span>, <span class="st">&quot;#ff6105&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>se_colour_inverse &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#ff6105&quot;</span>, <span class="st">&quot;#00a881&quot;</span>, <span class="st">&quot;#a4569c&quot;</span>, <span class="st">&quot;#0072d6&quot;</span>, <span class="st">&quot;#e41b4a&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>se_colour_gradient &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.8</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.6</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.4</span>), <span class="kw">alpha</span>(<span class="st">&quot;#003F69&quot;</span>, <span class="fl">0.2</span>)) <span class="co"># changes transparency</span></span></code></pre></div>
 </div>
 <div id="scatter-plot" class="section level2">
 <h2>Scatter Plot</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Scatter plot</span></a>
-<a class="sourceLine" id="cb3-2" title="2">d &lt;-<span class="st"> </span>diamonds</a>
-<a class="sourceLine" id="cb3-3" title="3">plot.point &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
-<a class="sourceLine" id="cb3-6" title="6">        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), </a>
-<a class="sourceLine" id="cb3-7" title="7">        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() ) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span> se_colour_inverse, <span class="dt">name =</span> <span class="st">&#39;Cut&#39;</span>) </a>
-<a class="sourceLine" id="cb3-10" title="10">plot.point</a></code></pre></div>
-<p><img src="Cookbook_files/figure-html/scatter-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>d &lt;-<span class="st"> </span>diamonds</span>
+<span id="cb3-3"><a href="#cb3-3"></a>plot.point &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </span>
+<span id="cb3-6"><a href="#cb3-6"></a>        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb3-7"><a href="#cb3-7"></a>        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() ) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>) <span class="op">+</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span> se_colour_inverse, <span class="dt">name =</span> <span class="st">&#39;Cut&#39;</span>) </span>
+<span id="cb3-10"><a href="#cb3-10"></a>plot.point</span></code></pre></div>
+<p><img src="Cookbook_files/figure-html/Scatter-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Depending on your data, additional changes may be required to “neaten” the plot. For example, we can reformat the y axis labels to display them as currency, and add <code>geom_smooth</code> to help show patterns:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># Scatter plot</span></a>
-<a class="sourceLine" id="cb4-2" title="2">d &lt;-<span class="st"> </span>diamonds</a>
-<a class="sourceLine" id="cb4-3" title="3">plot.point.v1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
-<a class="sourceLine" id="cb4-7" title="7">        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), </a>
-<a class="sourceLine" id="cb4-8" title="8">        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() ) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-10" title="10"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span> se_colour_inverse, <span class="dt">name =</span> <span class="st">&#39;Cut&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-11" title="11"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>)) <span class="co"># reformat scales to currency</span></a>
-<a class="sourceLine" id="cb4-12" title="12">plot.point.v1</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>d &lt;-<span class="st"> </span>diamonds</span>
+<span id="cb4-3"><a href="#cb4-3"></a>plot.point.v1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">color =</span> cut)) <span class="op">+</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </span>
+<span id="cb4-7"><a href="#cb4-7"></a>        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb4-8"><a href="#cb4-8"></a>        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() ) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>) <span class="op">+</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span> se_colour_inverse, <span class="dt">name =</span> <span class="st">&#39;Cut&#39;</span>) <span class="op">+</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>)) <span class="co"># reformat scales to currency</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>plot.point.v1</span></code></pre></div>
 <p><img src="Cookbook_files/figure-html/Scatter2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="boxplot" class="section level2">
 <h2>Boxplot</h2>
 <p>A boxplot shows the distribution of a variable. It gives you the median, the quartiles, and all outliers (shown as individual dots).</p>
 <p>You can do lots more to a boxplot, rotating it horizontally, adding the notch argument to add confidence intervals around the median, adding the mean, etc. See <code>tidyverse</code> <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">documentation</a> for more details</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">d &lt;-<span class="st"> </span>diamonds</a>
-<a class="sourceLine" id="cb5-2" title="2">plot.box &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">fill =</span> cut)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
-<a class="sourceLine" id="cb5-5" title="5">  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb5-6" title="6">  <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>()) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Cut&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour_inverse) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>)) <span class="co"># reformat scales to currency</span></a>
-<a class="sourceLine" id="cb5-10" title="10">plot.box</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>d &lt;-<span class="st"> </span>diamonds</span>
+<span id="cb5-2"><a href="#cb5-2"></a>plot.box &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> price, <span class="dt">fill =</span> cut)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb5-6"><a href="#cb5-6"></a>  <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>()) <span class="op">+</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Carat&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Price by Carat&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Cut&quot;</span>) <span class="op">+</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour_inverse) <span class="op">+</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>)) <span class="co"># reformat scales to currency</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a>plot.box</span></code></pre></div>
 <p><img src="Cookbook_files/figure-html/Boxplot-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="histogram" class="section level2">
 <h2>Histogram</h2>
 <p>Using <code>geom_hist</code>, we can plot the distribution of a variable. Altering the “binwidth” argument changes the size of the bins, and thus the level of detail.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">d &lt;-<span class="st"> </span>iris </a>
-<a class="sourceLine" id="cb6-2" title="2">d &lt;-<span class="st"> </span><span class="kw">subset</span>(d, d<span class="op">$</span>Species <span class="op">==</span><span class="st"> &quot;setosa&quot;</span>) <span class="co"># only look at &quot;Setosa&quot; species from the Iris dataset</span></a>
-<a class="sourceLine" id="cb6-3" title="3"></a>
-<a class="sourceLine" id="cb6-4" title="4">plot.hist &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length), <span class="dt">binwidth =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;#ff6105&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
-<a class="sourceLine" id="cb6-7" title="7">  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb6-8" title="8">        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>()) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Sepal Length&quot;</span>,  <span class="dt">y =</span> <span class="st">&quot;Number of Observations&quot;</span>,  <span class="dt">title =</span> <span class="st">&quot;Setosa Petal Length Distribution&quot;</span>) </a>
-<a class="sourceLine" id="cb6-10" title="10">plot.hist</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>d &lt;-<span class="st"> </span>iris </span>
+<span id="cb6-2"><a href="#cb6-2"></a>d &lt;-<span class="st"> </span><span class="kw">subset</span>(d, d<span class="op">$</span>Species <span class="op">==</span><span class="st"> &quot;setosa&quot;</span>) <span class="co"># only look at &quot;Setosa&quot; species from the Iris dataset</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a>plot.hist &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length), <span class="dt">binwidth =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;#ff6105&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </span>
+<span id="cb6-7"><a href="#cb6-7"></a>  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb6-8"><a href="#cb6-8"></a>        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>()) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Sepal Length&quot;</span>,  <span class="dt">y =</span> <span class="st">&quot;Number of Observations&quot;</span>,  <span class="dt">title =</span> <span class="st">&quot;Setosa Petal Length Distribution&quot;</span>) </span>
+<span id="cb6-10"><a href="#cb6-10"></a>plot.hist</span></code></pre></div>
 <p><img src="Cookbook_files/figure-html/hist-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="bar-chart" class="section level2">
 <h2>Bar chart</h2>
 <p>We can use either <code>geom_bar</code> or <code>geom_col</code> for bar charts. For the former, the height of the bars relate to <em>the number of cases</em> per group and for the latter, the height represents the <em>values</em>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">d &lt;-<span class="st"> </span>diamonds  </a>
-<a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3">plot.bar &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">x =</span> cut, <span class="dt">y =</span> price, <span class="dt">fill =</span> cut)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
-<a class="sourceLine" id="cb7-6" title="6">  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb7-7" title="7">        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb7-8" title="8">  <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># remove legend</span></a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Cut&quot;</span>,  <span class="dt">y =</span> <span class="st">&quot;Value of Diamonds&quot;</span>,  <span class="dt">title =</span> <span class="st">&quot;Value of Diamonds by Cut&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour_inverse) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>))</a>
-<a class="sourceLine" id="cb7-12" title="12">plot.bar</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>d &lt;-<span class="st"> </span>diamonds  </span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a>plot.bar &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d)<span class="op">+</span><span class="st"> </span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="st">  </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">x =</span> cut, <span class="dt">y =</span> price, <span class="dt">fill =</span> cut)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </span>
+<span id="cb7-6"><a href="#cb7-6"></a>  <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb7-7"><a href="#cb7-7"></a>        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>(),</span>
+<span id="cb7-8"><a href="#cb7-8"></a>  <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># remove legend</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="st">  </span><span class="kw">labs</span>( <span class="dt">x=</span> <span class="st">&quot;Cut&quot;</span>,  <span class="dt">y =</span> <span class="st">&quot;Value of Diamonds&quot;</span>,  <span class="dt">title =</span> <span class="st">&quot;Value of Diamonds by Cut&quot;</span>) <span class="op">+</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>se_colour_inverse) <span class="op">+</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">dollar_format</span>(<span class="dt">prefix =</span> <span class="st">&quot;£&quot;</span>))</span>
+<span id="cb7-12"><a href="#cb7-12"></a>plot.bar</span></code></pre></div>
 <p><img src="Cookbook_files/figure-html/bar-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="waffle" class="section level2">
-<h2>Waffle</h2>
-<p>An infographic-type vsualisation can be created with the <code>waffle</code> package. In order to use the icons, the <em>Font Awesome</em> TrueType font file will need to be installed (use the 4.7 version from <a href="https://github.com/FortAwesome/Font-Awesome/releases/tag/v4.7.0%5D">here</a>) and then loaded into R using the <code>extrafont</code>package.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">library</span>(extrafont)</a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="kw">library</span>(waffle)</a>
-<a class="sourceLine" id="cb8-3" title="3"></a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="co">#font_import()</span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="co">#loadfonts(device = &quot;win&quot;)</span></a>
-<a class="sourceLine" id="cb8-6" title="6"></a>
-<a class="sourceLine" id="cb8-7" title="7"><span class="co"># get proportion of diamonds </span></a>
-<a class="sourceLine" id="cb8-8" title="8">d &lt;-<span class="st"> </span><span class="kw">table</span>(diamonds<span class="op">$</span>cut)            </a>
-<a class="sourceLine" id="cb8-9" title="9">d &lt;-<span class="st"> </span><span class="kw">prop.table</span>(d) <span class="op">*</span><span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb8-10" title="10">d &lt;-<span class="st"> </span><span class="kw">round</span>(d)</a>
-<a class="sourceLine" id="cb8-11" title="11"></a>
-<a class="sourceLine" id="cb8-12" title="12"><span class="kw">waffle</span>(d, <span class="dt">rows =</span> <span class="dv">5</span>, <span class="dt">use_glyph =</span> <span class="st">&quot;diamond&quot;</span>, <span class="dt">glyph_size =</span> <span class="dv">6</span>, </a>
-<a class="sourceLine" id="cb8-13" title="13">       <span class="dt">title =</span> <span class="st">&quot;Diamonds&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-14" title="14"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">size =</span> <span class="dv">14</span>, <span class="dt">colour =</span> <span class="st">&quot;#5F5F5F&quot;</span>),</a>
-<a class="sourceLine" id="cb8-15" title="15">        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>), </a>
-<a class="sourceLine" id="cb8-16" title="16">        <span class="dt">panel.background  =</span>  <span class="kw">element_blank</span>() )<span class="op">+</span></a>
-<a class="sourceLine" id="cb8-17" title="17"><span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> se_colour_inverse, <span class="dt">name =</span> <span class="st">&quot;Cut&quot;</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Fair&quot;</span>, <span class="st">&quot;Good&quot;</span>, <span class="st">&quot;Very Good&quot;</span>, <span class="st">&quot;Premium&quot;</span>, <span class="st">&quot;Ideal&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-18" title="18"><span class="st">  </span><span class="kw">labs</span>( <span class="dt">caption =</span>  <span class="st">&quot;Diamonds by cut&quot;</span>)</a></code></pre></div>
-<p><img src="Cookbook_files/figure-html/waffle-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 
 
@@ -679,7 +639,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0

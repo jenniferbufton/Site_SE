@@ -20,16 +20,6 @@ navbar:
          href: Hex.html
        - text: "Leaflet Tutorial"
          href: Leaflet.html
-    - icon: fa-pound-sign
-      href: index.html
-      menu:
-        - text: "Small Grants Report"
-        - text: "Main Report"
-          href: Small-Grants_Report.html
-        - text: "Text Analytics"
-          href: TA.html
-        - text: "Predictive Analytics"
-          href: Predictive.html
     
   right:
     - icon: fa-internet-explorer

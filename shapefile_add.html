@@ -23,16 +23,18 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -42,14 +44,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -58,9 +62,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { background-color: #f8f8f8; }
+  {  background-color: #f8f8f8; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -460,26 +464,6 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-pound-sign"></span>
-     
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Small Grants Report</li>
-    <li>
-      <a href="Small-Grants_Report.html">Main Report</a>
-    </li>
-    <li>
-      <a href="TA.html">Text Analytics</a>
-    </li>
-    <li>
-      <a href="Predictive.html">Predictive Analytics</a>
-    </li>
-  </ul>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -533,24 +517,24 @@ You will need:
 </div>
 <div id="load-packages" class="section level1">
 <h1>Load packages</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)<span class="co"># for ggplot</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(broom) <span class="co"># to put shapefile into a dataframe format</span></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(geogrid) <span class="co">#reading and cleaning</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)<span class="co"># for ggplot</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(broom) <span class="co"># to put shapefile into a dataframe format</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(geogrid) <span class="co">#reading and cleaning</span></span></code></pre></div>
 <p></br></p>
 </div>
 <div id="read-in-the-shapefile" class="section level1">
 <h1>Read in the ShapeFile</h1>
 <p>Read in a shapefile with the <code>read_polygons</code> function from <code>geogrid</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">LAD_shp &lt;-<span class="st"> </span><span class="kw">read_polygons</span>(file.shp) <span class="co">#file.shp is an LA boundary shapefile from ONS: Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp</span></a></code></pre></div>
-<pre><code>## Reading layer `Local_Authority_Districts_April_2019_Boundaries_UK_BUC&#39; from data source `C:\Users\jenniferb\OneDrive - Sport England\R\Geographical Data\LAD\Local_Authority_Districts_April_2019_Boundaries_UK_BUC\Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp&#39; using driver `ESRI Shapefile&#39;
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>LAD_shp &lt;-<span class="st"> </span><span class="kw">read_polygons</span>(file.shp) <span class="co">#file.shp is an LA boundary shapefile from ONS: Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp</span></span></code></pre></div>
+<pre><code>## Reading layer `Local_Authority_Districts_April_2019_Boundaries_UK_BUC&#39; from data source `C:\Users\JenniferB\OneDrive - Sport England\R\Geographical Data\LAD\Local_Authority_Districts_April_2019_Boundaries_UK_BUC\Local_Authority_Districts_April_2019_Boundaries_UK_BUC.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 382 features and 10 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
 ## bbox:           xmin: -116.1928 ymin: 7054.1 xmax: 655644.8 ymax: 1218625
-## proj4string:    +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">kable</span>(LAD_shp[<span class="dv">1</span>,]) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># show first line of data</span></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;bordered&quot;</span>,</a>
-<a class="sourceLine" id="cb4-3" title="3">                <span class="dt">position =</span> <span class="st">&quot;left&quot;</span>, <span class="dt">font_size =</span> <span class="dv">12</span>)  </a></code></pre></div>
+## projected CRS:  OSGB 1936 / British National Grid</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">kable</span>(LAD_shp[<span class="dv">1</span>,]) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># show first line of data</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3"></a>                <span class="dt">position =</span> <span class="st">&quot;left&quot;</span>, <span class="dt">font_size =</span> <span class="dv">12</span>)  </span></code></pre></div>
 <table class="table table-bordered" style="font-size: 12px; ">
 <thead>
 <tr>
@@ -626,36 +610,36 @@ NA
 <div id="read-in-the-data" class="section level1">
 <h1>Read in the data</h1>
 <p>Read in the data you want to plot, and merge it with the spatial data, using the common column (Local Authority code).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Active Lives data</span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="st">  </span><span class="kw">select</span>(<span class="st">&#39;lad19cd&#39;</span>, <span class="st">&#39;Male.Active&#39;</span>) <span class="co"># choose LA code for join and also colmn with data to plot</span></a>
-<a class="sourceLine" id="cb5-3" title="3"></a>
-<a class="sourceLine" id="cb5-4" title="4"></a>
-<a class="sourceLine" id="cb5-5" title="5">LAD_shp_data &lt;-<span class="st"> </span>sp<span class="op">::</span><span class="kw">merge</span>(LAD_shp, <span class="co">#join shape and data</span></a>
-<a class="sourceLine" id="cb5-6" title="6">                          df,</a>
-<a class="sourceLine" id="cb5-7" title="7">                          <span class="dt">by.x=</span><span class="st">&quot;lad19cd&quot;</span>,</a>
-<a class="sourceLine" id="cb5-8" title="8">                          <span class="dt">by.y=</span><span class="st">&quot;lad19cd&quot;</span>,</a>
-<a class="sourceLine" id="cb5-9" title="9">                          <span class="dt">duplicateGeoms=</span>T,</a>
-<a class="sourceLine" id="cb5-10" title="10">                          <span class="dt">all.x=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Active Lives data</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">select</span>(<span class="st">&#39;lad19cd&#39;</span>, <span class="st">&#39;Male.Active&#39;</span>) <span class="co"># choose LA code for join and also colmn with data to plot</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a>LAD_shp_data &lt;-<span class="st"> </span>sp<span class="op">::</span><span class="kw">merge</span>(LAD_shp, <span class="co">#join shape and data</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>                          df,</span>
+<span id="cb5-7"><a href="#cb5-7"></a>                          <span class="dt">by.x=</span><span class="st">&quot;lad19cd&quot;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8"></a>                          <span class="dt">by.y=</span><span class="st">&quot;lad19cd&quot;</span>,</span>
+<span id="cb5-9"><a href="#cb5-9"></a>                          <span class="dt">duplicateGeoms=</span>T,</span>
+<span id="cb5-10"><a href="#cb5-10"></a>                          <span class="dt">all.x=</span>F)</span></code></pre></div>
 <p></br></p>
 </div>
 <div id="clean-the-data" class="section level1">
 <h1>Clean the data</h1>
 <p>Create a ‘clean’ function to create a usable dataframe for plotting - by using <code>tidy</code> - and apply this custom function to our shapefile.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">clean &lt;-<span class="st"> </span><span class="cf">function</span>(shape){</a>
-<a class="sourceLine" id="cb6-2" title="2">  shape<span class="op">@</span>data<span class="op">$</span>id =<span class="st"> </span><span class="kw">rownames</span>(shape<span class="op">@</span>data)</a>
-<a class="sourceLine" id="cb6-3" title="3">  shape.points =<span class="st"> </span><span class="kw">tidy</span>(shape, <span class="dt">region=</span><span class="st">&quot;id&quot;</span>) <span class="co">#converts to dataframe</span></a>
-<a class="sourceLine" id="cb6-4" title="4">  shape.df =<span class="st"> </span><span class="kw">inner_join</span>(shape.points, shape<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)</a>
-<a class="sourceLine" id="cb6-5" title="5">}</a>
-<a class="sourceLine" id="cb6-6" title="6"></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co"># Apply function to shapefile</span></a>
-<a class="sourceLine" id="cb6-8" title="8">LAD_shp_data_tidy &lt;-<span class="st"> </span><span class="kw">clean</span>(LAD_shp_data)</a>
-<a class="sourceLine" id="cb6-9" title="9"></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co"># here we can include only England by specifying only LAs with an &quot;E&quot; in the code are retained.</span></a>
-<a class="sourceLine" id="cb6-11" title="11">LAD_shp_data_tidy &lt;-<span class="st"> </span>LAD_shp_data_tidy[<span class="kw">grep</span>(<span class="st">&quot;E&quot;</span>, LAD_shp_data_tidy<span class="op">$</span>lad19cd),]</a>
-<a class="sourceLine" id="cb6-12" title="12"></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="kw">kable</span>(LAD_shp_data_tidy[<span class="dv">1</span>,]) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># show first line of joined data</span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;bordered&quot;</span>,</a>
-<a class="sourceLine" id="cb6-15" title="15">              <span class="dt">position =</span> <span class="st">&quot;left&quot;</span>, <span class="dt">font_size =</span> <span class="dv">12</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>clean &lt;-<span class="st"> </span><span class="cf">function</span>(shape){</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  shape<span class="op">@</span>data<span class="op">$</span>id =<span class="st"> </span><span class="kw">rownames</span>(shape<span class="op">@</span>data)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  shape.points =<span class="st"> </span><span class="kw">tidy</span>(shape, <span class="dt">region=</span><span class="st">&quot;id&quot;</span>) <span class="co">#converts to dataframe</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>  shape.df =<span class="st"> </span><span class="kw">inner_join</span>(shape.points, shape<span class="op">@</span>data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>}</span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co"># Apply function to shapefile</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>LAD_shp_data_tidy &lt;-<span class="st"> </span><span class="kw">clean</span>(LAD_shp_data)</span>
+<span id="cb6-9"><a href="#cb6-9"></a></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co"># here we can include only England by specifying only LAs with an &quot;E&quot; in the code are retained.</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>LAD_shp_data_tidy &lt;-<span class="st"> </span>LAD_shp_data_tidy[<span class="kw">grep</span>(<span class="st">&quot;E&quot;</span>, LAD_shp_data_tidy<span class="op">$</span>lad19cd),]</span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="kw">kable</span>(LAD_shp_data_tidy[<span class="dv">1</span>,]) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># show first line of joined data</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb6-15"><a href="#cb6-15"></a>              <span class="dt">position =</span> <span class="st">&quot;left&quot;</span>, <span class="dt">font_size =</span> <span class="dv">12</span>) </span></code></pre></div>
 <table class="table table-bordered" style="font-size: 12px; ">
 <thead>
 <tr>
@@ -827,7 +811,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0

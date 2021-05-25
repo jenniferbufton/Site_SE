@@ -23,15 +23,16 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -41,14 +42,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -57,9 +60,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { background-color: #f8f8f8; }
+  {  background-color: #f8f8f8; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -459,26 +462,6 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-pound-sign"></span>
-     
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Small Grants Report</li>
-    <li>
-      <a href="Small-Grants_Report.html">Main Report</a>
-    </li>
-    <li>
-      <a href="TA.html">Text Analytics</a>
-    </li>
-    <li>
-      <a href="Predictive.html">Predictive Analytics</a>
-    </li>
-  </ul>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -517,10 +500,10 @@ div.tocify {
 <p>This is a brief overview on how to create custom choropleth maps in R using shapefiles. </br></p>
 <div id="load-the-libraries" class="section level1">
 <h1>Load the libraries</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(scales) <span class="co"># for percentage function</span></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(viridis) <span class="co"># for colours</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse) <span class="co"># multiple packages including ggplot</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(extrafont)<span class="co"># for Sport England house font</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(scales) <span class="co"># for percentage function</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(viridis) <span class="co"># for colours</span></span></code></pre></div>
 <p></br></p>
 </div>
 <div id="get-your-data" class="section level1">
@@ -531,16 +514,16 @@ div.tocify {
 <div id="ggplot" class="section level1">
 <h1><code>GGPLOT</code></h1>
 <p>We can use <code>geom_polygon</code> to create our map, and strip out axes, gridlines etc. using <code>theme</code>. Here is an excellent <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet</a> for more information around the package.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> LAD_shp_data_tidy, <span class="kw">aes</span>(<span class="dt">x =</span> long.x, <span class="dt">y =</span> lat.x, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), <span class="co">#blank theme to remove axes, text etc.</span></a>
-<a class="sourceLine" id="cb2-5" title="5">        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </a>
-<a class="sourceLine" id="cb2-6" title="6">        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb2-7" title="7">        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb2-8" title="8">        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb2-9" title="9">        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="st"> </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>)) <span class="co">#colour theme can be modified</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> LAD_shp_data_tidy, <span class="kw">aes</span>(<span class="dt">x =</span> long.x, <span class="dt">y =</span> lat.x, <span class="dt">group =</span> group, <span class="dt">fill =</span> Male.Active))<span class="op">+</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),<span class="dt">axis.title.y =</span> <span class="kw">element_blank</span>(), <span class="co">#blank theme to remove axes, text etc.</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>        <span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#5F5F5F&quot;</span>), </span>
+<span id="cb2-6"><a href="#cb2-6"></a>        <span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">14</span>,<span class="dt">family =</span> <span class="st">&quot;Poppins&quot;</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb2-7"><a href="#cb2-7"></a>        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), </span>
+<span id="cb2-8"><a href="#cb2-8"></a>        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb2-9"><a href="#cb2-9"></a>        <span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>())<span class="op">+</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="st"> </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option=</span><span class="st">&quot;magma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Male Active&quot;</span>,<span class="dt">breaks =</span> <span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>, <span class="dt">labels =</span> <span class="kw">percent</span>(<span class="fl">0.1</span><span class="op">*</span><span class="dv">0</span><span class="op">:</span><span class="dv">9</span>)) <span class="co">#colour theme can be modified</span></span></code></pre></div>
 <p><img src="map_tutorial_files/figure-html/poly-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 
@@ -594,7 +577,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
